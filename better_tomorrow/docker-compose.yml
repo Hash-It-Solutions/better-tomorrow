@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  better_tommorrow:
+  better_tomorrow:
     build:
       context: .
       dockerfile: Dockerfile
