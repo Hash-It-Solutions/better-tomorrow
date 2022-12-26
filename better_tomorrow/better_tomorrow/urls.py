@@ -20,4 +20,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include('classrecording.urls')),
+    path('api/',include('course.urls')),
+    path('api/',include('coursesubjects.urls')),
+    path('api/',include('mocktest.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
