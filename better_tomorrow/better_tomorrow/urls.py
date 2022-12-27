@@ -19,5 +19,16 @@ from django.conf.urls.static import static
 from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/',include('classrecording.urls')),
+    path('',include('classrecording.urls')),
+    path('',include('course.urls')),
+    path('',include('coursesubjects.urls')),
+    path('',include('mocktest.urls')),
+    path('',include('mocktestoption.urls')),
+    path('',include('mocktestquestion.urls')),
+    path('',include('note.urls')),
+    path('',include('subject.urls')),
+    path('',include('subscription.urls')),
+    path('',include('module.urls')),
+    path('',include('user.urls')),
+    path('',include('usersubscription.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
