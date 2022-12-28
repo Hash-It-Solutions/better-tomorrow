@@ -6,5 +6,8 @@ router=routers.DefaultRouter()
 router.register(r'UserApi',UserViewSet)
 urlpatterns=[
     path('api/UserApi/',include(router.urls)),
-    path('signup/',views.signup,name='signup')
+    path('SignUp/',views.SignUp,name='SignUp'),
+    path('SignIn/',views.SignIn,name='SignIn'),
+    path('UserHome/',views.UserHome,name='UserHome'),
+    path('LogOut/',views.LogOut,name='LogOut'),
 ]
