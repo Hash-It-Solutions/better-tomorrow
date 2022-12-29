@@ -80,3 +80,116 @@ The e-learning website will allow users to purchase courses using a payment gate
 The e-learning website will comply with all applicable laws and regulations.
 <h3>Regulatory requirements:</h3>
 The e-learning website will comply with all applicable laws and regulations.
+<h3>USER APIs</h3>
+<h3>Manage Course</h3>
+<ul>
+    <p>Manage course model in the database</p>
+    <p>URL: /api/CourseApi/CourseApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>/api/ClassRecordingApi/ClassRecordingApi/
+    
+       
+        Example Input body:
+        {
+        "id": 1,
+        "name": "test",
+        "description": "description"
+        }
+      
+</ul>
+
+
+<h3>Manage CourseSubjects</h3>
+<ul>
+    <p>Manage CourseSubjects model in the database</p>
+    <p>URL: /api/CourseSubjectsApi/CourseSubjectsApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+</ul>
+
+<h3>Manage Mocktest</h3>
+<ul>
+    <p>Manage Mocktest model in the database</p>
+    <p>URL: /api/MocktestApi/MocktestApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+</ul>
+
+
+<h3>Manage MocktestOption</h3>
+<ul>
+    <p>Manage MocktestOption model in the database</p>
+    <p>URL: /api/MocktestOptionApi/MocktestOptionApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+</ul>
+
+
+<h3>Manage MockTestQuestion</h3>
+<ul>
+    <p>Manage MockTestQuestion model in the database</p>
+    <p>URL: /api/MockTestQuestionApi/MockTestQuestionApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+</ul>
+
+
+<h3>Manage Note</h3>
+<ul>
+    <p>Manage Note model in the database</p>
+    <p>URL: /api/NoteApi/NoteApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+</ul>
+
+<h3>Manage Subject</h3>
+<ul>
+    <p>Manage Subject model in the database</p>
+    <p>URL: /api/SubjectApi/SubjectApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+</ul>
+
+
+<h3>Manage Subscription</h3>
+<ul>
+    <p>Manage Subscription model in the database</p>
+    <p>URL: /api/SubscriptionApi/SubscriptionApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+</ul>
+
+<h3>Manage Module</h3>
+<ul>
+    <p>Manage Module model in the database</p>
+    <p>URL: /api/ModuleApi/ModuleApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+</ul>
+
+
+<h3>Manage User</h3>
+<ul>
+    <p>Manage User model in the database</p>
+    <p>URL: /api/UserApi/UserApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+</ul>
+
+<h3>Manage UserSubscription</h3>
+<ul>
+    <p>Manage UserSubscription model in the database</p>
+    <p>URL: /api/UserSubscriptionApi/UserSubscripitonApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+</ul>
