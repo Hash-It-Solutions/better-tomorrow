@@ -6,3 +6,6 @@ from rest_framework import viewsets
 class ModuleViewSet(viewsets.ModelViewSet):
     serializer_class=ModuleSerializer
     queryset=Module.objects.all()
+
+def ModuleDetails(request):
+    return render(request,'module/ModuleDetails.html')
