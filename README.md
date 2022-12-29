@@ -80,3 +80,20 @@ The e-learning website will allow users to purchase courses using a payment gate
 The e-learning website will comply with all applicable laws and regulations.
 <h3>Regulatory requirements:</h3>
 The e-learning website will comply with all applicable laws and regulations.
+<h3>USER APIs</h3>
+<h3>Insert User</h3>
+<ul>
+    <p>Insert a course into the database</p>
+    <p>URL: /api/CourseApi/CourseApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
+       
+        Example Input body:
+        {
+        "id": 1,
+        "name": "test",
+        "description": "description"
+        }
+      
+</ul>
