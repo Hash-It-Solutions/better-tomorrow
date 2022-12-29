@@ -81,12 +81,12 @@ The e-learning website will comply with all applicable laws and regulations.
 <h3>Regulatory requirements:</h3>
 The e-learning website will comply with all applicable laws and regulations.
 <h3>USER APIs</h3>
-<h3>Insert User</h3>
+<h3>Manage Course</h3>
 <ul>
-    <p>Insert a course into the database</p>
+    <p>Manage course model into the database</p>
     <p>URL: /api/CourseApi/CourseApi/</p>
     <p>Method: GET, POST, HEAD, OPTIONS</p>
-    <p>URL Content-Type: application/json</p>
+    <p>URL Content-Type: application/json</p>/api/ClassRecordingApi/ClassRecordingApi/
     
        
         Example Input body:
@@ -96,4 +96,14 @@ The e-learning website will comply with all applicable laws and regulations.
         "description": "description"
         }
       
+</ul>
+
+
+<h3>Manage c</h3>
+<ul>
+    <p>Manage ClassRecording into the database</p>
+    <p>URL: /api/ClassRecordingApi/ClassRecordingApi/</p>
+    <p>Method: GET, POST, HEAD, OPTIONS</p>
+    <p>URL Content-Type: application/json</p>
+    
 </ul>
