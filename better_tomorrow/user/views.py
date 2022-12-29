@@ -11,7 +11,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset=User.objects.all()
     
 def UserHome(request):
-    return render(request,'home/UserHome.html')
+    return render(request,'Home/UserHome.html')
 
 def SignUp(request):
     if request.method=='POST':

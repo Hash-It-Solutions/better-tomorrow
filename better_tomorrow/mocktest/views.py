@@ -8,3 +8,5 @@ class MocktestViewset(viewsets.ModelViewSet):
     serializer_class=MocktestSerializer
     queryset=Mocktest.objects.all()
 
+def MockTestDetails(request):
+    return render(request,'MockTest/MockTestDetails.html')

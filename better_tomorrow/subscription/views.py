@@ -6,3 +6,6 @@ from .models import Subscription
 class SubscriptionViewSet(viewsets.ModelViewSet):
     serializer_class=SubscriptionSerializer
     queryset=Subscription.objects.all()
+
+def SubscriptionDetails(request):
+    return render(request,'Subscription/SubscriptionDetails.html')
