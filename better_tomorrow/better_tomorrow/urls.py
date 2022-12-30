@@ -21,6 +21,9 @@ from better_tomorrow import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    path('about/', views.About, name='About'),
+    path('service/', views.Service, name='Service'),
+    path('contact/', views.Contact, name='Contact'),
     path('',include('classrecording.urls')),
     path('',include('course.urls')),
     path('',include('coursesubjects.urls')),
