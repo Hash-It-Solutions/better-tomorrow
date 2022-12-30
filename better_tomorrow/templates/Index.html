@@ -11,20 +11,20 @@
     <header id="header" class="fixed-top">
         <div class="container d-flex align-items-center">
 
-            <span class="logo me-auto"><a href="index.html"> <Img style="width:85%;"
-                        src="{% static 'img/logo.png' %}"></a></span>
+            <span class="logo me-auto"><a href="{% url 'home' %}"> <Img style="width:85%;"  src="{% static 'img/logo.png' %}"></a></span>
+
             <!-- Uncomment below if you prefer to use an image logo -->
             <!-- <a href="index.html" class="logo me-auto"><img src="{% static 'img/logo.png' %}" alt="" class="img-fluid"></a> -->
 
             <nav id="navbar" class="navbar order-last order-lg-0">
                 <ul>
-                    <li><a class="nav-link scrollto active" href="index.html">Home</a></li>
-                    <li><a href="about-us.html">About</a></li>
-                    <li><a href="service.html">Services</a></li>
+                    <li><a class="nav-link scrollto active" href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'About' %}">About</a></li>
+                    <li><a href="{% url 'Service' %}">Services</a></li>
 
 
 
-                    <li><a class="nav-link scrollto" href="contact-us.html">Contact</a></li>
+                    <li><a class="nav-link scrollto" href="{% url 'Contact' %}">Contact</a></li>
                     <li><a class="nav-link scrollto" href="{% url 'SignIn' %}">Login</a></li>
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
