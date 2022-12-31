@@ -10,5 +10,5 @@ class MocktestOptionViewset(viewsets.ModelViewSet):
     queryset=MockTestOption.objects.all()
 
 def api(request):
-    response=requests.get('http://localhost:8000/api/MocktestOptionApi/MocktestOptionApi/')
-    return render(request,'index.html',{'response':response})
+    response=requests.get('http://localhost:8000/api/MocktestOptionApi/MocktestOptionApi/').json()
+    return render(request,'Home/UserHome.html',{'response':response})
