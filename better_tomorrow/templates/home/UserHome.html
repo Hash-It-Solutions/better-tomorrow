@@ -4,6 +4,7 @@
 </head>
 <body>
     <h1>This is user Home</h1>
+    <a href="{% url 'LogOut' %}">logout</a>
     {% for i in response %}
     <strong>{{i.question}},</strong>
     <strong>{{i.option}},</strong>
