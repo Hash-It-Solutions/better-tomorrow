@@ -1,9 +1,10 @@
-from django.urls import path,include
+from django.urls import path, include
 from .views import MockTestQuestionviewset
 from rest_framework import routers
-router=routers.DefaultRouter()
-router.register(r'MockTestQuestionApi',MockTestQuestionviewset)
-
-urlpatterns=[
-    path('api/MockTestQuestionApi/',include(router.urls))
+from mocktestquestion import views
+router = routers.DefaultRouter()
+router.register(r'MockTestQuestionApi', MockTestQuestionviewset)
+urlpatterns = [
+    path('api/MockTestQuestionApi/', include(router.urls)),
+    path('apitest/', views.api, name='api'),
 ]

@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignIn</title>
+    <title>This is user Home</title>
 </head>
 <body>
-<h1>This is User Home</h1>
-<a href="{% url 'LogOut' %}" class="btn btn-primary">LogOut</a>
+    <h1>This is user Home</h1>
+    <a href="{% url 'LogOut' %}">logout</a>
+    {% for i in response %}
+    <strong>{{i.question}},</strong>
+    <strong>{{i.option}},</strong>
+    {% endfor %}
 </body>
 </html>
-

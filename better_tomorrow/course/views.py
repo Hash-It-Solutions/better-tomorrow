@@ -7,10 +7,8 @@ class CourseViewset(viewsets.ModelViewSet):
     serializer_class=CourseSerializer
     queryset=Course.objects.all()
 
-
 def CourseListing(request):
     return render(request,'Course/CourseListing.html')
-
 
 def CourseDetails(request):
     return render(request,'Course/CourseDetails.html')

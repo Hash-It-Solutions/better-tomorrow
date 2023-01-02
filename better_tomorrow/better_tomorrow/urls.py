@@ -14,23 +14,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from better_tomorrow import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('',include('classrecording.urls')),
-    path('',include('course.urls')),
-    path('',include('coursesubjects.urls')),
-    path('',include('mocktest.urls')),
-    path('',include('mocktestoption.urls')),
-    path('',include('mocktestquestion.urls')),
-    path('',include('note.urls')),
-    path('',include('subject.urls')),
-    path('',include('subscription.urls')),
-    path('',include('module.urls')),
-    path('',include('user.urls')),
-    path('',include('usersubscription.urls')),
+    path('about/', views.About, name='About'),
+    path('service/', views.Service, name='Service'),
+    path('contact/', views.Contact, name='Contact'),
+    path('', include('classrecording.urls')),
+    path('', include('course.urls')),
+    path('', include('coursesubjects.urls')),
+    path('', include('mocktest.urls')),
+    path('', include('mocktestoption.urls')),
+    path('', include('mocktestquestion.urls')),
+    path('', include('note.urls')),
+    path('', include('subject.urls')),
+    path('', include('subscription.urls')),
+    path('', include('module.urls')),
+    path('', include('user.urls')),
+    path('', include('usersubscription.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
