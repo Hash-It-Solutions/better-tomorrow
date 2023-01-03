@@ -7,3 +7,4 @@ class Mocktest(models.Model):
     title=models.CharField(max_length=50)
     description=models.TextField(max_length=100)
     due_date=models.DateField()
+    

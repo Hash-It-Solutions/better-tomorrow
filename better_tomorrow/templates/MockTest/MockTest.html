@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MockTest</title>
+</head>
+<body>
+    <h1>This is Mocktest </h1>
+    {% for i in MockTestQuestion %}
+        {% for j in MockTestOption %}
+            <strong>{{i.question}},</strong>
+            {% if i. %}
+            <strong>{{i.option}},</strong>
+            {% endif %}
+        {% endfor %}
+        
+    {% endfor %}
+    
+</body>
+</html>
