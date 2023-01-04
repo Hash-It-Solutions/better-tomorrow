@@ -11,8 +11,10 @@
     {% for i in MockTestQuestion %}
         {% for j in MockTestOption %}
             <strong>{{i.question}},</strong>
-            {% if i. %}
-            <strong>{{i.option}},</strong>
+            {% if i.id==j.question_id %}
+                {% for j in MockTestOption %}
+                    <strong>{{i.option}},</strong>
+                {% endfor %}
             {% endif %}
         {% endfor %}
         
