@@ -11,10 +11,8 @@
     {% for i in MockTestQuestion %}
             <strong>{{i.question}}</strong>
             {% for j in MockTestOption %}
-                {% if i.id == j.question_id %}
-                    {% for j in MockTestOption %}
-                         <strong>{{i.option}}</strong>
-                     {% endfor %}
+                {% if i.id == j.question_id %}         
+                         <strong>{{j.option}}</strong>
                  {% endif %}
             {% endfor %}
         

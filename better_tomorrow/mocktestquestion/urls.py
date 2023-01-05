@@ -6,5 +6,5 @@ router = routers.DefaultRouter()
 router.register(r'MockTestQuestionApi', MockTestQuestionviewset)
 urlpatterns = [
     path('api/MockTestQuestionApi/', include(router.urls)),
-    path('MockTestQuestion/', views.MockTestQuestion, name='MockTestQuestion'),
+
 ]
