@@ -6,3 +6,5 @@ class MockTestOption(models.Model):
     question_id=models.ForeignKey(MockTestQuestion,on_delete=models.CASCADE)
     option=models.CharField(max_length=50)
     is_correct=models.BooleanField()
+
+    

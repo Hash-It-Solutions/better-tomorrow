@@ -6,3 +6,6 @@ class ClassRecording(models.Model):
     module=models.ForeignKey(Module,on_delete=models.CASCADE)
     title=models.CharField(max_length=50)
     video_file=models.FileField(upload_to='videos',blank=True)
+
+    def __str__(self):
+        return self.title

@@ -8,3 +8,6 @@ class UserSubscription(models.Model):
     subscripion_id=models.ForeignKey(Subscription,on_delete=models.CASCADE)
     start_date=models.DateTimeField(auto_now_add=True)
     end_date=models.DateTimeField()
+
+
+    

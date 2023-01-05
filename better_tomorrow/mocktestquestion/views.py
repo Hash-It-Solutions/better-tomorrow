@@ -11,8 +11,7 @@ class MockTestQuestionviewset(viewsets.ModelViewSet):
     queryset = MockTestQuestion.objects.all()
 
 
-def api(request):
-    response = requests.get(
-        'http://localhost:8000/api/MockTestQuestionApi/MockTestQuestionApi/').json()
-    print(response)
-    return render(request, 'Home/UserHome.html', {'response': response})
+def MockTestQuestion(request):
+    MockTestQuestion = requests.get('http://localhost:8000/api/MockTestQuestionApi/MockTestQuestionApi/').json()
+    MockTestOption=requests.get('http://localhost:8000/api/MocktestOptionApi/MocktestOptionApi/').json()
+    return render(request, 'MockTest/MockTest.html', {'MockTestQuestion': MockTestQuestion,'MockTestOption':MockTestOption})
