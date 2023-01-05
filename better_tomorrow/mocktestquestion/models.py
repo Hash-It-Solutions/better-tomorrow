@@ -7,3 +7,5 @@ class MockTestQuestion(models.Model):
     subject_id=models.ForeignKey(Subject,on_delete=models.CASCADE)
     mock_test_id=models.ForeignKey(Mocktest,on_delete=models.CASCADE)
     question=models.TextField(max_length=500)
+
+    

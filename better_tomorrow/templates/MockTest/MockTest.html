@@ -9,14 +9,14 @@
 <body>
     <h1>This is Mocktest </h1>
     {% for i in MockTestQuestion %}
-        {% for j in MockTestOption %}
-            <strong>{{i.question}},</strong>
-            {% if i.id==j.question_id %}
-                {% for j in MockTestOption %}
-                    <strong>{{i.option}},</strong>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
+            <strong>{{i.question}}</strong>
+            {% for j in MockTestOption %}
+                {% if i.id == j.question_id %}
+                    {% for j in MockTestOption %}
+                         <strong>{{i.option}}</strong>
+                     {% endfor %}
+                 {% endif %}
+            {% endfor %}
         
     {% endfor %}
     
