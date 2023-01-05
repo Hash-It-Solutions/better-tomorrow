@@ -6,3 +6,7 @@ class Subscription(models.Model):
     price=models.DecimalField(max_digits=5,decimal_places=2)
     duration=models.IntegerField()
 
+
+    def __str__(self):
+        return self.name
+
