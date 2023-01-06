@@ -20,10 +20,13 @@
     <title>Courses</title>
 </head>
 <body>
+
+  
+{% load static %}
     <nav id="main-menu">
         <ul class="nav-bar">
-            <li class="nav-button-logo"><img src="/better_tomorrow/static/img/logo.png" alt="" style="max-width: 100px;"></li>
-             <li class="nav-button-home" ><a href="#">Home</a></li>
+            <li class="nav-button-logo"><img src="{% static 'img/logo.png' %}" alt="" style="max-width: 100px;"></li>
+             <li class="nav-button-home" ><a href="{% url 'home' %}">Home</a></li>
              <li class="nav-button-services" ><a href="#">Courses</a></li>
              <li class="nav-button-products" ><a href="#">Dashboard</a></li>
         </ul>
