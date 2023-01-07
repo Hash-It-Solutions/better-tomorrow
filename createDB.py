@@ -7,11 +7,10 @@ def createDb(self):
         db.create_all() 
         print("Database created")
         #add admin user
-        password = generate_password_hash("admin")
-        admin = User(email="admin@test.com", phone="1234567890", name="admin", password=password.encode('utf-8'), user_type="admin", user_sub_type="admin", user_sub_id="admin")
+        # password = generate_password_hash("admin")
+        admin = User(email="admin@test.com", phone="1234567890", name="admin", password='admin', user_type="admin", user_sub_type="admin", user_sub_id="admin")
         db.session.add(admin)
         db.session.commit()
-        print(password)
-        print(password.encode('utf-8'))
+
         print("Admin user created")
 createDb(self=None)

@@ -202,8 +202,7 @@ def login():
             user = User.query.filter_by(name=username).first()
             if user:
                 print(user.password)
-                decoded_password = user.password
-                if check_password_hash(decoded_password.decode("utf-8"), password):
+                if user.password == password:
                     login_user(user)
                     return redirect(url_for('index'))
                 else:
@@ -230,7 +229,7 @@ def register():
         email = request.form['email']
         phone = request.form['phone']
         name = request.form['name']
-        password = generate_password_hash(request.form['password'], method='sha256')
+        password = request.form['password']
         user_type = 'student'
         # user_sub_type = request.form['user_sub_type']
         # user_sub_id = request.form['user_sub_id']
