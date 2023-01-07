@@ -1,0 +1,52 @@
+{% extends "CustomAdmin/admin_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+   
+        <h1>Courses</h1>
+        <div class="row">
+    
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <a href="{% url 'Course_admin_add' %}" class="btn btn-success" style="text-align: right;">Add a course</a>
+                    </div>
+                    <div class="card-body" >
+                        <div class="table-responsive"  >
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                  
+                                <tbody>
+                                    
+                                    {% for obj in objs %}
+                                    <tr>
+                                        <td>{{obj.id}}</td>
+                                        <td>{{obj.name}}</td>
+                                        <td>{{obj.description}}</td>
+
+                                       
+                                        <td>
+                                            <a href="" class="btn btn-warning" style="font-size: x-small; width: fit-content;">Edit</a>
+                                            <a href="" class="btn btn-danger" style="font-size: x-small; width: fit-content;">Delete</a>
+                                        </td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                   
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+    
+</div>
+{% endblock %}

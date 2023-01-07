@@ -88,8 +88,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Courses Actions:</h6>
-                        <a href="{% url 'Course_admin_add' %}" class="collapse-item" >Add Courses</a>
-                        <a href="{% url 'Course_admin_View' %}" class="collapse-item" >View Courses</a>
+                        <a class="collapse-item" href="">Add Courses</a>
+                        <a class="collapse-item" href="">View Courses</a>
                         
                     </div>
                 </div>
@@ -226,47 +226,11 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                {% block content %}
 
-                    <!-- Page Heading -->
+                
+                {% endblock %}
 
-
-                    <!-- Content Row -->
-
-                    <!-- Content Row -->
-
-                    <div class="row">
-
-                        <!-- Area Chart -->
-
-                        <!-- Pie Chart -->
-
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Content Column -->
-                        <div class="col-lg-6 mb-4">
-
-                            <!-- Project Card Example -->
-
-                            <!-- Color System -->
-
-
-                        </div>
-
-                        <div class="col-lg-6 mb-4">
-
-                            <!-- Illustrations -->
-
-
-                            <!-- Approach -->
-
-                        </div>
-                    </div>
-
-                </div>
                 <!-- /.container-fluid -->
 
             </div>
