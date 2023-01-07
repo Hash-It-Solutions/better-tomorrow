@@ -1,0 +1,268 @@
+{% extends "admin/base.html" %}
+
+{% block title %}View Users{% endblock %}
+
+{% block content %}
+<div class="container">
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h1 class="m-0  text-primary"> View Users</h1>
+
+            <div class="container"
+                style="background-color: rgb(255, 255, 255); border-radius: 10px; padding: 1em; font-family: Arial, Helvetica, sans-serif; box-shadow: inset;">
+                <p>Name : {{ user.name }}</p>
+                <p>Email : {{ user.email }}</p>
+                <p>Phone : {{ user.phone }}</p>
+                <p>Role : {{ user.user_type }}</p>
+            </div>
+
+            <h4 class="m-0 font-weight-bold text-secondary">Subcription Models</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Status</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Duration</th>
+                            <th>Course</th>
+                            <th>Video Access</th>
+                            <th>Note Access</th>
+                            <th>Mock test</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sub in subscriptions %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>
+                                {% if sub.is_active == '1' %}
+                                <div class="custom-control custom-switch">
+                                    <input onclick="changeSubStatus('{{sub.id}}')" type="checkbox"
+                                        class="custom-control-input" id="is_active_{{ sub.id }}"
+                                        name="is_active_{{ sub.id }}" checked>
+
+                                    <label class="custom-control-label" for="is_active_{{ sub.id }}"></label>
+
+
+                                </div>
+                                {% else %}
+                                <div class="custom-control custom-switch">
+                                    <input onclick="changeSubStatus('{{sub.id}}')" type="checkbox"
+                                        class="custom-control-input" id="is_active_{{ sub.id }}"
+                                        name="is_active_{{ sub.id }}">
+                                    <label class="custom-control-label" for="is_active_{{ sub.id }}"></label>
+                                </div>
+                                {% endif %}
+
+
+                            </td>
+                            <td>{{ sub.name }}</td>
+                            <td>{{ sub.price }}</td>
+                            <td>{{ sub.duration }}</td>
+                            <td>{{ sub.course_id }}</td>
+                            <td>
+                                {% if sub.video_access %}
+                                <div class="custom-control custom-switch">
+                                    <input onclick="changeStatus('{{sub.id}}','video_access')" type="checkbox"
+                                        class="custom-control-input" id="video_access_{{ sub.id }}"
+                                        name="video_access_{{ sub.id }}" checked>
+
+                                    <label class="custom-control-label" for="video_access_{{ sub.id }}"></label>
+
+
+                                </div>
+                                {% else %}
+                                <div class="custom-control custom-switch">
+                                    <input onclick="changeStatus('{{sub.id}}','video_access')" type="checkbox"
+                                        class="custom-control-input" id="video_access_{{ sub.id }}"
+                                        name="video_access_{{ sub.id }}">
+                                    <label class="custom-control-label" for="video_access_{{ sub.id }}"></label>
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if sub.notes_access %}
+                                <div class="custom-control custom-switch">
+                                    <input onclick="changeStatus('{{sub.id}}','notes_access')" type="checkbox"
+                                        class="custom-control-input" id="notes_access{{ sub.id }}"
+                                        name="notes_access{{ sub.id }}" checked>
+
+                                    <label class="custom-control-label" for="notes_access{{ sub.id }}"></label>
+
+
+                                </div>
+                                {% else %}
+                                <div class="custom-control custom-switch">
+                                    <input onclick="changeStatus('{{sub.id}}','notes_access')" type="checkbox"
+                                        class="custom-control-input" id="notes_access{{ sub.id }}"
+                                        name="notes_access{{ sub.id }}">
+                                    <label class="custom-control-label" for="notes_access{{ sub.id }}"></label>
+                                </div>
+                                {% endif %}
+
+                            </td>
+                            <td>
+                                {% if sub.mocktest_access %}
+                                <div class="custom-control custom-switch">
+                                    <input onclick="changeStatus('{{sub.id}}','mocktest_access')" type="checkbox"
+                                        class="custom-control-input" id="mocktest_access{{ sub.id }}"
+                                        name="mocktest_access{{ sub.id }}" checked>
+
+                                    <label class="custom-control-label" for="mocktest_access{{ sub.id }}"></label>
+                                </div>
+                                {% else %}
+                                <div class="custom-control custom-switch">
+                                    <input onclick="changeStatus('{{sub.id}}','mocktest_access')" type="checkbox"
+                                        class="custom-control-input" id="mocktest_access{{ sub.id }}"
+                                        name="mocktest_access{{ sub.id }}">
+                                    <label class="custom-control-label" for="mocktest_access{{ sub.id }}"></label>
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="" class="btn btn-primary"><img
+                                        src="{{ url_for('static', filename='img/edit-icon.png') }}" alt=""
+                                        style="max-width: 20px;"></a>
+                                <a href="{{ url_for('admin_users_sub_delete', id=sub.id) }}" class="btn btn-danger"><img
+                                        src="{{ url_for('static', filename='img/delete-icon.png') }}" alt=""
+                                        style="max-width: 20px;"></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <script>
+                        function changeSubStatus(id) {
+                            let xhr = new XMLHttpRequest();
+                            xhr.open('POST', '/admin/users/sub/action/' + id);
+                            xhr.send();
+                        }
+                        function changeStatus(id, parm) {
+                            let xhr = new XMLHttpRequest();
+                            xhr.open('POST', '/changeStatus/' + id + '/' + parm);
+                            xhr.send();
+                        }
+                    </script>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5">
+                                <a type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#exampleModal">Add a
+                                    Subscription</a>
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Add a Subscription</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form method="post">
+                                                <div class="modal-body">
+
+                                                    <div class="form-group">
+                                                        <label>Sub Name</label>
+                                                        <input type="text" class="form-control" id="formName"
+                                                            value="{{ user.name }} Sub " placeholder="Enetr Name"
+                                                            name="name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleFormControlTextarea1">Description</label>
+                                                        <textarea class="form-control" id="Description"
+                                                            name="description" rows="3"></textarea>
+                                                    </div>
+
+
+                                                    <label class="my-1 mr-2"
+                                                        for="inlineFormCustomSelectPref">Course</label>
+                                                    <select class="custom-select my-1 mr-sm-2"
+                                                        id="inlineFormCustomSelectPref" name="course">
+                                                        <option selected disabled>Choose...</option>
+                                                        <option value="1">OET</option>
+                                                        <option value="2">HAAD</option>
+                                                        <option value="3">DHA</option>
+                                                    </select>
+
+                                                    <div class="form-group">
+                                                        <label>Price (₹)</label>
+                                                        <input type="number" class="form-control" id="formName"
+                                                            placeholder="Enetr Price" name="price">
+                                                    </div>
+                                                    <label>Duration</label>
+                                                    <div class="form-row">
+                                                        <div class="col-7">
+                                                            <input type="number" class="form-control"
+                                                                placeholder="Enter duration" name="duration">
+                                                        </div>
+                                                        <div class="col">
+                                                            <select class="custom-select my-1 mr-sm-2"
+                                                                id="inlineFormCustomSelectPref" name="duration_type">
+                                                                <option selected disabled>Choose...</option>
+                                                                <option value="1">Days</option>
+                                                                <option value="2">Months</option>
+                                                                <option value="3">Years</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                            id="notes_access" name="notes_access" checked>
+                                                        <label class="custom-control-label" for="notes_access">Notes
+                                                            Accses</label>
+                                                    </div>
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                            id="video_access" name="video_access" checked>
+                                                        <label class="custom-control-label" for="video_access">Videos
+                                                            Recordings
+                                                            Access</label>
+                                                    </div>
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                            id="mocktest_access" name="mocktest_access" checked>
+                                                        <label class="custom-control-label" for="mocktest_access">Mock
+                                                            Test
+                                                            Access</label>
+                                                    </div>
+
+
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                            id="is_active" name="is_active" checked>
+                                                        <label class="custom-control-label" for="is_active">Activate
+                                                            Subscription</label>
+                                                    </div>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+{% endblock %}

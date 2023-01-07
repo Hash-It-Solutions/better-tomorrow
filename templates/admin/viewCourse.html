@@ -1,0 +1,176 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Add Course{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    <h1>Coruses</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add a Coruse</a>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add a Coruse</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="modal-body">
+
+                                <div class="form-group">
+                                    <label>Course Name</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Enter Coruse Name"
+                                        name="name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1"> Course Description</label>
+                                    <textarea class="form-control" id="description" name="description"
+                                        rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Course Price (₹)</label>
+                                    <input type="number" class="form-control" id="price" placeholder="Enetr Price"
+                                        name="price">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlFile1">Choose an Image</label>
+                                    <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                        name="course_image">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="is_active" name="is_active"
+                                        checked>
+                                    <label class="custom-control-label" for="is_active">Activate
+                                        Course</label>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Course Name</th>
+                            <th>Course Description</th>
+                            <th>Course Image</th>
+                            <th>Course Fee</th>
+                            <!-- <th>Course Status</th> -->
+                            <th>Course Action</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>#</th>
+                            <th>Course Name</th>
+                            <th>Course Description</th>
+                            <th>Course Image</th>
+                            <th>Course Fee</th>
+                            <!-- <th>Course Status</th> -->
+                            <th>Course Action</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for course in courses %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td><a href="{{ url_for('admin_modules', id=course.id ) }}">{{ course.course_name }}</a></td>
+                            <td>{{ course.course_description }}</td>
+                            <td><img src="{{ course.course_image }}" alt="" style="max-width: 100px;"></td>
+                            <td>₹ {{ course.course_price }} </td>
+                            <td>
+                                <a href="" class="btn btn-primary" data-toggle="modal" data-target="#editModal_{{ course.id }}"><img
+                                    src="{{ url_for('static', filename='img/edit-icon.png') }}" alt=""
+                                    style="max-width: 20px;"></a>
+                                    <div class="modal fade" id="editModal_{{ course.id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editModalLabel">Edit Coruse - {{ course.course_name }} </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form method="post" enctype="multipart/form-data" action="/admin/course/edit/{{ course.id }}">
+                                                <div class="modal-body">
+                    
+                                                    <div class="form-group">
+                                                        <label>Course Name</label>
+                                                        <input type="text" class="form-control" id="name" placeholder="Enter Coruse Name"
+                                                            name="name" value="{{ course.course_name }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleFormControlTextarea1"> Course Description</label>
+                                                        <textarea class="form-control" id="description" name="description"
+                                                            rows="3">{{ course.course_description }}</textarea>
+                                                    </div>
+                    
+                                                    <div class="form-group">
+                                                        <label>Course Price (₹)</label>
+                                                        <input type="number" class="form-control" id="price" placeholder="Enetr Price"
+                                                            name="price" value="{{ course.course_price }}" >
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleFormControlFile1">Choose an Image</label>
+                                                        <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                                            name="course_image">
+                                                            <img src="{{ course.course_image }}" alt="" style="max-width: 100px;">
+                                                    </div>
+                    
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="is_active" name="is_active"
+                                                            checked>
+                                                        <label class="custom-control-label" for="is_active">Activate
+                                                            Course</label>
+                                                    </div>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </form>
+                    
+                                        </div>
+                                    </div>
+                                </div>
+                            <a href="{{ url_for('admin_course_delete', id=course.id) }}" class="btn btn-danger"><img
+                                    src="{{ url_for('static', filename='img/delete-icon.png') }}" alt=""
+                                    style="max-width: 20px;"></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                </table>
+            </div>
+        </div>
+    </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        
+           <p style="color: red;">{{ messages }}</p> 
+        
+    {% endif %}
+    {% endwith %}
+
+</div>
+
+
+{% endblock %}
