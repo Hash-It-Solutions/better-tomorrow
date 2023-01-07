@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from course.models import Course
+from mocktest.models import Mocktest
+from module.models import Module
 # Create your views here.
 
 def Custom_Admin_Login(request):  
@@ -27,7 +29,7 @@ def Custom_Admin_Dashboard(request):
     return render(request,'CustomAdmin/dashboard.html')
     
 
-def Course_admin_add(request):
+def Course_admin_Add(request):
     if request.method == 'POST':
         id = request.POST.get('course_id')
         name = request.POST.get('course_name')
@@ -41,6 +43,38 @@ def Course_admin_add(request):
 def Course_admin_View(request):
     objs=Course.objects.all()
     return render(request,'CustomAdmin/View_Courses.html',{'objs':objs})
+
+
+def Mocktest_admin_Add(request):
+    # if request.method == 'POST':
+    #     id = request.POST.get('course_id')
+    #     name = request.POST.get('course_name')
+    #     description = request.POST.get('course_description')
+    #     obj=Course(id=id,name=name,description=description)
+    #     obj.save()
+    #     return HttpResponse('course added successfully')
+    return render(request,'CustomAdmin/Add_Courses.html')
+
+
+def Mocktest_admin_View(request):
+    objs=Mocktest.objects.all()
+    return render(request,'CustomAdmin/View_Mocktest.html',{'objs':objs})
+
+
+def Module_admin_Add(request):
+    # if request.method == 'POST':
+    #     id = request.POST.get('course_id')
+    #     name = request.POST.get('course_name')
+    #     description = request.POST.get('course_description')
+    #     obj=Course(id=id,name=name,description=description)
+    #     obj.save()
+    #     return HttpResponse('course added successfully')
+    return render(request,'CustomAdmin/Add_Courses.html')
+
+def Module_admin_View(request):
+    objs=Module.objects.all()
+    return render(request,'CustomAdmin/View_Module.html',{'objs':objs})
+
 
 # def Custom_Admin_Login(request):     
 #         if request.method == 'POST':

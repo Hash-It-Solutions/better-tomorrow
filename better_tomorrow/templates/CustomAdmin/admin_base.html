@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>HASH IT Admin 2 - Dashboard</title>
+    <title>Better tomorrow admin</title>
 
     <!-- Custom fonts for this template-->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -34,9 +34,9 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
                 <div class="sidebar-brand-icon">
-                    <img src="{% static 'img/hash-it-logo.png' %}" alt="" style="max-width: 30px;">
+                    <img src="{% static 'img/logo.png' %}" alt="" style="max-width: 70px;">
                 </div>
-                <div class="sidebar-brand-text mx-3">Hash IT Admin</div>
+                <div class="sidebar-brand-text mx-3">Better tomorrow admin</div>
             </a>
 
             <!-- Divider -->
@@ -88,8 +88,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Courses Actions:</h6>
-                        <a class="collapse-item" href="">Add Courses</a>
-                        <a class="collapse-item" href="">View Courses</a>
+                        <a class="collapse-item" href="{% url 'Course_admin_Add' %}">Add Courses</a>
+                        <a class="collapse-item" href="{% url 'Course_admin_View' %}">View Courses</a>
                         
                     </div>
                 </div>
@@ -105,9 +105,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Mocktest Actions:</h6>
                         <a class="collapse-item" href="">Add Mocktest</a>
-                        <a class="collapse-item" href="">View Mocktest</a>
-                        
-                        
+                        <a class="collapse-item" href="{% url 'Mocktest_admin_View' %}">View Mocktest</a>                    
                     </div>
                 </div>
             </li>
@@ -123,7 +121,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Modules Actions:</h6>
                         <a class="collapse-item" href="">Add Modules</a>
-                        <a class="collapse-item" href="">View Modules</a>
+                        <a class="collapse-item" href="{% url 'Module_admin_View' %}">View Modules</a>
                         
                     </div>
                 </div>

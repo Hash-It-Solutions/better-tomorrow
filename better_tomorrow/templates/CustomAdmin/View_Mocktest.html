@@ -9,7 +9,7 @@
     
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <a href="{% url 'Course_admin_Add' %}" class="btn btn-success" style="text-align: right;">Add a course</a>
+                        <a href="{% url 'Mocktest_admin_Add' %}" class="btn btn-success" style="text-align: right;">Add a Mocktest</a>
                     </div>
                     <div class="card-body" >
                         <div class="table-responsive"  >
@@ -17,8 +17,10 @@
                                 <thead>
                                     <tr>
                                         <th>id</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
+                                        <th>module</th>
+                                        <th>title</th>
+                                        <th>description</th>
+                                        <th>due_date</th>
                                     </tr>
                                 </thead>
                   
@@ -27,8 +29,10 @@
                                     {% for obj in objs %}
                                     <tr>
                                         <td>{{obj.id}}</td>
-                                        <td>{{obj.name}}</td>
+                                        <td>{{obj.module}}</td>
+                                        <td>{{obj.title}}</td>
                                         <td>{{obj.description}}</td>
+                                        <td>{{obj.due_date}}</td>
 
                                        
                                         <td>
