@@ -80,7 +80,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(80), unique=True)
     phone = db.Column(db.String(80), unique=True)   
     name = db.Column(db.String(80))
-    password = db.Column(db.String(80))
+    password = db.Column(db.String(512))
     user_type = db.Column(db.String(80))
     user_sub_type = db.Column(db.String(80))
     user_sub_id = db.Column(db.String(80))
