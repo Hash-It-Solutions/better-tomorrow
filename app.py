@@ -15,6 +15,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import pyimgur
 
 import os
+import base64
 
 app = Flask(__name__)
 app.secret_key = 'asdasdasdasdasdasdasaasdasdasdasd12312312daveqvq34c'
@@ -200,7 +201,9 @@ def login():
         try:
             user = User.query.filter_by(name=username).first()
             if user:
-                if check_password_hash(user.password, password):
+                print(user.password)
+                decoded_password = user.password
+                if check_password_hash(decoded_password.decode("utf-8"), password):
                     login_user(user)
                     return redirect(url_for('index'))
                 else:
@@ -237,7 +240,7 @@ def register():
         if user:
             flash('Email address already exists')
             return render_template('register.html')
-        new_user = User(email=email, phone=phone, name=name, password=password, user_type=user_type)
+        new_user = User(email=email, phone=phone, name=name, password=password.encode('utf-8'), user_type=user_type)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
