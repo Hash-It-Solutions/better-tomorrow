@@ -1,0 +1,349 @@
+{% extends "admin/base.html" %}
+
+{% block title %}View Modules{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1>MockTest</h1>
+    <div class="d-flex justify-content-left"><a href="" class="btn btn-success" data-toggle="modal"
+            data-target="#AddQuestion">Add Questions <img src="{{ url_for('static', filename='img/add-icon.png') }}"
+                alt=""></a></div>
+    <div class="modal fade" id="AddQuestion" tabindex="-1" role="dialog" aria-labelledby="AddQuestionLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddQuestionLabel">Add a Question</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" enctype="multipart/form-data"
+                    action="/admin/modules/mocktest/Questions/add/{{mocktest.id}}">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>Question</label>
+                            <input type="text" class="form-control" id="question" placeholder="Enter Question"
+                                name="question">
+                        </div>
+
+
+
+                        <!-- <div class="form-group">
+                                    <label for="exampleFormControlFile1">Choose an Image</label>
+                                    <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                        name="module_image">
+                                </div> -->
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Question</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="accordion">
+
+
+        {% for question in questions %}
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne_{{question.id}}"
+                        aria-expanded="false" role="button" aria-controls="collapseOne_{{question.id}}">
+                       Q.{{ loop.index }} {{question.question}}}
+                    </button>
+                    <div class="float-right"><a
+                            href="{{ url_for('admin_modules_mocktest_Questions_delete', id=question.id )}}"><img
+                                src="{{ url_for('static', filename='img/delete-icon.png') }}" alt=""
+                                style="max-width: 30px; margin-right: 10px;"></a><a href="" class="btn btn-warning"
+                            data-toggle="modal" data-target="#editQuestion_{{ question.id }}"><img
+                                src="{{ url_for('static', filename='img/edit.png') }}" alt=""
+                                style="max-width: 20px;"></a>
+                        <div class="modal fade" id="editQuestion_{{ question.id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="editQuestion_{{ question.id }}Label" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editQuestion_{{ question.id }}Label">Add a Question
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="post" enctype="multipart/form-data"
+                                        action="/admin/modules/mocktest/Questions/edit/{{mocktest.id}}">
+                                        <div class="modal-body">
+
+                                            <div class="form-group">
+                                                <label>Question</label>
+                                                <input type="text" class="form-control" id="question"
+                                                    placeholder="Enter Question" value="{{question.question}}"
+                                                    name="question">
+                                            </div>
+
+
+
+                                            <!-- <div class="form-group">
+                                            <label for="exampleFormControlFile1">Choose an Image</label>
+                                            <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                                name="module_image">
+                                        </div> -->
+
+                                        </div>
+                                        <div class="modal-footer">
+
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Add Question</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h5>
+            </div>
+
+            <div id="collapseOne_{{question.id}}" class="collapse" aria-labelledby="headingOne"
+                data-parent="#accordion">
+
+                <div class="card-body">
+
+                    <ul class="list-group">
+
+                        {% for option in options %}
+                        {% if option.question_id == question.id %}
+                        {% if option.is_correct %}
+
+                        <li class="list-group-item active"> {{ option.answer }}
+                            <div class="float-right">
+                                <a
+                                    href="{{ url_for('admin_modules_mocktest_Questions_Options_delete', id=option.id) }}">
+                                    <img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt=""
+                                        style="max-width: 20px; margin-right: 10px;">
+                                </a>
+                                <a href="" data-toggle="modal" data-target="#editOtpion_chk_{{ option.id }}">
+                                    <img src="{{ url_for('static', filename='img/edit.png') }}" alt=""
+                                        style="max-width: 20px;">
+                                </a>
+                            </div>
+                        </li>
+                        <div class="modal fade" id="editOtpion_chk_{{ option.id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="editOtpion_chk_{{ option.id }}Label" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editOtpion_chk_{{ option.id }}Label">Add an Option</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="post" enctype="multipart/form-data"
+                                        action="/admin/modules/mocktest/Questions/Options/edit/{{question.id}}">
+                                        <div class="modal-body">
+
+                                            <div class="form-group">
+                                                <label>Option</label>
+                                                <input type="text" class="form-control" id="option"
+                                                    placeholder="Enter Option" name="option" value="{{ option.answer }}">
+                                            </div>
+
+                                            
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="is_correct_chk"
+                                                    name="is_correct" checked>
+                                                <label class="custom-control-label" for="is_correct_chk">Is Correct</label>
+                                            </div>
+                                            
+
+
+
+                                            <!-- <div class="form-group">
+                            <label for="exampleFormControlFile1">Choose an Image</label>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                name="module_image">
+                        </div> -->
+
+                                        </div>
+                                        <div class="modal-footer">
+
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Add Option</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <li class="list-group-item"> {{ option.answer }}
+                            <div class="float-right">
+                                <a
+                                    href="{{ url_for('admin_modules_mocktest_Questions_Options_delete', id=option.id) }}">
+                                    <img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt=""
+                                        style="max-width: 20px; margin-right: 10px;">
+                                </a>
+                                <a href="" data-toggle="modal" data-target="#editOtpion_{{ option.id }}">
+                                    <img src="{{ url_for('static', filename='img/edit.png') }}" alt=""
+                                        style="max-width: 20px;">
+                                </a>
+                            </div>
+                        </li>
+                        
+                        <div class="modal fade" id="editOtpion_{{ option.id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="editOtpion_{{ option.id }}Label" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editOtpion_{{ option.id }}Label">Add an Option</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="post" enctype="multipart/form-data"
+                                        action="/admin/modules/mocktest/Questions/Options/edit/{{option.id}}">
+                                        <div class="modal-body">
+
+                                            <div class="form-group">
+                                                <label>Option</label>
+                                                <input type="text" class="form-control" id="option"
+                                                    placeholder="Enter Option" name="option" value="{{ option.answer }}">
+                                            </div>
+
+                                            
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="is_correctu"
+                                                    name="is_correct">
+                                                <label class="custom-control-label" for="is_correctu">Is Correct</label>
+                                            </div>
+                                            
+
+
+
+                                            <!-- <div class="form-group">
+                            <label for="exampleFormControlFile1">Choose an Image</label>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                name="module_image">
+                        </div> -->
+
+                                        </div>
+                                        <div class="modal-footer">
+
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Add Option</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+
+                    </ul>
+
+
+
+                </div>
+
+                <div class="d-flex justify-content-center"><a href="" class="btn btn-success" data-toggle="modal"
+                        data-target="#AddOption_{{question.id}}">Add options</a></div>
+                <div class="modal fade" id="AddOption_{{question.id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="AddOption_{{question.id}}Label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="AddOption_{{question.id}}Label">Add an Option</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="post" enctype="multipart/form-data"
+                                action="/admin/modules/mocktest/Questions/Options/add/{{question.id}}">
+                                <div class="modal-body">
+
+                                    <div class="form-group">
+                                        <label>Option</label>
+                                        <input type="text" class="form-control" id="option" placeholder="Enter Option"
+                                            name="option">
+                                    </div>
+
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="is_correct"
+                                            name="is_correct">
+                                        <label class="custom-control-label" for="is_correct">Is Correct</label>
+                                    </div>
+
+
+
+                                    <!-- <div class="form-group">
+                            <label for="exampleFormControlFile1">Choose an Image</label>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                name="module_image">
+                        </div> -->
+
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Add Option</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+
+
+
+
+        <!-- <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+                        aria-controls="collapseTwo">
+                        Question 1
+                    </button>
+                    <div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 30px; margin-right: 10px;"></a><a href="" class="btn btn-warning"><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div>
+                </h5>
+            </div>
+
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item active">Option 1<div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px; margin-right: 10px;"></a><a href="" ><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div></li>
+                        <li class="list-group-item">Option 2<div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px; margin-right: 10px;"></a><a href="" ><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div></li>
+                        <li class="list-group-item">Option 3<div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px; margin-right: 10px;"></a><a href="" ><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div></li>
+                        <li class="list-group-item">Option 4<div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px; margin-right: 10px;"></a><a href="" ><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div></li>
+                        <li class="list-group-item">Option 5<div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px; margin-right: 10px;"></a><a href="" ><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div></li>
+                    </ul>
+                    <div class="d-flex justify-content-center"><a href="" class="btn btn-success">Add options</a></div>
+                
+                    
+                </div>
+            </div>
+        </div>
+         -->
+    </div>
+</div>
+
+
+{% endblock %}

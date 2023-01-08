@@ -85,7 +85,7 @@
                         {% for module in modules %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            <td>{{ module.module_name }}</td>
+                            <td><a href="{{ url_for('admin_modules_contents', id=module.id) }}">{{ module.module_name }}</a></td>
                             <td>{{ module.module_description }}</td>
                             <td><img src="{{ module.module_image }}" alt="" style="max-width: 100px;"></td>
                             <td>

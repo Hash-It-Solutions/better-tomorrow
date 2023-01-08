@@ -65,8 +65,8 @@
                     <li><div class="dropdown">
                         <img src="{{ url_for('static', filename='img/profile.png') }}"  class="dropbtn" alt="">
                         <div class="dropdown-content">
+                            <a href="#">Profile</a>
                         <a href="#">Student Accses</a>
-                        <a href="#">Link 2</a>
                         {% if user.user_type == 'admin' %}
                         <a href="{{ url_for('admin') }}">Admin Accses</a>
                         {% endif %}

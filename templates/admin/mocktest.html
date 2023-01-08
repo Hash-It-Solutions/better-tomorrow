@@ -1,0 +1,130 @@
+{% extends "admin/base.html" %}
+
+{% block title %}View Modules{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Mocktests</h1>
+    <div class="d-flex justify-content-left"><a href="" class="btn btn-success" data-toggle="modal"
+            data-target="#AddQuizModal">Add a quiz </a></div>
+    <div class="modal fade" id="AddQuizModal" tabindex="-1" role="dialog" aria-labelledby="AddQuizModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddQuizModalLabel">Add a Quiz</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" enctype="multipart/form-data" action="/admin/modules/mocktest/add/{{module.id}}">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>Quiz Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter Quiz Name" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1"> Quiz Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Choose an Image</label>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1" name="test_image">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="is_active" name="is_active" checked>
+                            <label class="custom-control-label" for="is_active">Activate
+                                Quiz</label>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Quiz</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card-deck">
+
+        {% for quiz in mocktest %}
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="{{quiz.test_image}}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">{{ quiz.test_name }}</h5>
+                <p class="card-text">{{ quiz.test_description }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">No. Of Questions: 10</li>
+                    <li class="list-group-item">Test duration : 30 mins</li>
+                    <li class="list-group-item">Max Marks : 50</li>
+                </ul>
+                <div class="card-body">
+                    <a href="{{ url_for('admin_modules_mocktest_QNA', id=quiz.id) }}" class="card-link">View Mock Test</a>
+                    <div class="float-right">
+                        <a href="{{ url_for('admin_modules_mocktest_delete', id=quiz.id) }}" >
+                            <img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 30px; margin-right: 10px;">
+                        </a>
+                       
+                
+                        <a href="" class="btn btn-warning" data-toggle="modal" data-target="#editQuizModel_{{quiz.id}}">
+                            <img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;">
+                        </a>
+                        <div class="modal fade" id="editQuizModel_{{quiz.id}}" tabindex="-1" role="dialog" aria-labelledby="editQuizModelLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editQuizModelLabel">Add a Quiz</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post" enctype="multipart/form-data" action="/admin/modules/mocktest/edit/{{ quiz.id }}">
+                                    <div class="modal-body">
+                
+                                        <div class="form-group">
+                                            <label>Quiz Name</label>
+                                            <input type="text" class="form-control" id="name" placeholder="Enter Quiz Name" name="name" value="{{ quiz.test_name }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlTextarea1"> Quiz Description</label>
+                                            <textarea class="form-control" id="description" name="description" rows="3">{{ quiz.test_description }}</textarea>
+                                        </div>
+                
+                
+                                        <div class="form-group">
+                                            <label for="exampleFormControlFile1">Choose an Image</label>
+                                            <input type="file" class="form-control-file" id="exampleFormControlFile1" name="test_image">
+                                        </div>
+                
+                                    </div>
+                                    <div class="modal-footer">
+                                        
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </form>
+                
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                {% endfor %}
+
+
+
+
+    </div>
+
+
+</div>
+{% endblock %}

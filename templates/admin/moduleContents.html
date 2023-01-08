@@ -1,0 +1,43 @@
+{% extends "admin/base.html" %}
+
+{% block title %}View Modules contents{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1>{{module.module_name}} contents</h1>
+
+    <div class="row">
+        <div class="col"><div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="{{ url_for('static', filename='/img/notes.png') }}" style=" padding: 1em; max-width: 136px; margin-left: auto; margin-right: auto;" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{module.module_name}} Notes</h5>
+    
+    <a href="{{ url_for('admin_modules_notes', id=module.id) }}" class="btn btn-primary">View folder</a>
+  </div>
+</div></div>
+        <div class="col"><div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="{{ url_for('static', filename='/img/zoom-logo-41644.png') }}" style=" padding: 1em; max-width: 250px; margin-left: auto; margin-right: auto;" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{module.module_name}} Recordings</h5>
+    
+    <a href="#" class="btn btn-primary">View folder</a>
+  </div>
+</div></div>
+        <div class="col"><div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="{{ url_for('static', filename='/img/icon-6065372_1280.webp') }}" style=" padding: 1em; max-width: 150px; margin-left: auto; margin-right: auto;" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{module.module_name}} Mock Test</h5>
+    
+    <a href="{{ url_for('admin_modules_mocktest', id=module.id) }}" class="btn btn-primary">View folder</a>
+  </div>
+</div></div>
+    </div>
+
+
+</div>
+
+
+
+
+{% endblock %}

@@ -1,5 +1,5 @@
 #flask boilerpalte
-from flask import Flask, request, jsonify, render_template, url_for ,redirect, session, flash
+from flask import Flask, request, jsonify, render_template, url_for ,redirect, session, flash, send_from_directory, send_file
 
 from functools import wraps
 #sql
@@ -27,7 +27,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CLIENT_ID = "2d3158d36137249"
 im = pyimgur.Imgur(CLIENT_ID)
 
-ENV = 'prod'
+ENV = 'dev'
 
 if ENV == 'dev' :
     app.debug = True
@@ -145,7 +145,7 @@ class MockTestQuestion(db.Model):
     image_url = db.Column(db.String(80), nullable=True)
 
     mock_test_id = db.Column(db.Integer, db.ForeignKey('mocktest.id'))
-    mocktestanswer = db.relationship('MockTestAnswer', backref='question')
+    mocktestanswer = db.relationship('MockTestAnswer', backref='question', lazy=True)
 
 class MockTestAnswer(db.Model):
     __tablename__ = 'mocktestanswer'
@@ -161,7 +161,7 @@ class Notes(db.Model):
     note_name = db.Column(db.String(80))
     note_description = db.Column(db.String(80))
     note_image = db.Column(db.String(80))
-    note_price = db.Column(db.String(80))
+    note_filename = db.Column(db.String(80))
     module_id = db.Column(db.Integer, db.ForeignKey('modules.id'))
 
 class VideoRec(db.Model):
@@ -247,15 +247,15 @@ def register():
 
 @app.route('/about-us', methods=['GET', 'POST'])
 def about_us():
-    return render_template('main/about-us.html')
+    return render_template('main/about-us.html', user=current_user)
 
 @app.route('/contact-us', methods=['GET', 'POST'])
 def contact_us():
-    return render_template('main/contact-us.html')
+    return render_template('main/contact-us.html', user=current_user)
 
 @app.route('/courses', methods=['GET', 'POST'])
 def courses():
-    return render_template('main/courses.html')
+    return render_template('main/courses.html', user=current_user)
 
 @app.route('/forbidden', methods=['GET', 'POST'])
 def forbidden():
@@ -455,4 +455,212 @@ def admin_modules_edit(id):
         return redirect(url_for('admin_modules', id=module.course_id))
     return 'edit module'
 
-  
+@app.route('/admin/modules/contents/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_contents(id):
+    module = Modules.query.get(id)
+    return render_template('admin/moduleContents.html', module=module)
+
+@app.route('/admin/modules/notes/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_notes(id):
+    module = Modules.query.get(id)
+    notes = Notes.query.filter_by(module_id=id).all()
+    if request.method == 'POST':
+        try:
+            notes_pdfs = request.files.getlist('notes_pdf')
+            for pdf in notes_pdfs:
+                pdf_filename = secure_filename(pdf.filename)
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                pdf.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename))
+                note = Notes(note_filename=pdf_filename,
+                            module_id=id)
+                db.session.add(note)
+                db.session.commit()
+            return redirect(url_for('admin_modules_notes', id=id))
+        except Exception as e:
+            flash('Error adding Note :- '+str(e))
+    return render_template('admin/notes.html', notes=notes, module=module)
+
+@app.route('/admin/modules/notes/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_notes_delete(id):
+    note = Notes.query.get(id)
+    db.session.delete(note)
+    db.session.commit()
+    return redirect(url_for('admin_modules_notes', id=note.module_id))
+
+@app.route('/admin/modules/notes/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_notes_edit(id):
+    note = Notes.query.get(id)
+    if request.method == 'POST':
+        note.note_name = request.form['name']
+        note.note_description = request.form['description']
+        db.session.commit()
+        return redirect(url_for('admin_modules_notes', id=note.module_id))
+    return 'edit note'
+
+@app.route('/download/<filename>', methods=['GET', 'POST'])
+def download(filename):
+    try:
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        uploads = os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename)
+        return send_file(uploads, as_attachment=True)
+    except Exception as e:
+        return str(e)
+
+@app.route('/admin/modules/mocktest/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest(id):
+    module = Modules.query.get(id)
+    mocktest = MockTest.query.all()
+    if request.method == 'POST':
+        pass
+    return render_template('admin/mocktest.html', mocktest=mocktest, module=module)
+
+@app.route('/admin/modules/mocktest/add/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_add(id):
+    if request.method == 'POST':
+        try:
+            img = request.files['test_image']
+            img_filename = secure_filename(img.filename)
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            img.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], img_filename))
+            upload_image = im.upload_image(os.path.join(basedir, app.config['UPLOAD_FOLDER'], img_filename), title=img_filename)
+            mocktest = MockTest(module_id=id,
+                                test_name=request.form['name'],
+                                test_description=request.form['description'],
+                                # test_duration=request.form['duration'],
+                                test_image = upload_image.link)
+            db.session.add(mocktest)
+            db.session.commit()
+            os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], img_filename))
+            return redirect(url_for('admin_modules_mocktest', id=id))
+        except Exception as e:
+            flash('Error adding Mock Test :- '+str(e))
+
+
+@app.route('/admin/modules/mocktest/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_delete(id):
+    mocktest = MockTest.query.get(id)
+    db.session.delete(mocktest)
+    db.session.commit()
+    return redirect(url_for('admin_modules_mocktest', id=mocktest.module_id))
+
+@app.route('/admin/modules/mocktest/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_edit(id):
+    mocktest = MockTest.query.get(id)
+    if request.method == 'POST':
+        mocktest.test_name = request.form['name']
+        mocktest.test_description = request.form['description']
+        db.session.commit()
+        return redirect(url_for('admin_modules_mocktest', id=mocktest.module_id))
+    return 'edit mocktest'
+
+@app.route('/admin/modules/mocktest/QNA/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_QNA(id):
+    mocktest = MockTest.query.get(id)
+    questions = MockTestQuestion.query.filter_by(mock_test_id=id).all()
+    options = MockTestAnswer.query.all()
+    return render_template('admin/mocktest_QNA.html', mocktest=mocktest, questions=questions, options=options)
+ 
+@app.route('/admin/modules/mocktest/Questions/add/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_Questions_add(id):
+    mocktest = MockTest.query.get(id)
+    if request.method == 'POST':
+        try:
+            question = MockTestQuestion(mock_test_id=id,
+                                        question=request.form['question'])
+            db.session.add(question)
+            db.session.commit()
+            return redirect(url_for('admin_modules_mocktest_QNA', id=id))
+        except Exception as e:
+            flash('Error adding Question :- '+str(e))
+    return redirect(url_for('admin_modules_mocktest_QNA',id=id))
+
+@app.route('/admin/modules/mocktest/Questions/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_Questions_delete(id):
+    question = MockTestQuestion.query.get(id)
+    db.session.delete(question)
+    db.session.commit()
+    return redirect(url_for('admin_modules_mocktest_QNA', id=question.mock_test_id))
+
+@app.route('/admin/modules/mocktest/Questions/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_Questions_edit(id):
+    question = MockTestQuestion.query.get(id)
+    if request.method == 'POST':
+        question.question = request.form['question']
+        db.session.commit()
+        return redirect(url_for('admin_modules_mocktest_QNA', id=question.mock_test_id))
+    return 'edit question'
+
+@app.route('/admin/modules/mocktest/Questions/Options/add/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_Questions_Options_add(id):
+    question = MockTestQuestion.query.get(id)
+    def status(stat):
+        if str(stat) == 'on':
+            return 1
+        else:
+            return 0
+    if request.method == 'POST':
+        try:
+            option = MockTestAnswer(question_id=id,
+                                    answer=request.form['option'],
+                                    is_correct=status(request.form.get('is_correct')))
+            db.session.add(option)
+            db.session.commit()
+            return redirect(url_for('admin_modules_mocktest_QNA', id=question.mock_test_id))
+        except Exception as e:
+            flash('Error adding Option :- '+str(e))
+    return redirect(url_for('admin_modules_mocktest_QNA', id=question.mock_test_id))
+
+@app.route('/admin/modules/mocktest/Questions/Options/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_Questions_Options_delete(id):
+    option = MockTestAnswer.query.get(id)
+    q_id = MockTestQuestion.query.filter_by(id=option.question_id).first()
+
+    db.session.delete(option)
+    db.session.commit()
+    return redirect(url_for('admin_modules_mocktest_QNA', id=q_id.id))
+
+@app.route('/admin/modules/mocktest/Questions/Options/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_Questions_Options_edit(id):
+    option = MockTestAnswer.query.filter_by(id=id).first()
+    q_id = MockTestQuestion.query.filter_by(id=option.question_id).first()
+    def status(stat):
+        if str(stat) == 'on':
+            return 1
+        else:
+            return 0
+    if request.method == 'POST':
+        option.answer = request.form['option']
+        option.is_correct = status(request.form.get('is_correct'))
+        db.session.commit()
+        return redirect(url_for('admin_modules_mocktest_QNA', id=q_id.id))
+    return 'edit option'
