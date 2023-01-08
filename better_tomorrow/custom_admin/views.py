@@ -36,13 +36,32 @@ def Course_admin_Add(request):
         description = request.POST.get('course_description')
         obj=Course(id=id,name=name,description=description)
         obj.save()
-        return HttpResponse('course added successfully')
+        return redirect('Course_admin_View')
     return render(request,'CustomAdmin/Add_Courses.html')
 
 
 def Course_admin_View(request):
     objs=Course.objects.all()
     return render(request,'CustomAdmin/View_Courses.html',{'objs':objs})
+
+
+def Course_admin_Delete(request,id):
+    obj=Course.objects.get(pk=id)
+    obj.delete()
+    return redirect('Course_admin_View')
+
+
+def Course_admin_Update(request,id1):
+    if request.method == 'POST':
+        id = request.POST.get('course_id')
+        name = request.POST.get('course_name')
+        description = request.POST.get('course_description')
+        Course.objects.filter(pk=id1).update(id=id,name=name,description=description)
+        return redirect('Course_admin_View')
+    else:
+        obj=Course.objects.get(pk=id1)
+        return render(request,'CustomAdmin/Edit_Courses.html',{'obj':obj})
+
 
 
 def Mocktest_admin_Add(request):
@@ -74,6 +93,17 @@ def Module_admin_Add(request):
 def Module_admin_View(request):
     objs=Module.objects.all()
     return render(request,'CustomAdmin/View_Module.html',{'objs':objs})
+
+
+
+
+
+
+
+
+
+
+
 
 
 # def Custom_Admin_Login(request):     
