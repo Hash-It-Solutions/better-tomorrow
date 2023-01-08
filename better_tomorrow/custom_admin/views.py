@@ -20,14 +20,15 @@ def Custom_Admin_Login(request):
     return render(request,'CustomAdmin/login.html')
 
      
-
 def Custom_Admin_Home(request):
      return render(request,'CustomAdmin/index.html')
 
-
 def Custom_Admin_Dashboard(request):
     return render(request,'CustomAdmin/dashboard.html')
-    
+
+
+
+                       # admin side of course
 
 def Course_admin_Add(request):
     if request.method == 'POST':
@@ -63,6 +64,8 @@ def Course_admin_Update(request,id1):
         return render(request,'CustomAdmin/Edit_Courses.html',{'obj':obj})
 
 
+
+            #   admin side of Mocktest
 
 def Mocktest_admin_Add(request):
     if request.method == 'POST':
@@ -103,22 +106,45 @@ def Mocktest_admin_Update(request,id1):
         module=Mocktest.objects.get(pk=id1)
         return render(request,'CustomAdmin/Edit_Mocktest.html',{'module':module})
 
-
+            #    admin side of module
 def Module_admin_Add(request):
-    # if request.method == 'POST':
-    #     id = request.POST.get('course_id')
-    #     name = request.POST.get('course_name')
-    #     description = request.POST.get('course_description')
-    #     obj=Course(id=id,name=name,description=description)
-    #     obj.save()
-    #     return HttpResponse('course added successfully')
-    return render(request,'CustomAdmin/Add_Courses.html')
+    if request.method == 'POST':
+        id = request.POST.get('module_id')
+        course_id = request.POST.get('course')
+        course=Course.objects.get(id=course_id)
+        module_title = request.POST.get('module_title')
+        module_description = request.POST.get('module_description')
+        obj=Module(id=id,course=course,title=module_title,description=module_description)
+        obj.save()
+        return redirect('Module_admin_View')
+    else:
+        objs=Course.objects.all()
+        return render(request,'CustomAdmin/Add_Module.html',{'objs':objs})
 
 def Module_admin_View(request):
     objs=Module.objects.all()
     return render(request,'CustomAdmin/View_Module.html',{'objs':objs})
 
 
+def Module_admin_Delete(request,id):
+    module=Module.objects.get(pk=id)
+    module.delete()
+    return redirect('Module_admin_View')
+
+
+
+def Module_admin_Update(request,id1):
+    if request.method == 'POST':
+        id = request.POST.get('module_id')
+        course_id = request.POST.get('course')
+        course=Course.objects.get(id=course_id)
+        module_title = request.POST.get('module_title')
+        module_description = request.POST.get('module_description')
+        Module.objects.filter(pk=id1).update(id=id,course=course,title=module_title,description=module_description)
+        return redirect('Module_admin_View')
+    else:
+        objs=Module.objects.get(pk=id1)
+        return render(request,'CustomAdmin/Edit_Module.html',{'objs':objs})
 
 
 
