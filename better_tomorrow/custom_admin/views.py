@@ -65,19 +65,43 @@ def Course_admin_Update(request,id1):
 
 
 def Mocktest_admin_Add(request):
-    # if request.method == 'POST':
-    #     id = request.POST.get('course_id')
-    #     name = request.POST.get('course_name')
-    #     description = request.POST.get('course_description')
-    #     obj=Course(id=id,name=name,description=description)
-    #     obj.save()
-    #     return HttpResponse('course added successfully')
-    return render(request,'CustomAdmin/Add_Courses.html')
+    if request.method == 'POST':
+        id = request.POST.get('mocktest_id')
+        module_id = request.POST.get('module')
+        module=Module.objects.get(id=module_id)
+        mocktest_title = request.POST.get('mocktest_title')
+        description = request.POST.get('mocktest_description')
+        date = request.POST.get('mocktest_date')
+        obj=Mocktest(id=id,module=module,title=mocktest_title,description=description,due_date=date)
+        obj.save()
+        return redirect('Mocktest_admin_View')
+    else:
+        module=Module.objects.all()
+        return render(request,'CustomAdmin/Add_Mocktest.html',{'module':module})
 
 
 def Mocktest_admin_View(request):
-    objs=Mocktest.objects.all()
-    return render(request,'CustomAdmin/View_Mocktest.html',{'objs':objs})
+    module=Mocktest.objects.all()
+    return render(request,'CustomAdmin/View_Mocktest.html',{'module':module})
+
+def Mocktest_admin_Delete(request,id):
+    module=Mocktest.objects.get(pk=id)
+    module.delete()
+    return redirect('Mocktest_admin_View')
+
+def Mocktest_admin_Update(request,id1):
+    if request.method == 'POST':
+        id = request.POST.get('mocktest_id')
+        module_id = request.POST.get('module')
+        module=Module.objects.get(id=module_id)
+        mocktest_title = request.POST.get('mocktest_title')
+        description = request.POST.get('mocktest_description')
+        date = request.POST.get('date')
+        Mocktest.objects.filter(pk=id1).update(id=id,module=module,mocktest_title=mocktest_title,description=description,due_date=date)
+        return redirect('Mocktest_admin_View')
+    else:
+        module=Mocktest.objects.get(pk=id1)
+        return render(request,'CustomAdmin/Edit_Mocktest.html',{'module':module})
 
 
 def Module_admin_Add(request):

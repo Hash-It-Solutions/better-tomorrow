@@ -27,18 +27,18 @@
                   
                                 <tbody>
                                     
-                                    {% for obj in objs %}
+                                    {% for module in module %}
                                     <tr>
-                                        <td>{{obj.id}}</td>
-                                        <td>{{obj.module}}</td>
-                                        <td>{{obj.title}}</td>
-                                        <td>{{obj.description}}</td>
-                                        <td>{{obj.due_date}}</td>
+                                        <td>{{module.id}}</td>
+                                        <td>{{module.module}}</td>
+                                        <td>{{module.title}}</td>
+                                        <td>{{module.description}}</td>
+                                        <td>{{module.due_date}}</td>
 
                                        
                                         <td>
-                                            <a href="" class="btn btn-warning" style="font-size: x-small; width: fit-content;">Edit</a>
-                                            <a href="" class="btn btn-danger" style="font-size: x-small; width: fit-content;">Delete</a>
+                                            <a href="{% url 'Mocktest_admin_Update' module.id %}" class="btn btn-warning" style="font-size: x-small; width: fit-content;">Edit</a>
+                                            <a href="{% url 'Mocktest_admin_Delete' module.id %}" class="btn btn-danger" style="font-size: x-small; width: fit-content;">Delete</a>
                                         </td>
                                         
                                     </tr>

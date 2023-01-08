@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h1 >Add course</h1>
+            <h1 >Add Mocktest</h1>
 
             <form  method="POST">
                 {% csrf_token %}
@@ -13,16 +13,33 @@
                     <label for="categoryName"> Enter the mocktest id</label>
                     <input type="text" class="form-control" id="mocktest_id" name="mocktest_id" placeholder=" Enter the mocktest id">
                 </div>
-                
-                
+
                 <div class="form-group">
-                    <label for="categoryName"> Enter the Module name</label>
-                    <input type="text" class="form-control" id="course_name" name="course_name" placeholder=" Enter the course name">
+                    <label for="module"> Enter the Module name</label>
+                    <select name="module" id="module" class="custom-select my-1 mr-sm-2">
+                        <option disabled selected>Choose...</option>
+                        {% for module in module %}
+                        <option value="{{module.id}}">{{module.title}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
+
+                <div class="form-group">
+                    <label for="categoryName"> Enter the title</label>
+                    <input type="text" class="form-control" id="mocktest_title" name="mocktest_title" placeholder=" Enter the mocktest title">
+                </div>
+                
+                
+
                 <div class="form-group">
                     <label for="categoryName">Enter the description</label>
-                    <textarea type="text" class="form-control" rows="4" cols="50" id="course_description" name="course_description" placeholder="Enter the description"></textarea>
+                    <textarea type="text" class="form-control" rows="4" cols="50" id="mocktest_description" name="mocktest_description" placeholder="Enter the mocktest_description"></textarea>
                     
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryName"> Enter the due date</label>
+                    <input type="date" class="form-control" id="mocktest_date" name="mocktest_date" placeholder=" Enter the mocktest title">
                 </div>
                 
             
