@@ -137,6 +137,7 @@ def Module_admin_Update(request,id1):
     if request.method == 'POST':
         id = request.POST.get('module_id')
         course_id = request.POST.get('course')
+        print(course_id)
         course=Course.objects.get(id=course_id)
         module_title = request.POST.get('module_title')
         module_description = request.POST.get('module_description')
@@ -145,12 +146,6 @@ def Module_admin_Update(request,id1):
     else:
         objs=Module.objects.get(pk=id1)
         return render(request,'CustomAdmin/Edit_Module.html',{'objs':objs})
-
-
-
-
-
-
 
 
 
