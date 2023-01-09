@@ -94,7 +94,7 @@ class subscription(db.Model):
     __tablename__ = 'subscription'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    description = db.Column(db.String(80))
+    description = db.Column(db.String(500))
     price = db.Column(db.String(80))
     duration = db.Column(db.String(80))
     duration_type = db.Column(db.String(80))
@@ -111,7 +111,7 @@ class Courses(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer, primary_key=True)
     course_name = db.Column(db.String(80))
-    course_description = db.Column(db.String(80))
+    course_description = db.Column(db.String(500))
     ###
     # course_language = db.Column(db.String(80))
     ###
@@ -123,7 +123,7 @@ class Modules(db.Model):
     __tablename__ = 'modules'
     id = db.Column(db.Integer, primary_key=True)
     module_name = db.Column(db.String(80))
-    module_description = db.Column(db.String(80))
+    module_description = db.Column(db.String(500))
     module_image = db.Column(db.String(80))
     
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
@@ -135,7 +135,7 @@ class MockTest(db.Model):
     __tablename__ = 'mocktest'
     id = db.Column(db.Integer, primary_key=True)
     test_name = db.Column(db.String(80))
-    test_description = db.Column(db.String(80))
+    test_description = db.Column(db.String(500))
     test_image = db.Column(db.String(80))
     test_price = db.Column(db.String(80))
     module_id = db.Column(db.Integer, db.ForeignKey('modules.id'))
@@ -162,7 +162,7 @@ class Notes(db.Model):
     __tablename__ = 'notes'
     id = db.Column(db.Integer, primary_key=True)
     note_name = db.Column(db.String(80))
-    note_description = db.Column(db.String(80))
+    note_description = db.Column(db.String(500))
     note_image = db.Column(db.String(80))
     note_filename = db.Column(db.String(80))
     module_id = db.Column(db.Integer, db.ForeignKey('modules.id'))
@@ -171,7 +171,7 @@ class VideoRec(db.Model):
     __tablename__ = 'videorec'
     id = db.Column(db.Integer, primary_key=True)
     video_name = db.Column(db.String(80))
-    video_description = db.Column(db.String(80))
+    video_description = db.Column(db.String(500))
     video_url = db.Column(db.String(80))
     video_price = db.Column(db.String(80))
     module_id = db.Column(db.Integer, db.ForeignKey('modules.id'))
