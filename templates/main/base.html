@@ -56,8 +56,20 @@
             <!-- Uncomment below if you prefer to use an image logo -->
             <!-- <a href="{{ url_for('index') }}" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
+
+
+
+
+
+
+
+
+
+
+
+
             <nav id="navbar" class="navbar" style="box-shadow: none; ">
-                <ul>
+                <ul class="menu">
                     <li><a class="nav-link scrollto active" href="{{ url_for('index') }}">Home</a></li>
                     <li><a href="{{ url_for('about_us') }}">About</a></li>
                     <li><a href="{{ url_for('courses') }}">Courses</a></li>
@@ -66,19 +78,44 @@
 
                     <li><a class="nav-link scrollto" href="{{ url_for('contact_us') }}">Contact</a></li>
                     {% if user == None %}
-                   
+
                     <li><a class="nav-link scrollto" href="{{ url_for('login') }}" style="color: #1977cc;">Login</a>
                     </li>
                     {% endif %}
                 </ul>
 
-                <i class="bi bi-list mobile-nav-toggle"></i>
-            </nav><!-- .navbar -->
+                <!-- <i class="bi bi-list mobile-nav-toggle"></i> -->
+            </nav>
+
+
+            <div id="hamburger-icon" onclick="toggleMobileMenu(this)">
+                <div class="bar1" ></div>
+                <div class="bar2" ></div>
+                <div class="bar3" ></div>
+                <ul class="mobile-menu" style="list-style: none;">
+                    <li><a class="nav-link scrollto"   href="{{ url_for('index') }}">Home</a></li>
+                    <li><a class="nav-link scrollto"  href="{{ url_for('about_us') }}">About</a></li>
+                    <li><a class="nav-link scrollto"  href="{{ url_for('courses') }}">Courses</a></li>
+                    <li><a class="nav-link scrollto" href="{{ url_for('contact_us') }}">Contact</a></li>
+                    {% if user == None %}
+                    <li><a class="nav-link scrollto" href="{{ url_for('login') }}" style="color: #1977cc;">Login</a></li>
+                    <li><a href="{{ url_for('logout') }}" style="color: rgb(29, 120, 16);">Register</a></li>    
+
+                    
+                    {% else %}
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Student Accses</a></li>
+                    <li><a href="{{ url_for('admin') }}">Admin Accses</a></li>
+                    <li><a href="{{ url_for('logout') }}" style="color: rgb(216, 0, 0); margin-bottom: 2em;">Logout</a></li>    
+                    {% endif %}
+                </ul>
+            </div>
+
 
             {% if user != None %}
-            <div class="dropdown">
+            <div class="dropdown-usr">
                 <img src="{{ url_for('static', filename='img/profile.png') }}" class="dropbtn" alt="">
-                <div class="dropdown-content">
+                <div class="dropdown-usr-content">
                     <a href="#">Profile</a>
                     <a href="#">Student Accses</a>
                     {% if user.user_type == 'admin' %}
@@ -88,7 +125,7 @@
                 </div>
             </div>
             {% else %}
-            <a href="{{ url_for('register') }}" class="appointment-btn scrollto"><span
+            <a href="{{ url_for('register') }}" id="register-btn" class="appointment-btn scrollto"><span
                     class="d-none d-md-inline">Register</span>
                 up</a>
             {% endif %}
@@ -101,9 +138,110 @@
 
 
 
+
+
+        <script>
+            function toggleMobileMenu(menu) {
+                menu.classList.toggle('open');
+            }
+        </script>
+
+
         <style>
+           
+
+            #hamburger-icon{
+                margin: auto 0;
+                display: none;
+                cursor: pointer;
+            }
+
+            #hamburger-icon div {
+                width: 35px;
+                height: 3px;
+                background-color: #333;
+                margin: 6px 0;
+                transition: 0.4s;
+                
+            }
+            
+            .open .bar1{
+                -webkit-transform: rotate(-45deg) translate(-6px, 6px);
+                transform: rotate(-45deg) translate(-6px, 6px);
+            }
+
+            .open .bar2{
+                opacity: 0;
+            }
+
+            .open .bar3{
+                -webkit-transform: rotate(45deg) translate(-6px, -6px);
+                transform: rotate(45deg) translate(-6px, -6px);
+            }
+
+            .open .mobile-menu {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .mobile-menu {
+                display: none;
+                background-color: #ffffff;
+                position: absolute;
+                max-height: 250px;
+                top: 145px;
+                left: 0;
+                height: calc(100vh - 50px);
+                width: 100%;
+                padding-bottom: 2em;
+            }
+
+
+            @media only screen and (max-width: 1065px) {
+                .navbar  {
+                    display: none;
+                }
+                #register-btn{
+                    display: none;
+                }
+                .dropdown-usr{
+                    display: none !important;
+                }
+
+                #hamburger-icon{
+                    display: block;
+                }
+
+            }
 
             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            @media only screen and (max-width: 1260px) {
+                .dropdown-usr-content {
+                    margin-left: -8em !important;
+                }
+            }
+
 
 
             .dropbtn {
@@ -117,12 +255,12 @@
                 border-radius: 40px;
             }
 
-            .dropdown {
+            .dropdown-usr {
                 position: relative;
                 display: inline-block;
             }
 
-            .dropdown-content {
+            .dropdown-usr-content {
                 display: none;
                 position: absolute;
                 border-radius: 10px;
@@ -132,7 +270,7 @@
                 z-index: 1;
             }
 
-            .dropdown-content a {
+            .dropdown-usr-content a {
                 color: black;
                 padding: 12px 16px;
                 text-decoration: none;
@@ -140,15 +278,15 @@
                 border-radius: 10px;
             }
 
-            .dropdown-content a:hover {
+            .dropdown-usr-content a:hover {
                 background-color: #f1f1f1
             }
 
-            .dropdown:hover .dropdown-content {
+            .dropdown-usr:hover .dropdown-usr-content {
                 display: block;
             }
 
-            .dropdown:hover .dropbtn {
+            .dropdown-usr:hover .dropbtn {
                 background-color: #0088ff;
             }
         </style>

@@ -27,7 +27,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CLIENT_ID = "2d3158d36137249"
 im = pyimgur.Imgur(CLIENT_ID)
 
-ENV = 'prod'
+ENV = 'dev'
 
 if ENV == 'dev' :
     app.debug = True
