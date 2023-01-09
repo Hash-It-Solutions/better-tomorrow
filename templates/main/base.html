@@ -29,6 +29,10 @@
 
     <!-- Template Main CSS File -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
     <!-- =======================================================
   * Template Name: Better Tomorrow - v4.9.0
@@ -52,90 +56,102 @@
             <!-- Uncomment below if you prefer to use an image logo -->
             <!-- <a href="{{ url_for('index') }}" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
-            <nav id="navbar" class="navbar order-last order-lg-0">
+            <nav id="navbar" class="navbar" style="box-shadow: none; ">
                 <ul>
                     <li><a class="nav-link scrollto active" href="{{ url_for('index') }}">Home</a></li>
                     <li><a href="{{ url_for('about_us') }}">About</a></li>
-                    <li><a href="{{ url_for('courses') }}">Services</a></li>
+                    <li><a href="{{ url_for('courses') }}">Courses</a></li>
 
-                    
+
 
                     <li><a class="nav-link scrollto" href="{{ url_for('contact_us') }}">Contact</a></li>
-                    {% if user != None %}
-                    <li><div class="dropdown">
-                        <img src="{{ url_for('static', filename='img/profile.png') }}"  class="dropbtn" alt="">
-                        <div class="dropdown-content">
-                            <a href="#">Profile</a>
-                        <a href="#">Student Accses</a>
-                        {% if user.user_type == 'admin' %}
-                        <a href="{{ url_for('admin') }}">Admin Accses</a>
-                        {% endif %}
-                        <a href="{{ url_for('logout') }}" style="color: rgb(216, 0, 0);">Logout</a>
-                        </div></li>
-                    <li></li>
-                    
-                    {% else %}
-                    <li><a class="nav-link scrollto" href="{{ url_for('login') }}" style="color: #1977cc;">Login</a></li>
+                    {% if user == None %}
+                   
+                    <li><a class="nav-link scrollto" href="{{ url_for('login') }}" style="color: #1977cc;">Login</a>
+                    </li>
+                    {% endif %}
                 </ul>
+
                 <i class="bi bi-list mobile-nav-toggle"></i>
             </nav><!-- .navbar -->
 
-            <a href="{{ url_for('register') }}" class="appointment-btn scrollto"><span class="d-none d-md-inline">Register</span>
-                up</a>
-                    
+            {% if user != None %}
+            <div class="dropdown">
+                <img src="{{ url_for('static', filename='img/profile.png') }}" class="dropbtn" alt="">
+                <div class="dropdown-content">
+                    <a href="#">Profile</a>
+                    <a href="#">Student Accses</a>
+                    {% if user.user_type == 'admin' %}
+                    <a href="{{ url_for('admin') }}">Admin Accses</a>
                     {% endif %}
-                    
-                
+                    <a href="{{ url_for('logout') }}" style="color: rgb(216, 0, 0);">Logout</a>
+                </div>
+            </div>
+            {% else %}
+            <a href="{{ url_for('register') }}" class="appointment-btn scrollto"><span
+                    class="d-none d-md-inline">Register</span>
+                up</a>
+            {% endif %}
+
+
+
+
 
         </div>
 
 
 
         <style>
+
+            
+
+
             .dropbtn {
-             
-              
-              max-width: 35px;
-              
-              
-              border: none;
-              cursor: pointer;
-              border-radius: 40px;
+
+
+                max-width: 35px;
+
+
+                border: none;
+                cursor: pointer;
+                border-radius: 40px;
             }
-            
+
             .dropdown {
-              position: relative;
-              display: inline-block;
+                position: relative;
+                display: inline-block;
             }
-            
+
             .dropdown-content {
-              display: none;
-              position: absolute;
-              border-radius: 10px;
-              background-color: #f9f9f9;
-              min-width: 160px;
-              box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-              z-index: 1;
+                display: none;
+                position: absolute;
+                border-radius: 10px;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                z-index: 1;
             }
-            
+
             .dropdown-content a {
-              color: black;
-              padding: 12px 16px;
-              text-decoration: none;
-              display: block;
-              border-radius: 10px;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                border-radius: 10px;
             }
-            
-            .dropdown-content a:hover {background-color: #f1f1f1}
-            
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1
+            }
+
             .dropdown:hover .dropdown-content {
-              display: block;
+                display: block;
             }
-            
+
             .dropdown:hover .dropbtn {
-              background-color: #0088ff;
+                background-color: #0088ff;
             }
-            </style>
+        </style>
 
 
 
@@ -173,30 +189,27 @@
                     <div class="col-lg-3 col-md-6 footer-links">
                         <h4>Our Services</h4>
                         <ul>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">HAAD</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">DHA</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">PROMETRICS</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">MOH</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">NCLEX-RN</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">KERALA-PSC</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">NORCET</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">JIPMER</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">NIMHANS</a></li>
+                            {% for course in courses %}
+
+                            {% if loop.index > 8 %}
+
+                            {% else %}
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">{{ course.course_name }}</a></li>
+                            {% endif %}
+                            {% endfor %}
                         </ul>
-
                     </div>
-
-
                     <div class="col-lg-3 col-md-6 footer-links">
                         <UL>
 
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">ESIC</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">DSSB</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">RRB</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">PGIMER</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">MSC(N) Entrance</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">OET, IELTS</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">UKVI</a></li>
+                            {% for course in courses %}
+
+                            {% if 9 > loop.index %}
+
+                            {% else %}
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">{{ course.course_name }}</a></li>
+                            {% endif %}
+                            {% endfor %}
                         </UL>
                     </div>
                 </div>

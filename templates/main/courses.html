@@ -167,7 +167,7 @@
 
 
             <div class="section-title">
-              <h2>courses we offer</h2>
+              <h2>Courses we offer</h2>
               <p>We help our students comprehend important material and get them ready to respond well in all nursing
                 tests. Every year, thousands of nursing students and nursing officers enroll in special crash courses
                 and quickly and easily pass challenging nursing exams including HAAD, DHA, PROMETRICS, NCLEX RN , AIIMS,
@@ -175,176 +175,45 @@
                 approach to medical and nursing topics will assist future nurses in updating their knowledge and
                 acquiring the necessary skills.</p>
             </div>
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center"
-              style="background: #166ab5">
+
+
+            
+        
+
+          <div class="courses">
+            <div class="row">
+
+
+              {% for course in courses %}
+              {% if loop.index%2 == 0 %}
+              <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center" style="background: #166ab5" >
               <div class="icon-box">
 
-                <h4><a style="color:#FFFFFF;" href="">HAAD</a></h4>
+                <h4><a style="color:#FFFFFF;" href="{{ url_for('course',id=course.id) }}">{{ course.course_name }}</a></h4>
                 <hr>
-                <p style="color:#FFFFFF;">All healthcare professionals including doctors, technicians, dentists,
-                  pharmacists and traditional practitioners; especially outside the UAE can now apply online for a
-                  medical license to work in the UAE. Each type of professional can apply for the fully-online
-                  Examination & Evaluation System (EES) in their own country, thus reducing costs and time. Nurses too
-                  must obtain their license from HAAD depending on whether they are applying to be a registered nurse,
-                  registered midwife, nurse practitioner, mental health nurse, pediatric nurse, community nurse or
-                  assistant . </p>
-              </div>
-            </div>
+                <p style="color:#FFFFFF;">{{ course.course_description }} </p>
+                <div class="float-right" style="padding-top: 2em;"><a href="{{ url_for('course',id=course.id) }}" class="more-btn" style="color: white; ">Register <i class="bx bx-chevron-right"></i></a></div>
 
+              </div>
+              
+              
+            </div>
+            {% else %}
             <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
               <div class="icon-box">
 
-                <h4><a href=""> DHA</a></h4>
+                <h4><a href="{{ url_for('course',id=course.id) }}">{{ course.course_name }}</a></h4>
                 <hr>
-                <p>In Dubai, UAE, the DHA exam is a nationwide examination for healthcare professional licenses. This
-                  examination is administered by the Dubai Health Authority (DHA) who also manages the professional
-                  licensing of medical professionals and oversees the overall health system in Dubai. With a primary
-                  degree qualification and two years of clinical experience, you are eligible to enroll for the DHA
-                  exam. On passing the exam, you will become one among the medical industry that protects public health
-                  and improves the quality of life within the Emirate of Dubai. </p>
+                <p>{{ course.course_description }}</p>
+                <div style="padding-top: 2em;"><a href="{{ url_for('course',id=course.id) }}" class="more-btn">Register <i class="bx bx-chevron-right"></i></a></div>
               </div>
             </div>
+            {% endif %}
+            {% endfor %}
 
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center"
-              style="background: #166ab5">
-              <div class="icon-box">
-
-                <h4><a style="color:#FFFFFF;" href=""> PROMETRICS</a></h4>
-                <hr>
-                <p style="color:#FFFFFF;">Prometric is a wholly owned subsidiary of Educational Testing Services (ETS)
-                  and a trusted provider of technology-based testing and assessment solutions. It is a testing and
-                  evaluation provider that operates test centers in more than 160 countries. For Foreign nurses who want
-                  to work in Saudi Arabia, Oman and Qatar must be eligible for the Prometric exam. In the Nurse Exam of
-                  Oman Prometric and Saudi, Qatar, candidates have two and a half hours to complete 70 and 100 questions
-                  in multiple choice format. This is a computer-based test and results are available immediately after
-                  the test.</p>
-              </div>
+  
             </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-              <div class="icon-box">
-
-                <h4><a href=""> MOH</a></h4>
-                <hr>
-                <p>MOH is the licensing exam generated for working in SHARJAH (UAE), OMAN, BAHRAIN, KUWAIT, SAUDI AND
-                  QATAR. You can attend the following MOH licensing exams (except Sharjah and Kuwait) anywhere in India
-                  (Bombay, Delhi, Hyderabad, Chennai, Bangalore, and Thiruvananthapuram).</p>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center"
-              style="background: #166ab5">
-              <div class="icon-box">
-
-                <h4><a style="color:#FFFFFF;" href="">NCLEX-RN</a></h4>
-                <hr>
-                <p style="color:#FFFFFF;">In USA and CANADA the ensuring of the knowledge and skills of nurses from
-                  other parts of the world is done by assessing their NCLEX-RN results. The National Council Licensure
-                  Examination for Registered Nurses (NCLEX-RN) is the licensure examination by NCSBN (National Council
-                  of State Boards of Nursing) to evaluate whether a nursing professional is eligible to practice in the
-                  United States of America and Canada. This exam is conducted in order to make sure that the nurses are
-                  efficient enough to provide protection and safety to public during medical care in the country. </p>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-              <div class="icon-box">
-
-                <h4><a href="">IELTS</a></h4>
-                <hr>
-                <p>The International English Language Testing System (IELTS) is designed to help you work, study or
-                  migrate to a country where English is the native language. This includes countries such as Australia,
-                  Canada, New Zealand, the UK and USA. Your ability to listen, read, write and speak in English will be
-                  assessed during the test. IELTS is graded on a scale of 1-9 .</p>
-              </div>
-            </div>
-
-
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center"
-              style="background: #166ab5">
-              <div class="icon-box">
-
-                <h4><a style="color:#FFFFFF;" href="">OET</a></h4>
-                <hr>
-                <p style="color:#FFFFFF;">The Occupational English Test (also known as OET) is an international English
-                  language test for the healthcare sector. It assess the proficiency language in communication skills of
-                  healthcare professionals who wish to register and practice in an English-speaking environment.
-                  OET is available for the following 12 professions: dentistry, dietetics, medicine, nursing,
-                  occupational therapy, optometry, pharmacy, physiotherapy, podiatry, radiography, speech pathology, and
-                  veterinary science
-
-                </p>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
-              <div class="icon-box">
-
-                <h4><a href=""> NORCET/JIPMER/PGIMER/DSSB/RRB</a></h4>
-                <hr>
-                <p>In India, the large numbers of vacancies for engagement of nurses are notified by various government
-                  organizations that include state and central Hospitals, AIIMS, JIPMER, PGIMER Indian Army, Indian
-                  Railways, Indian Navy and various Medical Institutions from time to time. The recruitment is done in
-                  every district and state of the country for the posts of Staff Nurse/ Nursing Sister, Patient
-                  Coordinator, Superintendent, Director of Nursing, Senior Nursing Officer and Nursing Officer.
-                  Community Health Nurse (CHN), Military Nurse, Industrial Nurse, Nursing Service Administrators etc.
-                </p>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center"
-              style="background: #166ab5">
-              <div class="icon-box">
-
-                <h4><a style="color:#FFFFFF;" href=""> Dataflow| Data Flow Status</a></h4>
-                <hr>
-                <p style="color:#FFFFFF;">Dataflow is a Process of verifying the Documents of the Particular Candidate
-                  through Online by the respective Authority DHA, HAAD, PROMETRICS, MOH – UAE, NHRA. This step is most
-                  commonly known as Certificate Verification; in this step, the candidate’s Educational documents like
-                  degree certificates will be verified through Online along with their Professional Documents. .</p>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-              <div class="icon-box">
-
-                <h4><a href=""> PrometricExamination Booking</a></h4>
-                <hr>
-                <p>Examination is the final step in getting the Eligibility Letter where the candidates should take an
-                  online Test Prescribed by the respective authority in a computer based Examination center. This
-                  examination is a MCQ type examination for which negative markings will not be awarded. The pass
-                  percentage for the examination will be 50-80% which will vary country to country and based on the
-                  category in which they are writing the examination. The examination center will be available within
-                  metro cities in India.</p>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center"
-              style="background: #166ab5">
-              <div class="icon-box">
-
-                <h4><a style="color:#FFFFFF;" href="">Staff Nurses Examinations</a></h4>
-                <hr>
-                <p style="color:#FFFFFF;">• Staff nurse or Nursing Officer is the title used to designate vacancies in
-                  nursing sector
-                  • Kerala government takes nurses to grade II roles in the health department cadres, namely DHS and DME
-                  • DME – medical colleges and teaching institutions comes under Directorate of Medical Education
-                  • DHS – Director of Health Services handle all other hospitals from primary health centers to GH
-                  . </p>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-              <div class="icon-box">
-
-                <h4><a href="">Online Coaching</a></h4>
-                <hr>
-                <p>To Attend Online Coaching You will Get live classes , recorded videos , Online Test series and Study
-                  Material.</p>
-              </div>
-            </div>
-
+          </div>
 
 
 

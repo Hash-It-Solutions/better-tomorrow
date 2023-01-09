@@ -1,0 +1,182 @@
+{% extends "main/base.html" %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+
+<div class="banner-bg">
+  <div class="container" style="z-index: 10; color: rgb(116, 184, 239); padding: 1em; max-height: 35vh;">
+    <div class="row">
+      <div class="col">
+        <div class="float-right">
+          <div class="container">
+            <h1 style="font-weight: 800;">{{course.course_name}} Course Details</h1>
+            <div style="color: rgb(149, 225, 255);">{{course.course_description}}</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col">
+        <div class="float-right" style="color: black; box-shadow: 2em">
+          <div class="card" style="width: 25rem;  margin: 0em 0em 0em 5em; box-shadow: 3px 10px 8px #8888886e;">
+            <img class="card-img-top" src="{{course.course_image}}" alt="Card image cap">
+            <div class="card-body">
+              <div class="container">
+                <p class="card-text" style="font-size: xx-large; font-weight: bolder;">₹ {{ course.course_price }}</p>
+                <button type="button" class="btn btn-primary btn-lg btn-block" style="margin-bottom: 2em;">Request To
+                  Apply</button>
+
+                <h5><b>This course contains:</b></h5>
+                <ul style="list-style-type: '';">
+                  <li class="cour-con"><i class="fas fa-video"></i> Zoom Class</li>
+                  <li class="cour-con"><i class="fas fa-file-download"></i> <b>7</b> Downloadable resources</li>
+                  <li class="cour-con"><i class="far fa-file-video"></i> <b>10</b> Recored Videos</li>
+                  <li class="cour-con"><i class="fas fa-certificate"></i> Certificate of completion</li>
+                  <li class="cour-con"><i class="fas fa-hands-helping"></i> Mentors Help</li>
+                </ul>
+                <style>
+                  .cour-con {
+                    margin: 1em 0em 0.5em 0em;
+                  }
+                </style>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+
+<div class="container">
+  <div class="card" style="margin-top: 2em; max-width: 50%;">
+    <div class="card-body">
+      <h5 class="card-title">Course Obectives</h5>
+      <ul style="list-style-type: '✓ ';">
+        <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+        <li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</li>
+        <li>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in
+          some form,</li>
+        <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+        <li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</li>
+        <li>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in
+          some form,</li>
+        <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+        <li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</li>
+        <li>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in
+          some form,</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top: 2em; max-width: 50%;">
+    <div class="card-body">
+      <h3 class="card-title">Course Contents</h3>
+
+
+      <div id="accordion">
+        {% for module in modules %}
+          {% if loop.index == 1 %}
+            {% if module.course_id == course.id %}
+
+            <div class="card">
+              <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                  <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#Modulee_{{module.id}}"
+                    aria-expanded="true" aria-controls="Modulee_{{module.id}}">
+                    {{ module.module_name }}
+                  </button>
+                </h5>
+              </div>
+
+              <div id="Modulee_{{module.id}}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  {{ module.module_description }}}
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+        {% for module in modules %}
+          {% if loop.index != 1 %}
+            {% if module.course_id == course.id %}
+
+            <div class="card">
+              <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                  <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#Modulee_{{module.id}}"
+                    aria-expanded="true" aria-controls="Modulee_{{module.id}}">
+                    {{ module.module_name }}
+                  </button>
+                </h5>
+              </div>
+
+              <div id="Modulee_{{module.id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  {{ module.module_description }}}
+                </div>
+              </div>
+            </div>
+
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+
+        <!-- 
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#moduleTwo" aria-expanded="true" aria-controls="moduleo">
+                 Module #2
+                </button>
+              </h5>
+            </div>
+            <div id="moduleTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+              <div class="card-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingThree">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#moduleThree" aria-expanded="false" aria-controls="moduleThree">
+                 Module #3
+                </button>
+              </h5>
+            </div>
+            <div id="moduleThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="con">- </div>
+  <style>
+    .banner-bg {
+      background-color: rgb(60, 60, 60);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 2px;
+      height: 35vh;
+      width: 100%;
+      z-index: -999;
+      margin-top: 10em;
+    }
+  </style>
+
+  {% endblock %}

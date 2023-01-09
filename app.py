@@ -112,6 +112,9 @@ class Courses(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     course_name = db.Column(db.String(80))
     course_description = db.Column(db.String(80))
+    ###
+    # course_language = db.Column(db.String(80))
+    ###
     course_image = db.Column(db.String(80))
     course_price = db.Column(db.String(80))
     course_module = db.relationship('Modules', backref='course')
@@ -190,7 +193,8 @@ def index():
         user=current_user
     else:
         user=None
-    return render_template('main/index.html', user=user)
+    courses = Courses.query.all()
+    return render_template('main/index.html', user=user, courses=courses)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -239,7 +243,7 @@ def register():
         if user:
             flash('Email address already exists')
             return render_template('register.html')
-        new_user = User(email=email, phone=phone, name=name, password=password.encode('utf-8'), user_type=user_type)
+        new_user = User(email=email, phone=phone, name=name, password=password, user_type=user_type)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
@@ -247,15 +251,62 @@ def register():
 
 @app.route('/about-us', methods=['GET', 'POST'])
 def about_us():
-    return render_template('main/about-us.html', user=current_user)
+    courses = Courses.query.all()
+    return render_template('main/about-us.html', user=current_user, courses=courses)
 
 @app.route('/contact-us', methods=['GET', 'POST'])
+
 def contact_us():
-    return render_template('main/contact-us.html', user=current_user)
+    courses = Courses.query.all()
+    return render_template('main/contact-us.html', user=current_user, courses=courses)
 
 @app.route('/courses', methods=['GET', 'POST'])
 def courses():
-    return render_template('main/courses.html', user=current_user)
+    courses = Courses.query.all()
+    return render_template('main/courses.html', user=current_user, courses=courses)
+
+@app.route('/courses/<int:id>', methods=['GET', 'POST'])
+def course(id):
+    courses = Courses.query.all()
+    course = Courses.query.get(id)
+    modules = Modules.query.filter_by(course_id=id)
+    return render_template('main/course-detail.html', user=current_user, course=course, modules=modules, courses=courses)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/forbidden', methods=['GET', 'POST'])
 def forbidden():
@@ -310,10 +361,6 @@ def admin_users_sub_delete(id):
     db.session.delete(sub)
     db.session.commit()
     return redirect(url_for('admin_users_view', id=sub.user_id))
-
-
-
-
 
 @app.route('/admin/users/sub/action/<int:id>', methods=['GET', 'POST'])
 @login_required

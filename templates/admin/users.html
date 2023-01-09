@@ -29,8 +29,8 @@
                                     <td>{{ user.user_type }}</td>
                                     <td>{{ user.phone }}</td>
                                     <td>
-                                        <a href="" class="btn btn-primary"><img src="{{ url_for('static', filename='img/edit-icon.png') }}" alt="" style="max-width: 20px;"></a>
-                                        <a href="" class="btn btn-danger"><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px;"></a>
+                                        <a href="" class="btn btn-primary" onclick="Alert()"><img src="{{ url_for('static', filename='img/edit-icon.png') }}" alt="" style="max-width: 20px;"></a>
+                                        <a href="" class="btn btn-danger" onclick="Alert()"><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px;"></a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -38,7 +38,7 @@
                         <tfoot>
                             <tr>
                                 <td colspan="5">
-                                    <a href="" class="btn btn-primary">Add User</a>
+                                    
                                 </td>
                             </tr>
                         </tfoot>
@@ -47,5 +47,12 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+        function Alert() {
+            alert("This feature is not available yet.");
+        }
+    </script>
 {% endblock %}
 
