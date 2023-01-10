@@ -8,6 +8,7 @@ from module.models import Module
 from note.models import Note
 from subject.models import Subject
 from mocktestquestion.models import MockTestQuestion
+from mocktestoption.models import MockTestOption
 # Create your views here.
 
 def Custom_Admin_Login(request):  
@@ -209,10 +210,12 @@ def Mocktest_Question_Add(request):
         question=request.POST.get('question')
         obj=MockTestQuestion(id=id,subject=subject,mock_test=mocktest,question=question)
         obj.save()
-        return redirect('Mocktest_Question_View')
+        return redirect('Mocktest_Option_Add')
     else:
         subject_obj=Subject.objects.all()
         mocktest_obj=Mocktest.objects.all()
+        print(subject_obj)
+
     return render(request,'CustomAdmin/Add_MocktestQuestion.html',{'subject_obj':subject_obj,'mocktest_obj':mocktest_obj})
 
 
@@ -220,6 +223,28 @@ def Mocktest_Question_Add(request):
 
 
 
+                        # Admin side of MocktestOption
+
+def Mocktest_Option_View(request):
+    obj=MockTestOption.objects.all()
+    return render(request,'CustomAdmin/View_MocktestOption.html',{'obj':obj})
+
+
+def Mocktest_Option_Add(request):
+    if request.method=='POST':
+        id=request.POST.get('option_id')
+        question_id=request.POST.get('question')
+        question=MockTestQuestion.objects.get(id=question_id)
+        print(question)
+        option=request.POST.get('option')
+        is_correct=request.POST.get('checkbox')=='on'
+        obj=MockTestOption(id=id,question=question,option=option,is_correct=is_correct)
+        obj.save()
+        return redirect('Mocktest_Option_Add')
+    else:
+        objs=MockTestQuestion.objects.all()        
+    return render(request,'CustomAdmin/Add_MocktestOption.html',{'objs':objs})
+    
 
 
 

@@ -30,6 +30,13 @@ urlpatterns = [
 
     path('Mocktest_Question_Add/',views.Mocktest_Question_Add,name='Mocktest_Question_Add'),
     path('Mocktest_Question_View/',views.Mocktest_Question_View,name='Mocktest_Question_View'),
+
+
+
+
+    path('Mocktest_Option_Add/',views.Mocktest_Option_Add,name='Mocktest_Option_Add'),
+    path('Mocktest_Option_View/',views.Mocktest_Option_View,name='Mocktest_Option_View'),
+
    
 
 ]

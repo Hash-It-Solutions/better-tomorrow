@@ -8,4 +8,8 @@ class MockTestQuestion(models.Model):
     mock_test=models.ForeignKey(Mocktest,on_delete=models.CASCADE)
     question=models.TextField(max_length=500)
 
+    def __str__(self):
+        return self.question
+
+
     
