@@ -27,7 +27,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CLIENT_ID = "2d3158d36137249"
 im = pyimgur.Imgur(CLIENT_ID)
 
-ENV = 'prod'
+ENV = 'dev'
 
 if ENV == 'dev' :
     app.debug = True
@@ -105,7 +105,7 @@ class subscription(db.Model):
     video_access = db.Column(db.Boolean)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    
+
 
 class Courses(db.Model):
     __tablename__ = 'courses'
@@ -325,6 +325,7 @@ def admin_users():
     users = User.query.all()
     return render_template('admin/users.html', users=users)
 
+
 @app.route('/admin/users/view/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -352,6 +353,16 @@ def admin_users_view(id):
         db.session.commit()
         return redirect(url_for('admin_users_view', id=id))
     return render_template('admin/viewUser.html', user=user, subscriptions=subscriptions)
+
+@app.route('/admin/users/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_users_delete(id):
+    user = User.query.get(id)
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('admin_users'))
+
 
 @app.route('/admin/users/sub/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -398,14 +409,6 @@ def changeStatus(id, parm):
     return redirect(url_for('admin_users_view', id=sub.user_id))
 
 
-@app.route('/admin/users/delete/<int:id>', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def admin_users_delete(id):
-    user = User.query.get(id)
-    db.session.delete(user)
-    db.session.commit()
-    return redirect(url_for('admin_users'))
 
 @app.route('/admin/course/', methods=['GET', 'POST'])
 @login_required
@@ -639,6 +642,7 @@ def admin_modules_mocktest_Questions_add(id):
             return redirect(url_for('admin_modules_mocktest_QNA', id=id))
         except Exception as e:
             flash('Error adding Question :- '+str(e))
+            return str(e)
     return redirect(url_for('admin_modules_mocktest_QNA',id=id))
 
 @app.route('/admin/modules/mocktest/Questions/delete/<int:id>', methods=['GET', 'POST'])

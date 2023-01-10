@@ -30,7 +30,7 @@
                                     <td>{{ user.phone }}</td>
                                     <td>
                                         <a href="" class="btn btn-primary" onclick="Alert()"><img src="{{ url_for('static', filename='img/edit-icon.png') }}" alt="" style="max-width: 20px;"></a>
-                                        <a href="" class="btn btn-danger" onclick="Alert()"><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px;"></a>
+                                        <a href="{{ url_for('admin_users_delete', id=user.id) }}" class="btn btn-danger" ><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px;"></a>
                                     </td>
                                 </tr>
                             {% endfor %}
