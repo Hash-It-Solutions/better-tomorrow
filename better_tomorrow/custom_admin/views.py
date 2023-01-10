@@ -5,6 +5,7 @@ from django.contrib import messages
 from course.models import Course
 from mocktest.models import Mocktest
 from module.models import Module
+from note.models import Note
 # Create your views here.
 
 def Custom_Admin_Login(request):  
@@ -137,7 +138,6 @@ def Module_admin_Update(request,id1):
     if request.method == 'POST':
         id = request.POST.get('module_id')
         course_id = request.POST.get('course')
-        print(course_id)
         course=Course.objects.get(id=course_id)
         module_title = request.POST.get('module_title')
         module_description = request.POST.get('module_description')
@@ -146,6 +146,64 @@ def Module_admin_Update(request,id1):
     else:
         objs=Module.objects.get(pk=id1)
         return render(request,'CustomAdmin/Edit_Module.html',{'objs':objs})
+
+
+            #    admin side of note
+
+def Note_admin_View(request):
+    objs=Note.objects.all()
+    return render(request,'CustomAdmin/View_Notes.html',{'objs':objs})
+
+def Note_admin_Add(request):
+    if request.method == 'POST':
+        id = request.POST.get('note_id')
+        module_id = request.POST.get('note')
+        module=Module.objects.get(id=module_id)
+        note_title = request.POST.get('note_title')
+        note_content = request.POST.get('note_content')
+        note_file=request.POST.get('file')
+        obj=Note(id=id,module=module,title=note_title,content=note_content,file_field=note_file)
+        obj.save()
+        return redirect('Note_admin_View')
+    else:
+        objs=Module.objects.all()
+        return render(request,'CustomAdmin/Add_Note.html',{'objs':objs})
+
+
+def Note_admin_Update(request,id1):
+    if request.method=='POST':
+        id=request.POST.get('note_id')
+        module_id=request.POST.get('note')
+        module=Module.objects.get(id=module_id)
+        note_title=request.POST.get('note_title')
+        content=request.POST.get('note_content')
+        note_file=request.POST.get('file')
+        Note.objects.filter(pk=id1).update(id=id,module=module,title=note_title,content=content,file_field=note_file)
+        return redirect('Note_admin_View')
+    else:
+        objs=Note.objects.get(pk=id1)
+        return render(request,'CustomAdmin/Edit_Note.html',{'objs':objs})
+
+def Note_admin_Delete(request,id):
+    obj=Note.objects.get(pk=id)
+    obj.delete()
+    return redirect('Note_admin_View')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

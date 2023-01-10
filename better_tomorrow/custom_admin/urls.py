@@ -22,4 +22,11 @@ urlpatterns = [
    path('Module_admin_Update/<int:id1>',views.Module_admin_Update,name='Module_admin_Update'),
 
 
+   
+   path('Note_admin_Add/',views.Note_admin_Add,name='Note_admin_Add'),
+   path('Note_admin_View/',views.Note_admin_View,name='Note_admin_View'),
+   path('Note_admin_Update/<int:id1>',views.Note_admin_Update,name='Note_admin_Update'),
+   path('Note_admin_Delete/<int:id>',views.Note_admin_Delete,name='Note_admin_Delete'),
+   
+
 ]

@@ -127,6 +127,25 @@
                     </div>
                 </div>
             </li>
+
+
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseThree"
+                    aria-expanded="true" aria-controls="collapseThree">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Note</span>
+                </a>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Note Actions:</h6>
+                        <a class="collapse-item" href="{% url 'Note_admin_Add' %}">Add Note</a>
+                        <a class="collapse-item" href="{% url 'Note_admin_View' %}">View Note</a>
+                        
+                    </div>
+                </div>
+            </li>
          
 
 

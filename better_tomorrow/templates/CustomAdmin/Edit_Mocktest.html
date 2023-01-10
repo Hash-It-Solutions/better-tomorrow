@@ -10,7 +10,7 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="categoryName"> Enter the mocktest id</label>
-                    <input type="text" value="{{obj.id}}" class="form-control" id="course_id" name="mocktest_id" placeholder=" Enter the course id">
+                    <input type="text" value="{{module.id}}" class="form-control" id="course_id" name="mocktest_id" placeholder=" Enter the mocktest id">
                 </div>
 
                 <div class="form-group">
@@ -25,19 +25,18 @@
                 
                 
                 <div class="form-group">
-                    <label for="categoryName"> Enter the course title</label>
-                    <input type="text" value="{{obj.title}}" class="form-control" id="mocktest_title" name="mocktest_title" placeholder=" Enter the course title">
+                    <label for="categoryName"> Enter the module title</label>
+                    <input type="text" value="{{module.title}}" class="form-control" id="mocktest_title" name="mocktest_title" placeholder=" Enter the mocktest title">
                 </div>
                 <div class="form-group">
                     <label for="categoryName">Enter the description</label>
-                    <textarea required value="{{obj.description}}" type="text"  class="form-control" rows="4" cols="50" id="mocktest_description" name="course_description" placeholder="Enter the description">{{obj.description}}</textarea>
+                    <textarea type="text" class="form-control" rows="4" cols="50" id="mocktest_description" name="mocktest_description" placeholder="Enter the mocktest_description">{{module.description}}</textarea>
                     
                 </div>
 
                 <div class="form-group">
-                    <label for="categoryName">Enter the due_date</label>
-                    <textarea required value="{{obj.due_date}}" type="text"  class="form-control" rows="4" cols="50" id="date" name="date" placeholder="Enter the description">{{obj.due_date}}</textarea>
-                    
+                    <label for="categoryName"> Enter the due date</label>
+                    <input type="date" value="{{module.due_date}}" class="form-control" id="mocktest_date" name="mocktest_date" placeholder=" Enter the due date">
                 </div>
                 
             

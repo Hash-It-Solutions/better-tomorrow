@@ -1,0 +1,53 @@
+{% extends "CustomAdmin/admin_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 >Add Note</h1>
+
+            <form  method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="categoryName"> Enter the note id</label>
+                    <input type="text" class="form-control" id="note_id" name="note_id" placeholder=" Enter the note_id">
+                </div>
+                
+                
+                <div class="form-group">
+                    <label for="categoryName"> Enter the module name</label>
+                    <select name="note" id="note" class="custom-select my-1 mr-sm-2">
+                        <option disabled selected>Choose...</option>
+                        {% for obj in objs %}
+                        <option value="{{obj.id}}">{{obj.title}}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryName"> Enter the note title</label>
+                    <input type="text" class="form-control" id="note_title" name="note_title" placeholder=" Enter the module title">
+                </div>
+                <div class="form-group">
+                    <label for="categoryName">Enter the content</label>
+                    <textarea type="text" class="form-control" rows="4" cols="50" id="note_content" name="note_content" placeholder="Enter the content"></textarea>
+                    
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryName">Upload the file</label>
+                    <input type="file" class="form-control" id="file" name="file">
+                    
+                </div>
+                
+                
+            
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        
+        </div>
+    </div>
+</div>
+{% endblock %}
