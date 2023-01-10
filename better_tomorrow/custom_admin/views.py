@@ -6,6 +6,8 @@ from course.models import Course
 from mocktest.models import Mocktest
 from module.models import Module
 from note.models import Note
+from subject.models import Subject
+from mocktestquestion.models import MockTestQuestion
 # Create your views here.
 
 def Custom_Admin_Login(request):  
@@ -78,7 +80,7 @@ def Mocktest_admin_Add(request):
         date = request.POST.get('mocktest_date')
         obj=Mocktest(id=id,module=module,title=mocktest_title,description=description,due_date=date)
         obj.save()
-        return redirect('Mocktest_admin_View')
+        return redirect('Mocktest_Question_Add')
     else:
         module=Module.objects.all()
         return render(request,'CustomAdmin/Add_Mocktest.html',{'module':module})
@@ -106,6 +108,7 @@ def Mocktest_admin_Update(request,id1):
     else:
         module=Mocktest.objects.get(pk=id1)
         return render(request,'CustomAdmin/Edit_Mocktest.html',{'module':module})
+
 
             #    admin side of module
 def Module_admin_Add(request):
@@ -189,6 +192,28 @@ def Note_admin_Delete(request,id):
     obj.delete()
     return redirect('Note_admin_View')
 
+
+                        # Admin side of Mocktestquestion
+
+def Mocktest_Question_View(request):
+    obj=MockTestQuestion.objects.all()
+    return render(request,'CustomAdmin/View_MocktestQuestion.html',{'obj':obj})
+    
+def Mocktest_Question_Add(request):
+    if request.method=='POST':
+        id=request.POST.get('mocktest_id')
+        subject_id=request.POST.get('subject')
+        subject=Subject.objects.get(id=subject_id)
+        mocktest_id=request.POST.get('mocktest')
+        mocktest=Mocktest.objects.get(id=mocktest_id)
+        question=request.POST.get('question')
+        obj=MockTestQuestion(id=id,subject=subject,mock_test=mocktest,question=question)
+        obj.save()
+        return redirect('Mocktest_Question_View')
+    else:
+        subject_obj=Subject.objects.all()
+        mocktest_obj=Mocktest.objects.all()
+    return render(request,'CustomAdmin/Add_MocktestQuestion.html',{'subject_obj':subject_obj,'mocktest_obj':mocktest_obj})
 
 
 

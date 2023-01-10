@@ -1,0 +1,51 @@
+{% extends "CustomAdmin/admin_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 >Add MocktestQuestion</h1>
+
+            <form  method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="categoryName"> Enter the mocktest id</label>
+                    <input type="text" class="form-control" id="mocktest_id" name="mocktest_id" placeholder=" Enter the mocktest id">
+                </div>
+                
+                
+                <div class="form-group">
+                    <label for="categoryName"> Enter the subject</label>
+                    <select name="subject" id="subject" class="custom-select my-1 mr-sm-2">
+                        <option disabled selected>Choose...</option>
+                        {% for obj in subject_obj %}
+                        <option value="{{obj.id}}">{{obj.name}}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+                <div class="form-group">
+                    <label for="categoryName"> Enter the mocktest</label>
+                    <select name="mocktest" id="mocktest" class="custom-select my-1 mr-sm-2">
+                        <option disabled selected>Choose...</option>
+                        {% for obj in mocktest_obj %}
+                        <option value="{{obj.id}}">{{obj.title}}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryName"> Enter the question</label>
+                    <input type="text" class="form-control" id="question" name="question" placeholder=" Enter the question">
+                </div>
+            
+            
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        
+        </div>
+    </div>
+</div>
+{% endblock %}
