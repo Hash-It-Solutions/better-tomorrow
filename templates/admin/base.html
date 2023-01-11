@@ -81,6 +81,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Users:</h6>
                         <a class="collapse-item" href="{{ url_for('admin_users') }}">View Users</a>
+                        <a class="collapse-item" href="{{ url_for('admin_users_requests') }}">View Requests</a>
                         
                     </div>
                 </div>
@@ -151,11 +152,16 @@
 
                     <!-- Topbar Search -->
                     
+
+                    <a href="{{ url_for('index') }}" style="background-color: rgba(91, 91, 91, 0.116); border-radius: 6px; padding: 3px;">Back to Website</a>
+                    <div class="website-link"></div>
+
+                        
                    
-                    <a href="{{ url_for('index') }}">Go back to Landing Page</a>
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
+                       
+                        
                       
 
                         <!-- Nav Item - User Information -->
@@ -195,6 +201,21 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
+               <div class="container">
+                {%- if request.path == "/admin/" %}
+                    <a href="/admin/">Admin</a> 
+                {%- elif request.path == "/admin/users" %}
+                    <a href="/admin/">Admin</a> > <a href="{{ url_for('admin_users') }}">Users</a>
+                {%- elif  "/admin/users/view" in request.path %}
+                    <a href="/admin/">Admin</a> > <a href="{{ url_for('admin_users') }}">Users</a> > <a href="">View Users</a>
+                {%- elif "/admin/course" in request.path %}
+                    <a href="/admin/">Admin</a> > <a href="{{ url_for('admin_course') }}">Courses</a>
+                {%- elif "/admin/modules" in request.path %}
+                    <a href="/admin/">Admin</a> > <a href="{{ url_for('admin_course') }}">Courses</a> > <a href="{{ request.path}}">Modules</a>
+                {% endif%}
+
+               </div>
+
                 {% block content %}
                     {# instert here #}
                 {% endblock %}

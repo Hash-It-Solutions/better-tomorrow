@@ -3,215 +3,252 @@
 {% block title %}Courses{% endblock %}
 
 {% block content %}
-  <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex align-items-center">
-    <div class="container">
-      <h1>SERVICE OFFER BY us</h1>
-      <h2>Everyday is the Opportunity for a better Tomorrow</h2>
-      <a href="#about" class="btn-get-started scrollto">Get Started</a>
-    </div>
-  </section><!-- End Hero -->
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="d-flex align-items-center">
+  <div class="container">
+    <h1>SERVICE OFFER BY us</h1>
+    <h2>Everyday is the Opportunity for a better Tomorrow</h2>
+    <a href="#about" class="btn-get-started scrollto">Get Started</a>
+  </div>
+</section><!-- End Hero -->
 
-  <main id="main">
-    <style>
-      #hero {
-        height: 111vh !important;
-      }
-
-
-      .jumbotron {
-        background: #358CCE;
-        color: #FFF;
-        border-radius: 0px;
-      }
-
-      .jumbotron-sm {
-        padding-top: 24px;
-        padding-bottom: 24px;
-      }
-
-      .jumbotron small {
-        color: #FFF;
-      }
-
-      .h1 small {
-        font-size: 24px;
-      }
-
-      .pt-100 {
-        padding-top: 100px;
-      }
-
-      .pb-100 {
-        padding-bottom: 100px;
-      }
-
-      .ptb-100 {
-        padding: 100px 0px;
-      }
-
-      .pt-70 {
-        padding-top: 70px;
-      }
-
-      .pb-70 {
-        padding-bottom: 70px;
-      }
-
-      .ptb-70 {
-        padding: 70px 0px;
-      }
-
-      p {
-        font-size: 15px;
-        margin: 0px;
-        padding: 0px;
-      }
-
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        margin: 0;
-        padding: 0;
-        color: #282936;
-      }
-
-      #services .title {
-        font-size: 46px;
-        color: #000000;
-        font-weight: 600;
-      }
-
-      #services .title span {
-        font-size: 46px;
-        color: #166ab5;
-        font-weight: 600;
-      }
-
-      #services .btn-primary {
-        color: #fff;
-        background-color: #166ab5;
-        border: none;
-        font-size: 14px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        padding: 12px 20px;
-        min-width: 150px;
-        transition: all 0.5s ease;
-        -moz-transition: all 0.5s ease;
-        -webkit-transition: all 0.5s ease;
-        -ms-transition: all 0.5s ease;
-        -o-transition: all 0.5s ease;
-      }
-
-      .btn-primary:hover {
-        -webkit-box-shadow: 0 5px 9px -4px rgb(0 0 255 / 65%);
-        box-shadow: 0 5px 9px -4px rgb(0 0 255 / 65%);
-      }
-
-      .card-items .card {
-        position: relative;
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        min-width: 0;
-        word-wrap: break-word;
-        background-color: #fff;
-        background-clip: border-box;
-        border: none;
-        border-radius: .25rem;
-        box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
-        margin-bottom: 30px;
-      }
-
-      .card-items .card .card-body i {
-        border-radius: 6px;
-        font-size: 31px;
-        color: #166ab5;
-        background-color: #166ab51c;
-        width: 50px;
-        height: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .card-items .card .card-body .card-title {
-        margin-bottom: .75rem;
-        margin-top: 26px;
-        margin-bottom: 15px;
-      }
-
-      .icon-box {
-        text-align: center;
-        padding: 80px 20px !important;
-        transition: all ease-in-out 0.3s;
-        text-align: justify;
-      }
-    </style>
-    <!-- ======= Why Us Section ======= -->
-
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about  section-bg">
-
-      <section id="services" class="bg-light pt-100 pb-70">
-        <div class="container">
+<main id="main">
+  <style>
+    #hero {
+      height: 111vh !important;
+    }
 
 
+    .jumbotron {
+      background: #358CCE;
+      color: #FFF;
+      border-radius: 0px;
+    }
 
-          <div class="row">
+    .jumbotron-sm {
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+
+    .jumbotron small {
+      color: #FFF;
+    }
+
+    .h1 small {
+      font-size: 24px;
+    }
+
+    .pt-100 {
+      padding-top: 100px;
+    }
+
+    .pb-100 {
+      padding-bottom: 100px;
+    }
+
+    .ptb-100 {
+      padding: 100px 0px;
+    }
+
+    .pt-70 {
+      padding-top: 70px;
+    }
+
+    .pb-70 {
+      padding-bottom: 70px;
+    }
+
+    .ptb-70 {
+      padding: 70px 0px;
+    }
+
+    p {
+      font-size: 15px;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 0;
+      padding: 0;
+      color: #282936;
+    }
+
+    #services .title {
+      font-size: 46px;
+      color: #000000;
+      font-weight: 600;
+    }
+
+    #services .title span {
+      font-size: 46px;
+      color: #166ab5;
+      font-weight: 600;
+    }
+
+    #services .btn-primary {
+      color: #fff;
+      background-color: #166ab5;
+      border: none;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 12px 20px;
+      min-width: 150px;
+      transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      -webkit-transition: all 0.5s ease;
+      -ms-transition: all 0.5s ease;
+      -o-transition: all 0.5s ease;
+    }
+
+    .btn-primary:hover {
+      -webkit-box-shadow: 0 5px 9px -4px rgb(0 0 255 / 65%);
+      box-shadow: 0 5px 9px -4px rgb(0 0 255 / 65%);
+    }
+
+    .card-items .card {
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      min-width: 0;
+      word-wrap: break-word;
+      background-color: #fff;
+      background-clip: border-box;
+      border: none;
+      border-radius: .25rem;
+      box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
+      margin-bottom: 30px;
+    }
+
+    .card-items .card .card-body i {
+      border-radius: 6px;
+      font-size: 31px;
+      color: #166ab5;
+      background-color: #166ab51c;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-items .card .card-body .card-title {
+      margin-bottom: .75rem;
+      margin-top: 26px;
+      margin-bottom: 15px;
+    }
+
+    .icon-box {
+      text-align: center;
+      padding: 80px 20px !important;
+      transition: all ease-in-out 0.3s;
+      text-align: justify;
+    }
+  </style>
+  <!-- ======= Why Us Section ======= -->
+
+  <!-- ======= About Section ======= -->
+  <section id="about" class="about  section-bg">
+
+    <section id="services" class="bg-light pt-100 pb-70">
+      <div class="container">
 
 
-            <div class="section-title">
-              <h2>Courses we offer</h2>
-              <p>We help our students comprehend important material and get them ready to respond well in all nursing
-                tests. Every year, thousands of nursing students and nursing officers enroll in special crash courses
-                and quickly and easily pass challenging nursing exams including HAAD, DHA, PROMETRICS, NCLEX RN , AIIMS,
-                JIPMER, DSSSB, PGIMER, and Kerala PSC. Additionally, our straightforward, pragmatic, and laser-focused
-                approach to medical and nursing topics will assist future nurses in updating their knowledge and
-                acquiring the necessary skills.</p>
-            </div>
+
+        <div class="row">
 
 
-            
-        
+          <div class="section-title">
+            <h2>Courses we offer</h2>
+            <p>We help our students comprehend important material and get them ready to respond well in all nursing
+              tests. Every year, thousands of nursing students and nursing officers enroll in special crash courses
+              and quickly and easily pass challenging nursing exams including HAAD, DHA, PROMETRICS, NCLEX RN , AIIMS,
+              JIPMER, DSSSB, PGIMER, and Kerala PSC. Additionally, our straightforward, pragmatic, and laser-focused
+              approach to medical and nursing topics will assist future nurses in updating their knowledge and
+              acquiring the necessary skills.</p>
+          </div>
+
+
+
+
 
           <div class="courses">
             <div class="row">
 
-
-              {% for course in courses %}
-              {% if loop.index%2 == 0 %}
-              <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center" style="background: #166ab5" >
+              <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center"
+              style="background: #166ab5">
               <div class="icon-box">
-
-                <h4><a style="color:#FFFFFF;" href="{{ url_for('course',id=course.id) }}">{{ course.course_name }}</a></h4>
+                <h4><a style="color:#FFFFFF;" href="{{ url_for('courses_c',param='haad') }}">HAAD</a>
+                </h4>
                 <hr>
-                <p style="color:#FFFFFF;">{{ course.course_description }} </p>
-                <div class="float-right" style="padding-top: 2em;"><a href="{{ url_for('course',id=course.id) }}" class="more-btn" style="color: white; ">Register <i class="bx bx-chevron-right"></i></a></div>
-
+                <p style="color:#FFFFFF;">All healthcare professionals including doctors, technicians, dentists, pharmacists and traditional practitioners; especially outside the UAE can now apply online for a medical license to work in the UAE. Each type of professional can apply for the fully-online Examination & Evaluation System (EES) in their own country, thus reducing costs and time. Nurses too must obtain their license from HAAD depending on whether they are applying to be a registered nurse, registered midwife, nurse practitioner, mental health nurse, pediatric nurse, community nurse or assistant .</p>
+                <div class="float-right" style="padding-top: 2em;"><a href="{{ url_for('courses_c',param='haad') }}"
+                    class="more-btn" style="color: white; ">Register <i class="bx bx-chevron-right"></i></a></div>
               </div>
-              
-              
             </div>
-            {% else %}
+
             <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
               <div class="icon-box">
 
-                <h4><a href="{{ url_for('course',id=course.id) }}">{{ course.course_name }}</a></h4>
+                <h4><a href="{{ url_for('courses_c',param='dha') }}">DHA</a></h4>
                 <hr>
-                <p>{{ course.course_description }}</p>
-                <div style="padding-top: 2em;"><a href="{{ url_for('course',id=course.id) }}" class="more-btn">Register <i class="bx bx-chevron-right"></i></a></div>
+                <p>In Dubai, UAE, the DHA exam is a nationwide examination for healthcare professional licenses. This examination is administered by the Dubai Health Authority (DHA) who also manages the professional licensing of medical professionals and oversees the overall health system in Dubai. With a primary degree qualification and two years of clinical experience, you are eligible to enroll for the DHA exam. On passing the exam, you will become one among the medical industry that protects public health and improves the quality of life within the Emirate of Dubai.</p>
+                <div style="padding-top: 2em;"><a href="{{ url_for('courses_c',param='dha') }}"
+                    class="more-btn">Register <i class="bx bx-chevron-right"></i></a></div>
               </div>
             </div>
-            {% endif %}
-            {% endfor %}
 
-  
+             <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center"
+              style="background: #166ab5">
+              <div class="icon-box">
+                <h4><a style="color:#FFFFFF;" href="{{ url_for('courses_c',param='PROMETRICS') }}">PROMETRICS</a>
+                </h4>
+                <hr>
+                <p style="color:#FFFFFF;">All healthcare professionals including doctors, technicians, dentists, pharmacists and traditional practitioners; especially outside the UAE can now apply online for a medical license to work in the UAE. Each type of professional can apply for the fully-online Examination & Evaluation System (EES) in their own country, thus reducing costs and time. Nurses too must obtain their license from 'PROMETRICS' depending on whether they are applying to be a registered nurse, registered midwife, nurse practitioner, mental health nurse, pediatric nurse, community nurse or assistant .</p>
+                <div class="float-right" style="padding-top: 2em;"><a href="{{ url_for('courses_c',param='PROMETRICS') }}"
+                    class="more-btn" style="color: white; ">Register <i class="bx bx-chevron-right"></i></a></div>
+              </div>
+            </div>
+
+
+              {% for course in courses %}
+              {% if loop.index%2 == 0 %}
+              <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center"
+                style="background: #166ab5">
+                <div class="icon-box">
+                  <h4><a style="color:#FFFFFF;" href="{{ url_for('course',id=course.id) }}">{{ course.course_name }}</a>
+                  </h4>
+                  <hr>
+                  <p style="color:#FFFFFF;">{{ course.course_description }} </p>
+                  <div class="float-right" style="padding-top: 2em;"><a href="{{ url_for('course',id=course.id) }}"
+                      class="more-btn" style="color: white; ">Register <i class="bx bx-chevron-right"></i></a></div>
+                </div>
+              </div>
+              {% else %}
+              <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+                <div class="icon-box">
+
+                  <h4><a href="{{ url_for('course',id=course.id) }}">{{ course.course_name }}</a></h4>
+                  <hr>
+                  <p>{{ course.course_description }}</p>
+                  <div style="padding-top: 2em;"><a href="{{ url_for('course',id=course.id) }}"
+                      class="more-btn">Register <i class="bx bx-chevron-right"></i></a></div>
+                </div>
+              </div>
+              {% endif %}
+              {% endfor %}
+
+
+
+
             </div>
           </div>
 
@@ -219,19 +256,16 @@
 
 
 
-          </div>
-
         </div>
-      </section>
 
-    </section><!-- End About Section -->
+      </div>
+    </section>
 
-    <!-- ======= Counts Section ======= -->
+  </section><!-- End About Section -->
 
-    <!-- ======= Appointment Section ======= -->
-  </main>
+  <!-- ======= Counts Section ======= -->
 
-  {% endblock %}
+  <!-- ======= Appointment Section ======= -->
+</main>
 
-
-
+{% endblock %}

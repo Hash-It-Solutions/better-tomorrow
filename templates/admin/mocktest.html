@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>Mocktests</h1>
+    <h1><a href="">Mocktests</a></h1>
     <div class="d-flex justify-content-left"><a href="" class="btn btn-success" data-toggle="modal"
             data-target="#AddQuizModal">Add a quiz </a></div>
     <div class="modal fade" id="AddQuizModal" tabindex="-1" role="dialog" aria-labelledby="AddQuizModalLabel"
@@ -27,6 +27,15 @@
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1"> Quiz Description</label>
                             <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Quiz Duration</label>
+                            <input type="number" class="form-control" id="test_duration" placeholder="Enter minutes" name="test_duration">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Quiz Maximum Score</label>
+                            <input type="number" class="form-control" id="max_marks" placeholder="Enter Maximum Score" name="max_marks">
                         </div>
 
 
@@ -61,9 +70,9 @@
                 <p class="card-text">{{ quiz.test_description }}</p>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">No. Of Questions: 10</li>
-                    <li class="list-group-item">Test duration : 30 mins</li>
-                    <li class="list-group-item">Max Marks : 50</li>
+                    <li class="list-group-item">No. Of Questions: {{ quiz.total_questions}}</li>
+                    <li class="list-group-item">Test duration : {{ quiz.test_duration }} mins</li>
+                    <li class="list-group-item">Max Marks : {{ quiz.max_marks }}</li>
                 </ul>
                 <div class="card-body">
                     <a href="{{ url_for('admin_modules_mocktest_QNA', id=quiz.id) }}" class="card-link">View Mock Test</a>

@@ -14,6 +14,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # from flask_admin.contrib.sqla import ModelView
 import pyimgur
 
+import datetime
 import os
 import base64
 
@@ -37,7 +38,7 @@ if ENV == 'dev' :
 else:
     app.debug = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
-    SECRET_KEY = os.environ.get('SECRET_KEY') 
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     if SQLALCHEMY_DATABASE_URI.startswith("postgres://"):
         SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace("postgres://", "postgresql://", 1)
 
@@ -56,7 +57,13 @@ def admin_required(f):
     return decorated_function
 
 
-
+def teacher_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.user_type != 'teacher':
+            return redirect(url_for('forbidden'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 # class MyAdminIndexView(AdminIndexView):
@@ -88,7 +95,9 @@ class User(UserMixin, db.Model):
     email_confirmation_code = db.Column(db.String, default=False)
     email_confirmed = db.Column(db.String, default=False)
 
+    test_result = db.relationship('MockTestResults', backref='user')
     subscription = db.relationship('subscription', backref='user')
+    classes = db.relationship('Classes', backref='user')
 
 class subscription(db.Model):
     __tablename__ = 'subscription'
@@ -107,6 +116,19 @@ class subscription(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
+class Requets(db.Model):
+    __tablename__ = 'requests'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    staus = db.Column(db.String(80))
+    date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+
+
+
+ 
+
+
 class Courses(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer, primary_key=True)
@@ -118,6 +140,21 @@ class Courses(db.Model):
     course_image = db.Column(db.String(80))
     course_price = db.Column(db.String(80))
     course_module = db.relationship('Modules', backref='course')
+    course_class = db.relationship('Classes', backref='course')
+
+
+
+class Classes(db.Model):
+    __tablename__ = 'classes'
+    id = db.Column(db.Integer, primary_key=True)
+    class_name = db.Column(db.String(80))
+    class_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    class_time = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+     
+
  
 class Modules(db.Model):
     __tablename__ = 'modules'
@@ -136,10 +173,24 @@ class MockTest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     test_name = db.Column(db.String(80))
     test_description = db.Column(db.String(500))
+    test_duration = db.Column(db.String(80))
+    max_marks = db.Column(db.String(80))
     test_image = db.Column(db.String(80))
     test_price = db.Column(db.String(80))
+    total_questions = db.Column(db.Integer)
     module_id = db.Column(db.Integer, db.ForeignKey('modules.id'))
     test_module = db.relationship('MockTestQuestion', backref='test')
+    test_results = db.relationship('MockTestResults', backref='test')
+
+class MockTestResults(db.Model):
+    __tablename__ = 'mocktestresults'
+    id = db.Column(db.Integer, primary_key=True)
+    test_id = db.Column(db.Integer, db.ForeignKey('mocktest.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    marks_obtained = db.Column(db.String(80))
+    test_status = db.Column(db.String(80))
+    test_taken_on = db.Column(db.String(80))
+
 
 class MockTestQuestion(db.Model):
     __tablename__ = 'mocktestquestion'
@@ -173,6 +224,7 @@ class VideoRec(db.Model):
     video_name = db.Column(db.String(80))
     video_description = db.Column(db.String(500))
     video_url = db.Column(db.String(80))
+    video_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     video_price = db.Column(db.String(80))
     module_id = db.Column(db.Integer, db.ForeignKey('modules.id'))
     
@@ -265,6 +317,37 @@ def courses():
     courses = Courses.query.all()
     return render_template('main/courses.html', user=current_user, courses=courses)
 
+@app.route('/courses/<param>', methods=['GET', 'POST'])
+def courses_c(param):
+    courses = Courses.query.all()
+    course = Courses.query.get(1)
+    request = Requets.query.filter_by(user_id=current_user.id).first()
+    
+    if param == 'haad':
+        courses_name = 'HAAD'
+        course_price = course.course_price
+        couese_image = 'departments-2.jpg'
+        courses_description = 'All healthcare professionals including doctors, technicians, dentists, pharmacists and traditional practitioners; especially outside the UAE can now apply online for a medical license to work in the UAE. Each type of professional can apply for the fully-online Examination & Evaluation System (EES) in their own country, thus reducing costs and time. Nurses too must obtain their license from HAAD depending on whether they are applying to be a registered nurse, registered midwife, nurse practitioner, mental health nurse, pediatric nurse, community nurse or assistant .'
+    elif param == 'dha':
+        courses_name = 'DHA'
+        course_price = course.course_price
+        couese_image = 'departments-2.jpg'
+        courses_description = 'In Dubai, UAE, the DHA exam is a nationwide examination for healthcare professional licenses. This examination is administered by the Dubai Health Authority (DHA) who also manages the professional licensing of medical professionals and oversees the overall health system in Dubai. With a primary degree qualification and two years of clinical experience, you are eligible to enroll for the DHA exam. On passing the exam, you will become one among the medical industry that protects public health and improves the quality of life within the Emirate of Dubai.'
+    elif param == 'PROMETRICS':
+        courses_name = 'PROMETRICS'
+        course_price = course.course_price
+        couese_image = 'departments-2.jpg'
+        courses_description = 'Prometric is a wholly owned subsidiary of Educational Testing Services (ETS) and a trusted provider of technology-based testing and assessment solutions. It is a testing and evaluation provider that operates test centers in more than 160 countries. For Foreign nurses who want to work in Saudi Arabia, Oman and Qatar must be eligible for the Prometric exam. In the Nurse Exam of Oman Prometric and Saudi, Qatar, candidates have two and a half hours to complete 70 and 100 questions in multiple choice format. This is a computer-based test and results are available immediately after the test.'
+    return render_template('main/c-course-details.html',param=param, 
+                                                        user=current_user, 
+                                                        courses=courses, 
+                                                        courses_name=courses_name, 
+                                                        courses_description=courses_description,
+                                                        course=course, 
+                                                        course_price=course_price, 
+                                                        couese_image=couese_image,
+                                                        request=request) 
+    
 @app.route('/courses/<int:id>', methods=['GET', 'POST'])
 def course(id):
     courses = Courses.query.all()
@@ -410,6 +493,84 @@ def changeStatus(id, parm):
 
 
 
+
+
+@app.route('/admin/users/requests', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_users_requests():
+    requests = Requets.query.all()
+    users = User.query.all()
+    courses = Courses.query.all()
+    return render_template('admin/viewRequests.html', requests=requests, users=users, courses=courses)
+
+@app.route('/admin/users/requests/add/<int:user_id>/<int:course_id>', methods=['GET', 'POST'])
+@login_required
+def users_requests_add(user_id, course_id):
+    user = User.query.get(user_id)
+    course = Courses.query.get(course_id)
+    req = Requets(user_id=user_id, course_id=course_id, staus="pending")
+    db.session.add(req)
+    db.session.commit()
+    return redirect(url_for('courses'))
+
+    
+
+
+@app.route('/admin/users/sub/add/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_users_sub_add(id):
+    user = User.query.get(id)
+    courses = Courses.query.all()
+    requests = Requets.query.filter_by(user_id=id).first()
+    def status(stat):
+        if str(stat) == 'on':
+            return 1
+        else:
+            return 0
+    if request.method == 'POST':
+        sub = subscription(user_id=id, 
+                            name=request.form['name'],
+                            description=request.form['description'],
+                            # price=request.form['price'],
+                            course_id=request.form['course'],
+                            # duration=request.form['duration'],
+                            # duration_type=request.form['duration_type'],
+                            notes_access=status(request.form.get('notes_access')),
+                            video_access=status(request.form.get('video_access')),
+                            mocktest_access=status(request.form.get('mocktest_access')),
+                            is_active=status(request.form.get('is_active')))
+        db.session.add(sub)
+        db.session.commit()
+        requests.staus = "accepted"
+        requests.date = datetime.datetime.now()
+        db.session.commit()
+        return redirect(url_for('admin_users_requests'))
+    return render_template('admin/addSub.html', user=user, courses=courses)
+
+@app.route('/admin/users/requests/reject/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_users_requests_reject(id):
+    requests = Requets.query.get(id)
+    requests.staus = "rejected"
+    requests.date = datetime.datetime.now()
+    db.session.commit()
+    return redirect(url_for('admin_users_requests'))
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.route('/admin/course/', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -505,12 +666,16 @@ def admin_modules_edit(id):
         return redirect(url_for('admin_modules', id=module.course_id))
     return 'edit module'
 
+
+
+# ------------------------ Module Contents ------------------------ #
 @app.route('/admin/modules/contents/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def admin_modules_contents(id):
     module = Modules.query.get(id)
     return render_template('admin/moduleContents.html', module=module)
+
 
 @app.route('/admin/modules/notes/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -570,6 +735,8 @@ def download(filename):
 def admin_modules_mocktest(id):
     module = Modules.query.get(id)
     mocktest = MockTest.query.all()
+
+
     if request.method == 'POST':
         pass
     return render_template('admin/mocktest.html', mocktest=mocktest, module=module)
@@ -588,7 +755,9 @@ def admin_modules_mocktest_add(id):
             mocktest = MockTest(module_id=id,
                                 test_name=request.form['name'],
                                 test_description=request.form['description'],
-                                # test_duration=request.form['duration'],
+                                test_duration=request.form['test_duration'],
+                                max_marks=request.form['max_marks'],
+                                total_questions=0,
                                 test_image = upload_image.link)
             db.session.add(mocktest)
             db.session.commit()
@@ -639,6 +808,8 @@ def admin_modules_mocktest_Questions_add(id):
                                         question=request.form['question'])
             db.session.add(question)
             db.session.commit()
+            mocktest.total_questions = mocktest.total_questions + 1
+            db.session.commit()
             return redirect(url_for('admin_modules_mocktest_QNA', id=id))
         except Exception as e:
             flash('Error adding Question :- '+str(e))
@@ -650,7 +821,10 @@ def admin_modules_mocktest_Questions_add(id):
 @admin_required
 def admin_modules_mocktest_Questions_delete(id):
     question = MockTestQuestion.query.get(id)
+    mocktest = MockTest.query.get(question.mock_test_id)
     db.session.delete(question)
+    db.session.commit()
+    mocktest.total_questions = mocktest.total_questions - 1
     db.session.commit()
     return redirect(url_for('admin_modules_mocktest_QNA', id=question.mock_test_id))
 
@@ -715,3 +889,71 @@ def admin_modules_mocktest_Questions_Options_edit(id):
         db.session.commit()
         return redirect(url_for('admin_modules_mocktest_QNA', id=q_id.id))
     return 'edit option'
+
+
+
+@app.route('/admin/modules/videoRec/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_videoRec(id):
+    module = Modules.query.get(id)
+    videos = VideoRec.query.filter_by(module_id=id).all()
+    users = User.query.all()
+    subscriptions = subscription.query.all()
+    emails = []
+    for subs in subscriptions:
+        for user in users:
+            if subs.user_id == user.id and subs.video_access and subs.is_active == '1':
+                if user.email not in emails:
+                    emails.append(user.email)
+            
+    return render_template('admin/viewVideos.html', module=module, videos=videos, users=users , subscriptions=subscriptions, emails=emails)
+
+
+
+@app.route('/admin/modules/videoRec/add/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_videoRec_add(id):
+    module = Modules.query.get(id)
+    if request.method == 'POST':
+        try:
+            video_url=request.form['video_url']
+            if 'https://www.youtube.com/watch?v=' in video_url:
+                video_url = video_url.replace('https://www.youtube.com/watch?v=','https://www.youtube.com/embed/')
+            elif 'https://youtu.be/' in video_url:
+                video_url = video_url.replace('https://youtu.be/','https://www.youtube.com/embed/')
+            
+            video = VideoRec(module_id=id,
+                             video_name=request.form['video_name'],
+                             video_date= datetime.datetime.strptime(request.form['video_date'], '%Y-%m-%d'),
+                             video_url=video_url)
+            db.session.add(video)
+            db.session.commit()
+            return redirect(url_for('admin_modules_videoRec', id=id))
+        except Exception as e:
+            flash('Error adding Video :- '+str(e))
+    return redirect(url_for('admin_modules_videoRec', id=id))
+
+@app.route('/admin/modules/videoRec/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_videoRec_delete(id):
+    video = VideoRec.query.get(id)
+    db.session.delete(video)
+    db.session.commit()
+    return redirect(url_for('admin_modules_videoRec', id=video.module_id))
+
+@app.route('/admin/modules/videoRec/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_videoRec_edit(id):
+    video = VideoRec.query.get(id)
+    if request.method == 'POST':
+        video.video_name = request.form['video_name']
+        video_date = datetime.datetime.strptime(request.form['video_date'], '%Y-%m-%d')
+        video.video_date = video_date   
+        video.video_url = request.form['video_url']
+        db.session.commit()
+        return redirect(url_for('admin_modules_videoRec', id=video.module_id))
+    return 'edit video'

@@ -21,7 +21,7 @@
   <div class="card-body">
     <h5 class="card-title">{{module.module_name}} Recordings</h5>
     
-    <a href="#" class="btn btn-primary">View folder</a>
+    <a href="{{ url_for('admin_modules_videoRec', id=module.id) }}" class="btn btn-primary">View folder</a>
   </div>
 </div></div>
         <div class="col"><div class="card" style="width: 18rem;">

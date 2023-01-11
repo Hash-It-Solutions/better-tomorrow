@@ -77,7 +77,7 @@
 
 
                     <li><a class="nav-link scrollto" href="{{ url_for('contact_us') }}">Contact</a></li>
-                    {% if user == None %}
+                    {% if not user.is_authenticated %}
 
                     <li><a class="nav-link scrollto" href="{{ url_for('login') }}" style="color: #1977cc;">Login</a>
                     </li>
@@ -112,7 +112,7 @@
             </div>
 
 
-            {% if user != None %}
+            {% if user.is_authenticated %}
             <div class="dropdown-usr">
                 <img src="{{ url_for('static', filename='img/profile.png') }}" class="dropbtn" alt="">
                 <div class="dropdown-usr-content">
@@ -131,8 +131,7 @@
             {% endif %}
 
 
-
-
+          
 
         </div>
 
