@@ -104,7 +104,7 @@
                     
                     {% else %}
                     <li><a href="#">Profile</a></li>
-                    <li><a href="#">Student Accses</a></li>
+                    <li><a href="{{ url_for('student') }}">Student Accses</a></li>
                     <li><a href="{{ url_for('admin') }}">Admin Accses</a></li>
                     <li><a href="{{ url_for('logout') }}" style="color: rgb(216, 0, 0); margin-bottom: 2em;">Logout</a></li>    
                     {% endif %}
@@ -117,7 +117,7 @@
                 <img src="{{ url_for('static', filename='img/profile.png') }}" class="dropbtn" alt="">
                 <div class="dropdown-usr-content">
                     <a href="#">Profile</a>
-                    <a href="#">Student Accses</a>
+                    <a href="{{ url_for('student') }}">Student Accses</a>
                     {% if user.user_type == 'admin' %}
                     <a href="{{ url_for('admin') }}">Admin Accses</a>
                     {% endif %}

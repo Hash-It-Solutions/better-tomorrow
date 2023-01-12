@@ -1,0 +1,75 @@
+{% extends "student/base.html" %}
+
+{% block title %}Student Accses page{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container">
+    <h1>{{Nav_courses[0].course_name}}</h1>
+    
+    <div class="row" >
+        <div class="col-sm">
+            <div class="folder-view" style="max-width: fit-content; ">
+                <a href="">
+                <i class="fas fa-folder" id="folder_icon1" style="font-size: 10em;  color: rgba(128, 128, 128, 0.427);" ></i> <br> <p style="text-align: center;">Notes</p>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="folder-view" style="max-width: fit-content;">
+                <a href="">
+                <i class="fas fa-folder" id="folder_icon2" style="font-size: 10em; color: rgba(128, 128, 128, 0.427);"></i> <br> <p style="text-align: center;">Video Recordings</p>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="folder-view" style="max-width: fit-content;">
+                <a href="{{ url_for('mocktests_mod',id=Nav_courses[0].id) }}">
+                <i class="fas fa-folder" id="folder_icon3" style="font-size: 10em; color: rgba(128, 128, 128, 0.427);"></i> <br> <p style="text-align: center;">Mocktests</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+<style>
+
+
+
+
+</style>
+
+<script>
+    $(document).ready(function(){
+        $("#folder_icon1").hover(function(){
+            $(this).css("color", "rgba(128, 128, 128, 0.642)");
+        }, function(){
+            $(this).css("color", "rgba(128, 128, 128, 0.427)");
+        });
+    });
+    $(document).ready(function(){
+        $("#folder_icon2").hover(function(){
+            $(this).css("color", "rgba(128, 128, 128, 0.642)");
+        }, function(){
+            $(this).css("color", "rgba(128, 128, 128, 0.427)");
+        });
+    });
+    $(document).ready(function(){
+        $("#folder_icon3").hover(function(){
+            $(this).css("color", "rgba(128, 128, 128, 0.642)");
+        }, function(){
+            $(this).css("color", "rgba(128, 128, 128, 0.427)");
+        });
+    });
+
+    
+    
+    
+    
+</script>
+
+{% endblock %}

@@ -321,7 +321,18 @@ def courses():
 def courses_c(param):
     courses = Courses.query.all()
     course = Courses.query.get(1)
-    request = Requets.query.filter_by(user_id=current_user.id).first()
+    status = 'apply'
+    if current_user.is_authenticated:
+        request = Requets.query.filter_by(user_id=current_user.id).all()
+        for req in request:
+            if req.staus == 'pending':
+                status = 'pending'
+                break
+            elif req.staus == 'approved':
+                status = 'approved'
+                break
+            else:
+                status = 'apply'
     
     if param == 'haad':
         courses_name = 'HAAD'
@@ -346,7 +357,7 @@ def courses_c(param):
                                                         course=course, 
                                                         course_price=course_price, 
                                                         couese_image=couese_image,
-                                                        request=request) 
+                                                        status=status) 
     
 @app.route('/courses/<int:id>', methods=['GET', 'POST'])
 def course(id):
@@ -356,6 +367,41 @@ def course(id):
     return render_template('main/course-detail.html', user=current_user, course=course, modules=modules, courses=courses)
 
 
+def getCourses():
+    subscriptions = subscription.query.filter_by(user_id=current_user.id).all()
+    courses = []
+    for sub in subscriptions:
+        if sub.is_active == '1':
+            c = Courses.query.get(sub.course_id)
+            if c not in courses:
+                courses.append(c)
+    return courses
+
+
+@app.route('/student', methods=['GET', 'POST'])
+@login_required
+def student():
+    
+    return render_template('student/index.html', user=current_user, Nav_courses=getCourses())
+                
+
+
+
+
+@app.route('/student/mocktests/modules/<int:id>', methods=['GET', 'POST'])
+@login_required
+def mocktests_mod(id):
+    modules = Modules.query.filter_by(course_id=id).all()
+    return render_template('student/mocktest-mod.html', user=current_user, Nav_courses=getCourses(), modules=modules)
+
+
+
+@app.route('/student/mocktests/<int:id>', methods=['GET', 'POST'])
+@login_required
+def mocktests(id):
+    module = Modules.query.get(id)
+    mocktests = MockTest.query.filter_by(module_id=id).all()
+    return render_template('student/mocktest.html', user=current_user, Nav_courses=getCourses(), module=module, mocktests=mocktests)
 
 
 
@@ -374,19 +420,7 @@ def course(id):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+# -----------------------------------------------------------Admin Routes------------------------------------------------------------
 
 
 

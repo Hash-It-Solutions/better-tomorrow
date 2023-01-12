@@ -26,7 +26,7 @@
 
                {% if user.is_authenticated %}
                
-                  {% if user.id == request.user_id and course.id == request.course_id %}
+                  {% if status == 'pending' %}
                     <a href="" class="btn btn-primary btn-lg btn-block"
                       style="margin-bottom: 2em; color: black; background-color: rgba(128, 128, 128, 0.196);"  >Course Applied</a>
                   {% else %}
