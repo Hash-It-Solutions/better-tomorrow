@@ -404,10 +404,51 @@ def mocktests(id):
     return render_template('student/mocktest.html', user=current_user, Nav_courses=getCourses(), module=module, mocktests=mocktests)
 
 
+@app.route('/student/mocktests/<int:id>/brief', methods=['GET', 'POST'])
+@login_required
+def mocktests_brief(id):
+    mocktest = MockTest.query.get(id)
+    return render_template('student/mocktest/brief.html', user=current_user, Nav_courses=getCourses(), mocktest=mocktest)
 
 
+@app.route('/student/mocktests/<int:id>/start', methods=['GET', 'POST'])
+@login_required
+def mocktests_start(id):
+    Q = {'question': '', 'choices': [], 'answer': ''}
+    questions = []
+    mocktest = MockTest.query.get(id)
+    mocktest_questions = MockTestQuestion.query.filter_by(mock_test_id=id).all()
+    for question in mocktest_questions:
+        Q['question'] = question.question
+        mocktest_answers = MockTestAnswer.query.filter_by(question_id=id).all()
+        Q['choices'] = [answer.answer for answer in mocktest_answers]
+        Q['answer'] = [answer.answer for answer in mocktest_answers if answer.is_correct][0]
+        questions.append(Q)
+        Q = {'question': '', 'choices': [], 'answer': ''}
+    print(questions)
+        
+            
+    return render_template('student/mocktest/quiz.html', user=current_user, Nav_courses=getCourses(), mocktest=mocktest, questions=questions)
 
 
+@app.route('/student/mocktests/<int:id>/sendResult', methods=['GET', 'POST'])
+@login_required
+def mocktests_result(id):
+    mocktest = MockTest.query.get(id)
+    if request.method == 'POST':
+        print(request.json)
+        print(request.json['user_id'])
+        quiz_results = request.json
+        results = MockTestResults(
+                    user_id=current_user.id,
+                    test_id=mocktest.id,
+                    marks_obtained=quiz_results['score'],
+                    test_taken_on=datetime.datetime.now(),
+                )
+        db.session.add(results)
+        db.session.commit()
+        return jsonify({'status': 'success'})
+    return jsonify({'status': 'error'})
 
 
 

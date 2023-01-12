@@ -1,8 +1,418 @@
-{% extends "mocktest/base.html" %}
+{% extends "student/mocktest/base.html" %}
 
-{% block title %}About Us{% endblock %}
+{% block title %}Quiz{% endblock %}
 {% block content %}
 
+
+
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="quiz-box">
+      <div class="container">
+
+
+
+        <div id="quiz-container">
+          <div class="row justify-content-md-center">
+            <div class="col-9">
+              <div class="col">
+                <h1>Quiz - {{mocktest.test_name}}</h1>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="timer" style="text-align: center;">
+                <h1 id="timer"></h1>
+              </div>
+            </div>
+
+           <div class="container" id="quiz-form">
+             <div class="d-flex justify-content-center" style="align-items: center;">
+
+              <form id="quiz-form">
+                <div class="card" id="quiz-card" style="min-width: 25rem; margin-top: 5rem; margin-bottom: 1em; border-radius: 1em;">
+                  <div class="card-header">
+                    <div class="form-group">
+                      <div id="question" style="padding: 1em; font-size: 2em; font-weight: bolder;"></div>
+                    </div>
+                  </div>
+                  <ul class="list-group list-group-flush" style="border-radius: 1em;">
+                    <div id="choices"></div>
+                  </ul>
+                </div>
+                <div class="form-group" style="text-align: center;">
+                  <input type="button" class="btn btn-secondary" id="previous-button" value="Previous">
+                  <input type="button" class="btn btn-primary" id="next-button" value="Next">
+                </div>
+              </form>
+
+            </div>
+           </div>
+
+          </div>
+        </div>
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <style>
+
+@media only screen and (max-width: 600px) {
+  .quiz-box {
+    max-width: 10%;
+    height: 50em;
+    width: 100em;
+    
+  }
+  #quiz-card{
+    
+    min-width: fit-content !important;
+  }
+ 
+  
+}
+
+    .quiz-box {
+      align-items: center;
+      background-color: rgba(149, 169, 186, 0.285);
+      font: rgba(0, 0, 0, 0.24);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      max-width: 70%;
+      height: 50em;
+      width: 100em;
+
+
+      -webkit-box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+      -moz-box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+      box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+
+    }
+
+    
+
+    .timer {
+
+      /* padding: 1em; */
+      background-color: azure;
+      border-radius: 10px;
+
+      -webkit-box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+      -moz-box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+      box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+
+    }
+  </style>
+
+
+
+  <script>
+    // mobile screen max-width: 600px change timer position
+    if (window.matchMedia("(max-width: 600px)").matches) {
+      document.getElementById("timer").classList.toggle('col-12');
+     
+    }
+    // var questions = [
+    //   {
+    //     question: "What is the capital of India?",
+    //     choices: ["Mumbai", "Delhi", "Kolkata", "Chennai"],
+    //     answer: "Delhi"
+    //   },
+    //   {
+    //     question: "What is the capital of China?",
+    //     choices: ["Beijing", "Shanghai", "Hong Kong", "Guangzhou"],
+    //     answer: "Beijing"
+    //   },
+    //   // ...
+    // ];
+    var questions = {{questions|safe }};
+
+
+    var countdown = "{{ mocktest.test_duration }}" * 60;
+    var timer;
+    var time = 0;
+
+    function startTimer() {
+      timer = setInterval(function () {
+        countdown--;
+        var minutes = Math.floor(countdown / 60);
+        var seconds = countdown % 60;
+        $("#timer").text(minutes + " : " + seconds);
+        if (countdown === 0) {
+          clearInterval(timer);
+          showResults();
+        }
+      }, 1000);
+    }
+
+    $(document).ready(function () {
+      startTime = Date.now();
+      startTimer();
+      correctAnswers = 0;
+      showQuestion();
+    });
+
+    var currentQuestion = 0;
+    var attemptedQuestions = [];
+    var selectedAnswers = [];
+
+
+    $(document).ready(function () {
+      showQuestion();
+    });
+
+    function storeAnswer() {
+      var userAnswer = $("input[name='choice']:checked").val();
+      selectedAnswers[currentQuestion] = userAnswer;
+    }
+
+    $("#previous-button").click(function () {
+      if (currentQuestion > 0) {
+        storeAnswer();
+        currentQuestion--;
+        showQuestion();
+      }
+    });
+
+    $("#next-button").click(function () {
+      var userAnswer = $("input[name='choice']:checked").val();
+      if (userAnswer) {
+        attemptedQuestions.push(currentQuestion);
+        storeAnswer();
+        checkAnswer();
+        currentQuestion++;
+        if (currentQuestion !== questions.length) {
+          showQuestion();
+        } else {
+          showResults();
+        }
+      } else {
+        alert("Please select an answer");
+      }
+    });
+
+    function checkAnswer() {
+      if (questions[currentQuestion].answer === selectedAnswers[currentQuestion]) {
+        correctAnswers++;
+      }
+      if (currentQuestion === questions.length) {
+        showResults();
+      }
+    }
+
+
+    function showQuestion() {
+      attemptedQuestions.push(currentQuestion);
+      var prevSelected = selectedAnswers[currentQuestion];
+      $("#question").text("1. " + questions[currentQuestion].question);
+      $("#choices").empty();
+      for (var i = 0; i < questions[currentQuestion].choices.length; i++) {
+        $("#choices").append("<li class='list-group-item'><input type='radio' class='form-check-input' id='choice_" + i + "' name='choice' value='" + questions[currentQuestion].choices[i] + "'> <label class='form-check-label' for='choice_" + i + "'>" + questions[currentQuestion].choices[i] + " </label> </li> ");
+      }
+      if (prevSelected) {
+        $("input[name='choice'][value='" + prevSelected + "']").prop("checked", true);
+      }
+    }
+
+
+    function showResults() {
+      clearInterval(timer);
+      endTime = Date.now();
+      timeTaken = (endTime - startTime) / 1000;
+      $("#question").text("You got " + correctAnswers + " out of " + questions.length + " questions correct! It took you " + Math.floor(timeTaken / 60) + " mins " + timeTaken % 60 + " seconds to complete the quiz.");
+      $("#choices").empty();
+      $("#previous-button, #next-button").hide();
+      $("#quiz-form").append("<div id='results'></div>");
+      for (var i = 0; i < questions.length; i++) {
+        if (questions[i].answer === selectedAnswers[i]) {
+          $("#results").append("<p>Question " + (i + 1) + ": Correct</p>");
+        } else {
+          $("#results").append("<p>Question " + (i + 1) + ": Incorrect</p>");
+        }
+      }
+      $.ajax({
+        type: "POST",
+        url: "http://192.168.29.166:5000/student/mocktests/{{mocktest.id}}/sendResult",
+        data: JSON.stringify({ score: correctAnswers, user_id: "{{user.id}}" }),
+        headers: { "content-type": "application/json" },
+        success: function (response) {
+          console.log(response);
+        }
+      });
+      // In the showResults() function
+      // 
+    }
+
+
+
+  </script>
+
+
+
+
+
+
+
+
+
+  <!-- <script>
+  var attemptedQuestions = [];
+  var questions = [
+    { question: "What is the capital of France?", choices: ["Paris", "London", "Madrid", "Berlin"], answer: "Paris" },
+    { question: "What is the largest planet in our solar system?", choices: ["Earth", "Jupiter", "Saturn", "Uranus"], answer: "Jupiter" },
+    { question: "What is the currency of Japan?", choices: ["Dollar", "Euro", "Yen", "Pound"], answer: "Yen" }
+  ];
+
+
+  $("input[name='choice']").change(function () {
+    attemptedQuestions.push(currentQuestion);
+  });
+
+  var currentQuestion = 0;
+
+  var selectedAnswers = [];
+
+//function that store the selected answer in the array
+function storeAnswer() {
+    var userAnswer = $("input[name='choice']:checked").val();
+    selectedAnswers[currentQuestion] = userAnswer;
+}
+
+$("#previous-button").click(function() {
+    if (currentQuestion > 0) {
+        storeAnswer();
+        currentQuestion--;
+        showQuestion();
+        var prevSelected = selectedAnswers[currentQuestion];
+        $("input[name='choice'][value='"+prevSelected+"']").prop("checked", true);
+    }
+});
+
+$("#next-button").click(function() {
+    var userAnswer = $("input[name='choice']:checked").val();
+    if (userAnswer) {
+        attemptedQuestions.push(currentQuestion);
+        storeAnswer();
+        currentQuestion++;
+        if(currentQuestion !== questions.length){
+            showQuestion();
+        }else{
+            checkAnswer();
+        }
+    } else {
+        alert("Please select an answer");
+    }
+});
+  
+  // keep track of current question, correct answers and time taken
+  var currentQuestion = 0;
+  var correctAnswers = 0;
+  var timeTaken = 0;
+
+  // create a timer
+  var timer;
+  var timeLeft = 30;
+
+  // show the first question
+  showQuestion();
+
+  // start the timer
+  startTimer();
+
+  // handle form submission
+  $("#quiz-form").submit(function (event) {
+    event.preventDefault();
+    checkAnswer();
+  });
+
+  // check the answer
+  function checkAnswer() {
+    if (currentQuestion === questions.length) {
+        if (attemptedQuestions.length === questions.length) {
+            stopTimer();
+            showResults();
+        } else {
+            alert("You need to answer all questions first!");
+        }
+    }
+
+    // var userAnswer = $("input[name='choice']:checked").val();
+    // if (userAnswer === questions[currentQuestion].answer) {
+    //   correctAnswers++;
+    // }
+    // currentQuestion++;
+    // if (currentQuestion === questions.length) {
+    //   if (attemptedQuestions.length === questions.length) {
+    //     stopTimer();
+    //     showResults();
+    //   } else {
+    //     alert("You need to answer all questions first!");
+    //   }
+    // } else {
+    //   showQuestion();
+    // }
+  }
+
+
+
+
+
+  // show the current question
+  function showQuestion() {
+    var prevSelected = selectedAnswers[currentQuestion];
+    if (prevSelected) {
+        $("input[name='choice'][value='"+prevSelected+"']").prop("checked", true);
+    }
+    if (currentQuestion === 0) {
+      $("#previous-button").attr("disabled", true);
+    } else {
+      $("#previous-button").attr("disabled", false);
+    }
+
+    var question = questions[currentQuestion];
+    $("#question").text(question.question);
+    $("#choices").empty();
+    for (var i = 0; i < question.choices.length; i++) {
+      $("#choices").append("<input type='radio' name='choice' value='" + question.choices[i] + "' required>" + question.choices[i] + "<br>");
+    }
+  }
+
+  // start the timer
+  function startTimer() {
+    timer = setInterval(function () {
+      timeLeft--;
+      $("#timer").text(timeLeft);
+      if (timeLeft === 0) {
+        stopTimer();
+        alert("Time's up!");
+        showResults();
+      }
+    }, 1000);
+  }
+
+  // stop the timer
+  function stopTimer() {
+    clearInterval(timer);
+    timeTaken = 30 - timeLeft;
+  }
+
+  // show the results
+  function showResults() {
+    $("#quiz-form").hide();
+    $("#timer").hide();
+    $("body").append("<div id='results'>You got " + correctAnswers + " out of " + questions.length + " questions correct! <br> Time Taken: " + timeTaken + " seconds</div>");
+  }
+</script> -->
 
 
 

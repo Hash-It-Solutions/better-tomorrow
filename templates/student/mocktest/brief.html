@@ -1,9 +1,61 @@
-{% extends "mocktest/base.html" %}
+{% extends "student/mocktest/base.html" %}
 
-{% block title %}About Us{% endblock %}
+{% block title %}Brief{% endblock %}
 {% block content %}
 
 
 
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="brief-box">
+      <div class="container">
+
+
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <h1 style="text-align: center;">Welcome to Quiz!</h1>
+          </div>
+          <div class="col-6">
+            <img src="{{mocktest.test_image}}" alt="" style="max-width:100%; border-radius: 20px;">
+          </div>
+          <div class="col-12" style="padding: 20px;">
+            <h3 style="text-align: center;"><b>{{mocktest.test_name}}</b></h3>
+            <p style="text-align: center; ">{{mocktest.test_description}}</p>
+          </div>
+          <div class="col-12">
+            <h5 style="text-align: center;"><b>Test Details</b></h5>
+            <p style="text-align: center; ">Total Questions: 10</p>
+            <p style="text-align: center; ">Total Marks: {{mocktest.max_marks}}</p>
+            <p style="text-align: center; ">Time: {{mocktest.test_duration}} minutes</p>
+          </div>  
+          
+            <a href="{{ url_for('mocktests_start', id=mocktest.id)}}" class="btn btn-primary btn-lg btn-block" style="max-width: 40%; margin-bottom: 3em;">Start</a>
+          
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <style>
+    .brief-box {
+      align-items: center;
+      background-color: rgba(149, 169, 186, 0.285);
+      font: rgba(0, 0, 0, 0.24);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      max-width: 70%;
+      width: 100em;
+      
+
+      -webkit-box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+      -moz-box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+      box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+
+    }
+  </style>
 
   {% endblock %}
