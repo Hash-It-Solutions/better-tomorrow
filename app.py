@@ -36,11 +36,13 @@ ENV = 'prod'
 
 if ENV == 'dev' :
     app.debug = True
+    PROPPLER_PATH = r'C:\Program Files\poppler-0.68.0\bin'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
     app.config['SECRET_KEY'] = 'asdasdasdasdasdasdasdaveqvq34c'
       
 else:
     app.debug = False
+    PROPPLER_PATH = r'vendor\poppler\bin'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SECRET_KEY = os.environ.get('SECRET_KEY')
     if SQLALCHEMY_DATABASE_URI.startswith("postgres://"):
@@ -851,7 +853,7 @@ def admin_modules_notes_upload(id):
                 db.session.add(note)
                 db.session.commit()
 
-                images = convert_from_path(UPLOAD_FOLDER+pdf_filename,poppler_path=r'C:\Program Files\poppler-0.68.0\bin', fmt='jpg')
+                images = convert_from_path(UPLOAD_FOLDER+pdf_filename,poppler_path=PROPPLER_PATH, fmt='jpg')
                 for i in range(len(images)):
                     # images[i].save('page'+ str(i) +'.jpg', 'JPEG')
                     images[i].save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename + 'page'+ str(i) +'.jpg'), 'JPEG')
