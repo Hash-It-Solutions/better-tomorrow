@@ -18,6 +18,10 @@ import datetime
 import os
 import base64
 
+from pdf2image import convert_from_path
+ 
+
+
 app = Flask(__name__)
 app.secret_key = 'asdasdasdasdasdasdasaasdasdasdasd12312312daveqvq34c'
 
@@ -214,9 +218,16 @@ class Notes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     note_name = db.Column(db.String(80))
     note_description = db.Column(db.String(500))
-    note_image = db.Column(db.String(80))
-    note_filename = db.Column(db.String(80))
+    # note_image = db.Column(db.String(80))
+    # note_filename = db.Column(db.String(80))
     module_id = db.Column(db.Integer, db.ForeignKey('modules.id'))
+    note_images = db.relationship('NoteImages', backref='note')
+
+class NoteImages(db.Model):
+    __tablename__ = 'noteimages'
+    id = db.Column(db.Integer, primary_key=True)
+    note_id = db.Column(db.Integer, db.ForeignKey('notes.id'))
+    image_url = db.Column(db.String(80))
 
 class VideoRec(db.Model):
     __tablename__ = 'videorec'
@@ -451,13 +462,49 @@ def mocktests_result(id):
     return jsonify({'status': 'error'})
 
 
+# @app.route('/student/mocktests/<int:id>/result', methods=['GET', 'POST'])
+# @login_required
+# def mocktests_result_view(id):
+#     mocktest = MockTest.query.get(id)
+#     results = MockTestResults.query.filter_by(user_id=current_user.id, test_id=id).first()
+#     return render_template('student/mocktest/result.html', user=current_user, Nav_courses=getCourses(), mocktest=mocktest, results=results)
 
 
 
+@app.route('/student/video/modules/<int:id>', methods=['GET', 'POST'])
+@login_required
+def video_mod(id):
+    modules = Modules.query.filter_by(course_id=id).all()
+    return render_template('student/video-mod.html', user=current_user, Nav_courses=getCourses(), modules=modules)
+
+@app.route('/student/video/<int:id>', methods=['GET', 'POST'])
+@login_required
+def video(id):
+    module = Modules.query.get(id)
+    videos = VideoRec.query.filter_by(module_id=id).all()
+    return render_template('student/videos.html', user=current_user, Nav_courses=getCourses(), module=module, videos=videos)
 
 
+@app.route('/student/notes/modules/<int:id>', methods=['GET', 'POST'])
+@login_required
+def notes_mod(id):
+    modules = Modules.query.filter_by(course_id=id).all()
+    return render_template('student/notes-mod.html', user=current_user, Nav_courses=getCourses(), modules=modules)
 
+@app.route('/student/notes/<int:id>', methods=['GET', 'POST'])
+@login_required
+def notes(id):
+    module = Modules.query.get(id)
+    notes = Notes.query.filter_by(module_id=id).all()
+    noteImages = NoteImages.query.all() 
+    return render_template('student/notes.html', user=current_user, Nav_courses=getCourses(), module=module, notes=notes, noteImages=noteImages)
 
+@app.route('/student/notes/<int:id>/view', methods=['GET', 'POST'])
+@login_required
+def notes_view(id):
+    note = Notes.query.get(id)
+    noteImages = NoteImages.query.filter_by(note_id=id).all()
+    return render_template('student/note-view.html', user=current_user, Nav_courses=getCourses(), note=note, noteImages=noteImages)
 
 
 
@@ -592,13 +639,13 @@ def users_requests_add(user_id, course_id):
     
 
 
-@app.route('/admin/users/sub/add/<int:id>', methods=['GET', 'POST'])
+@app.route('/admin/users/sub/add/<int:id>/<int:req_id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def admin_users_sub_add(id):
+def admin_users_sub_add(id,req_id):
     user = User.query.get(id)
     courses = Courses.query.all()
-    requests = Requets.query.filter_by(user_id=id).first()
+    requests = Requets.query.get(req_id)
     def status(stat):
         if str(stat) == 'on':
             return 1
@@ -758,6 +805,40 @@ def admin_modules_contents(id):
 def admin_modules_notes(id):
     module = Modules.query.get(id)
     notes = Notes.query.filter_by(module_id=id).all()
+    noteImages = NoteImages.query.all()
+    # if request.method == 'POST':
+    #     try:
+    #         notes_pdfs = request.files.getlist('notes_pdf')
+    #         for pdf in notes_pdfs:
+    #             pdf_filename = secure_filename(pdf.filename)
+    #             basedir = os.path.abspath(os.path.dirname(__file__))
+    #             pdf.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename))
+    #             note = Notes(note_name=request.form['name'],#######################
+    #                         module_id=id)
+    #             db.session.add(note)
+    #             db.session.commit()
+
+    #             images = convert_from_path(UPLOAD_FOLDER+pdf_filename,poppler_path=r'C:\Program Files\poppler-0.68.0\bin', fmt='jpg')
+    #             for i in range(len(images)):
+    #                 # images[i].save('page'+ str(i) +'.jpg', 'JPEG')
+    #                 images[i].save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename + 'page'+ str(i) +'.jpg'), 'JPEG')
+    #                 upload_image = im.upload_image(os.path.join(basedir, app.config['UPLOAD_FOLDER'],  pdf_filename + 'page'+ str(i) +'.jpg'), title= pdf_filename + 'page'+ str(i) +'.SSjpg')
+    #                 noteImg = NoteImages(note_id=note.id, image_url=upload_image.link)
+    #                 db.session.add(noteImg)
+    #                 db.session.commit()
+    #                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'],  pdf_filename + 'page'+ str(i) +'.jpg'))
+    #             os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename))
+    #         return redirect(url_for('admin_modules_notes', id=id))
+    #     except Exception as e:
+    #         flash('Error adding Note :- '+str(e))
+    return render_template('admin/notes.html', notes=notes, module=module, noteImages=noteImages)
+
+@app.route('/admin/modules/notes/upload/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_notes_upload(id):
+    module = Modules.query.get(id)
+    notes = Notes.query.filter_by(module_id=id).all()
     if request.method == 'POST':
         try:
             notes_pdfs = request.files.getlist('notes_pdf')
@@ -765,14 +846,27 @@ def admin_modules_notes(id):
                 pdf_filename = secure_filename(pdf.filename)
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 pdf.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename))
-                note = Notes(note_filename=pdf_filename,
+                note = Notes(note_name=request.form['name'],note_description=request.form['description'],
                             module_id=id)
                 db.session.add(note)
                 db.session.commit()
+
+                images = convert_from_path(UPLOAD_FOLDER+pdf_filename,poppler_path=r'C:\Program Files\poppler-0.68.0\bin', fmt='jpg')
+                for i in range(len(images)):
+                    # images[i].save('page'+ str(i) +'.jpg', 'JPEG')
+                    images[i].save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename + 'page'+ str(i) +'.jpg'), 'JPEG')
+                    upload_image = im.upload_image(os.path.join(basedir, app.config['UPLOAD_FOLDER'],  pdf_filename + 'page'+ str(i) +'.jpg'), title= pdf_filename + 'page'+ str(i) +'.SSjpg')
+                    noteImg = NoteImages(note_id=note.id, image_url=upload_image.link)
+                    db.session.add(noteImg)
+                    db.session.commit()
+                    os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'],  pdf_filename + 'page'+ str(i) +'.jpg'))
+                os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename))
             return redirect(url_for('admin_modules_notes', id=id))
         except Exception as e:
-            flash('Error adding Note :- '+str(e))
-    return render_template('admin/notes.html', notes=notes, module=module)
+            return jsonify({'error': str(e)})
+    
+    return 'no post'
+
 
 @app.route('/admin/modules/notes/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -891,6 +985,21 @@ def admin_modules_mocktest_Questions_add(id):
             return str(e)
     return redirect(url_for('admin_modules_mocktest_QNA',id=id))
 
+@app.route('/admin/modules/mocktest/Questions/add/execl/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_mocktest_Questions_add_execl(id):
+    mocktest = MockTest.query.get(id)
+    if request.method == 'POST':
+        try:
+            f = request.files['file']
+           
+            return redirect(url_for('admin_modules_mocktest_QNA', id=id))
+        except Exception as e:
+            flash('Error adding Question :- '+str(e))
+            return str(e)
+    return redirect(url_for('admin_modules_mocktest_QNA',id=id))
+
 @app.route('/admin/modules/mocktest/Questions/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -964,6 +1073,7 @@ def admin_modules_mocktest_Questions_Options_edit(id):
         db.session.commit()
         return redirect(url_for('admin_modules_mocktest_QNA', id=q_id.id))
     return 'edit option'
+
 
 
 

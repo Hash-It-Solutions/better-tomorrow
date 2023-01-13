@@ -59,7 +59,7 @@
                                             </div>
                                             {% for user in users %}
                                                             {% if user.id == request.user_id %}
-                                            <form method="post" action="/admin/users/sub/add/{{user.id}}">
+                                            <form method="post" action="/admin/users/sub/add/{{user.id}}/{{request.id}}">
                                                 <div class="modal-body">
 
                                                     <div class="form-group">
@@ -84,7 +84,7 @@
                                                         id="inlineFormCustomSelectPref" name="course">
                                                         {% for course in courses %}
                                                         {% if course.id == request.course_id %}
-                                                        <option selected >{{ course.course_name }}</option>
+                                                        <option value="{{ course.id }}" selected >{{ course.course_name }}</option>
 
                                                         {% endif %}
                                                         {% endfor %}

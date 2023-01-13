@@ -12,14 +12,14 @@
     <div class="row" >
         <div class="col-sm">
             <div class="folder-view" style="max-width: fit-content; ">
-                <a href="">
+                <a href="{{ url_for('notes_mod',id=Nav_courses[0].id) }}">
                 <i class="fas fa-folder" id="folder_icon1" style="font-size: 10em;  color: rgba(128, 128, 128, 0.427);" ></i> <br> <p style="text-align: center;">Notes</p>
                 </a>
             </div>
         </div>
         <div class="col-sm">
             <div class="folder-view" style="max-width: fit-content;">
-                <a href="">
+                <a href="{{ url_for('video_mod',id=Nav_courses[0].id) }}">
                 <i class="fas fa-folder" id="folder_icon2" style="font-size: 10em; color: rgba(128, 128, 128, 0.427);"></i> <br> <p style="text-align: center;">Video Recordings</p>
                 </a>
             </div>

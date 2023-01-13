@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+
+{% block title %}View Notes{% endblock %}
+
+{% block content %}
+
+
+{% for image in noteImages %}
+    <img src="{{ image.image_url }}" alt="" style="width: 100%;">
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

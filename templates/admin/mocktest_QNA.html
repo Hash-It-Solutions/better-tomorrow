@@ -9,7 +9,10 @@
     <h1>Mocktest - <a href="{{ url_for('admin_modules_mocktest',id=mocktest.id)}}">{{ mocktest.test_name }}</a> </h1>
     <div class="d-flex justify-content-left"><a href="" class="btn btn-success" data-toggle="modal"
             data-target="#AddQuestion">Add Questions <img src="{{ url_for('static', filename='img/add-icon.png') }}"
-                alt=""></a></div>
+                alt=""></a>
+            <a href="" class="btn btn-info" data-toggle="modal"
+            data-target="#Excel">Upload Execl <i class="fas fa-table" style="font-size: 40px;"></i></a></div>
+            
     <div class="modal fade" id="AddQuestion" tabindex="-1" role="dialog" aria-labelledby="AddQuestionLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -50,6 +53,58 @@
         </div>
     </div>
 
+    <div class="modal fade" id="Excel" tabindex="-1" role="dialog" aria-labelledby="ExcelLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ExcelLabel">Add through Excel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" enctype="multipart/form-data" action="/admin/modules/mocktest/Questions/add/execl/{{mocktest.id}}">
+                    <div class="modal-body">
+
+                   
+                        <div class="fileUpload">
+                            <br>
+                            <h1>Upload Multiple PDF Files</h1>
+                            <hr>   
+                            <div id="upload" class="upload">
+                            <input type="file" multiple  accept="application/pdf" name="notes_pdf" required>
+                            </div>
+                            
+                            </div>
+
+
+                        <!-- <div class="form-group">
+                                    <label for="exampleFormControlFile1">Choose an Image</label>
+                                    <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                        name="module_image">
+                                </div> -->
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" id="submit_btn"  class="btn btn-primary">Add Question</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#file_form').on('submit', function () {
+
+            $('#submit_btn').attr('disabled', 'disabled');
+            $('#submit_btn').html('Please Wait <div class="spinner" style="color: #EEE; max-width: 30px; display: inline;"><img id="spinner" src="{{url_for("static", filename="img/Spinner.svg")}}" alt="" style="color: #EEE; max-width: 25px; display: inline;"></div>');
+            
+            
+
+        });
+    </script>
 
     <div id="accordion">
 

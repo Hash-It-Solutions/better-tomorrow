@@ -20,31 +20,35 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" id="file_form" enctype="multipart/form-data" action="/admin/modules/notes/upload/{{module.id}}">
                         <div class="modal-body">
-
+                            <div class="name">
+                                <label>Note Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter Note Name"
+                                    name="name"> <br>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1"> Note Description</label>
+                                <textarea class="form-control" id="description" name="description" placeholder="Enter Note Description"
+                                    rows="3"></textarea>
+                            </div>
                           
                             <div class="fileUpload">
                                 <br>
                                 <h1>Upload Multiple PDF Files</h1>
                                 <hr>   
                                 <div id="upload" class="upload">
-                                <input type="file" multiple onchange="showFile()" accept="application/pdf" name="notes_pdf" required>
+                                <input type="file" multiple  accept="application/pdf" name="notes_pdf" required>
                                 </div>
-                                <ul id="preview"></ul>
+                                
                                 </div>
 
 
                         </div>
                         <div class="modal-footer">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="is_active" name="is_active"
-                                    checked>
-                                <label class="custom-control-label" for="is_active">Activate
-                                    Module</label>
-                            </div>
+                            
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <button type="submit" id="submit_btn" class="btn btn-primary">Save changes </button>
                         </div>
                     </form>
 
@@ -53,16 +57,89 @@
         </div>
     </div>
 
+    <script>
+        $('#file_form').on('submit', function () {
+
+            $('#submit_btn').attr('disabled', 'disabled');
+            $('#submit_btn').html('Please Wait <div class="spinner" style="color: #EEE; max-width: 30px; display: inline;"><img id="spinner" src="{{url_for("static", filename="img/Spinner.svg")}}" alt="" style="color: #EEE; max-width: 25px; display: inline;"></div>');
+            
+            
+
+        });
+    </script>
 
     {% for note in notes %}
     <div class="card-deck">
         <div class="card" style="width: 18rem;">
             <div class="card-body">
               <h5 class="card-title">{{ note.note_name }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{ note.note_filename}}</h6>
+            
               <p class="card-text">{{ note.note_description }}</p>
-              <div class="col-9"><a href="{{ url_for('download', filename=note.note_filename) }}" class="card-link">Download PDF</a></div>
               
+                
+                <div class="container" >
+
+
+
+
+                    <div class="carousel" data-flickity>
+                            {% for noteImage in noteImages %}
+                                {% if noteImage.note_id == note.id %}
+                                <div class="carousel-cell" ><img src="{{ noteImage.image_url }}" alt="" style="width: 100%;"></div>
+                                {% endif %}
+                                {% endfor %}
+                                
+                    </div>
+                    
+                    
+                </div>
+
+
+
+<style>
+ /* external css: flickity.css */
+
+* { box-sizing: border-box; }
+
+body { font-family: sans-serif; }
+
+/* prevent vertical scroll bar glitch */
+html { overflow-y: scroll; }
+
+.carousel {
+  background: #EEE;
+  width: 50%;
+}
+
+.carousel-cell {
+  width: 100%;
+  height: fit-content;
+  margin-right: 10px;
+  
+  border-radius: 5px;
+  counter-increment: gallery-cell;
+}
+
+/* cell number */
+.carousel-cell:before {
+  display: block;
+  text-align: center;
+ 
+  line-height: 200px;
+  font-size: 80px;
+  color: white;
+}
+
+</style>
+
+
+
+
+
+
+
+
+
               <div class="float-right">
                 <div class="row">
                     <div class="col">

@@ -1,0 +1,55 @@
+{% extends "student/base.html" %}
+
+{% block title %}Notes{% endblock %}
+{% block content %}
+
+
+<div class="container">
+  <h1>Class Notes in {{module.module_name}}</h1>
+
+
+  <div class="row">
+    {% for note in notes %}
+
+    <div class="col">
+        <div class="card" style="width: 18rem;">
+            <div class="carousel" data-flickity>
+                {% for noteImage in noteImages %}
+                    {% if noteImage.note_id == note.id %}
+                    <div class="carousel-cell" ><img src="{{ noteImage.image_url }}" alt="" style="width: 100%;"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{note.note_name}}</h5>
+              <p class="card-text">{{note.note_description}}</p>
+              <a href="{{url_for('notes_view', id=note.id)}}" class="btn btn-primary">View</a>
+            </div>
+          </div>     
+    </div>
+    {% endfor %}
+  </div>
+
+  
+    
+    
+      
+
+
+       
+                
+
+    
+
+
+<style>
+    .card{
+        margin: 10px;
+        
+      -webkit-box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+      -moz-box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+      box-shadow: 14px 14px 25px 0px rgba(0, 0, 0, 0.3);
+    }
+</style>
+
+{% endblock %}
