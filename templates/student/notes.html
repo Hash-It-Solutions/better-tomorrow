@@ -11,7 +11,44 @@
   <div class="row">
     {% for note in notes %}
 
-    <div class="col">
+    {% if isSubActive  %}
+      <div class="col">
+          <div class="card" style="width: 18rem;">
+              <div class="carousel" data-flickity>
+                  {% for noteImage in noteImages %}
+                      {% if noteImage.note_id == note.id %}
+                      <div class="carousel-cell" ><img src="{{ noteImage.image_url }}" alt="" style="width: 100%;"></div>
+                      {% endif %}
+                  {% endfor %}
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{note.note_name}}</h5>
+                <p class="card-text">{{note.note_description}}</p>
+                <a href="{{url_for('notes_view', id=note.id)}}" class="btn btn-primary">View</a>
+              </div>
+            </div>     
+      </div>
+    {% else %}
+   
+      {% if loop.index >= 2 %}
+      <div class="col">
+        <div class="card" style="width: 18rem; background-color: rgba(128, 128, 128, 0.365);">
+            <div class="carousel" data-flickity>
+                {% for noteImage in noteImages %}
+                    {% if noteImage.note_id == note.id %}
+                    <div class="carousel-cell" ><img src="{{ noteImage.image_url }}" alt="" style="width: 100%; filter: blur(8px); -webkit-filter: blur(8px); "></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{note.note_name}}</h5>
+              <p class="card-text">{{note.note_description}}</p>
+              <a href="{{ url_for('courses') }}" class="btn btn-primary">SUBSCRIBE TO GET ACCSES</a>
+            </div>
+          </div>     
+      </div>
+      {% else %}
+      <div class="col">
         <div class="card" style="width: 18rem;">
             <div class="carousel" data-flickity>
                 {% for noteImage in noteImages %}
@@ -26,23 +63,23 @@
               <a href="{{url_for('notes_view', id=note.id)}}" class="btn btn-primary">View</a>
             </div>
           </div>     
-    </div>
+      </div>
+      {% endif %}
+    {% endif %}
+    
     {% endfor %}
   </div>
 
+</div>
   
     
     
       
 
 
-       
-                
-
-    
-
 
 <style>
+
     .card{
         margin: 10px;
         

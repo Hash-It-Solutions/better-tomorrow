@@ -37,10 +37,15 @@
                       <div id="question" style="padding: 1em; font-size: 2em; font-weight: bolder;"></div>
                     </div>
                   </div>
-                  <ul class="list-group list-group-flush" style="border-radius: 1em;">
-                    <div id="choices"></div>
-                  </ul>
                 </div>
+
+             
+             
+                  <div class="row" id="choices" style="margin-bottom: 1em;"></div>
+                
+                  
+               
+
                 <div class="form-group" style="text-align: center;">
                   <input type="button" class="btn btn-secondary" id="previous-button" value="Previous">
                   <input type="button" class="btn btn-primary" id="next-button" value="Next">
@@ -66,6 +71,25 @@
 
   <style>
 
+
+    .col-6 {
+      background-color: rgba(40, 40, 40, 0.299);
+      color: white;
+      border-radius: 1em;
+      border: 1px solid white;
+      padding: 2em;
+      max-width: 50%;
+      
+    }
+
+    .col-6:hover {
+      background-color: rgba(93, 220, 255, 0.639);
+      color: rgb(33, 33, 33);
+      border-radius: 1em;
+      padding: 2em;
+      border: 1px solid rgba(93, 220, 255, 0.639);
+      
+    }
 @media only screen and (max-width: 600px) {
   .quiz-box {
     max-width: 10%;
@@ -89,7 +113,8 @@
       padding: 20px;
       margin-top: 20px;
       max-width: 70%;
-      height: 50em;
+      min-height: 70%;
+      height: fit-content;
       width: 100em;
 
 
@@ -217,7 +242,7 @@
       $("#question").text("1. " + questions[currentQuestion].question);
       $("#choices").empty();
       for (var i = 0; i < questions[currentQuestion].choices.length; i++) {
-        $("#choices").append("<li class='list-group-item'><input type='radio' class='form-check-input' id='choice_" + i + "' name='choice' value='" + questions[currentQuestion].choices[i] + "'> <label class='form-check-label' for='choice_" + i + "'>" + questions[currentQuestion].choices[i] + " </label> </li> ");
+        $("#choices").append("<div class='col-6'><input type='radio' class='form-check-input' id='choice_" + i + "' name='choice' value='" + questions[currentQuestion].choices[i] + "'> <label class='form-check-label' style='cursor: pointer;' for='choice_" + i + "'>" + questions[currentQuestion].choices[i] + " </label> </div>");
       }
       if (prevSelected) {
         $("input[name='choice'][value='" + prevSelected + "']").prop("checked", true);
@@ -235,18 +260,24 @@
       $("#quiz-form").append("<div id='results'></div>");
       for (var i = 0; i < questions.length; i++) {
         if (questions[i].answer === selectedAnswers[i]) {
-          $("#results").append("<p>Question " + (i + 1) + ": Correct</p>");
+          $("#results").append("<p>Question " + (i + 1) +": "+ questions[i].question + "<br>" + ": Correct</p>");
         } else {
           $("#results").append("<p>Question " + (i + 1) + ": Incorrect</p>");
         }
       }
       $.ajax({
         type: "POST",
-        url: "http://192.168.29.166:5000/student/mocktests/{{mocktest.id}}/sendResult",
-        data: JSON.stringify({ score: correctAnswers, user_id: "{{user.id}}" }),
+        url: "{{URL}}student/mocktests/{{mocktest.id}}/sendResult",
+        data: JSON.stringify({score: ({{mocktest.max_marks}}/{{mocktest.total_questions}})*correctAnswers, 
+                              user_id: "{{user.id}}",
+                              questions: questions, 
+                              answers: selectedAnswers, 
+                              time: timeTaken }),
         headers: { "content-type": "application/json" },
         success: function (response) {
           console.log(response);
+          window.location.href = "{{URL}}student/mocktests/"+ response["id"] +"/result";
+
         }
       });
       // In the showResults() function
@@ -257,162 +288,6 @@
 
   </script>
 
-
-
-
-
-
-
-
-
-  <!-- <script>
-  var attemptedQuestions = [];
-  var questions = [
-    { question: "What is the capital of France?", choices: ["Paris", "London", "Madrid", "Berlin"], answer: "Paris" },
-    { question: "What is the largest planet in our solar system?", choices: ["Earth", "Jupiter", "Saturn", "Uranus"], answer: "Jupiter" },
-    { question: "What is the currency of Japan?", choices: ["Dollar", "Euro", "Yen", "Pound"], answer: "Yen" }
-  ];
-
-
-  $("input[name='choice']").change(function () {
-    attemptedQuestions.push(currentQuestion);
-  });
-
-  var currentQuestion = 0;
-
-  var selectedAnswers = [];
-
-//function that store the selected answer in the array
-function storeAnswer() {
-    var userAnswer = $("input[name='choice']:checked").val();
-    selectedAnswers[currentQuestion] = userAnswer;
-}
-
-$("#previous-button").click(function() {
-    if (currentQuestion > 0) {
-        storeAnswer();
-        currentQuestion--;
-        showQuestion();
-        var prevSelected = selectedAnswers[currentQuestion];
-        $("input[name='choice'][value='"+prevSelected+"']").prop("checked", true);
-    }
-});
-
-$("#next-button").click(function() {
-    var userAnswer = $("input[name='choice']:checked").val();
-    if (userAnswer) {
-        attemptedQuestions.push(currentQuestion);
-        storeAnswer();
-        currentQuestion++;
-        if(currentQuestion !== questions.length){
-            showQuestion();
-        }else{
-            checkAnswer();
-        }
-    } else {
-        alert("Please select an answer");
-    }
-});
-  
-  // keep track of current question, correct answers and time taken
-  var currentQuestion = 0;
-  var correctAnswers = 0;
-  var timeTaken = 0;
-
-  // create a timer
-  var timer;
-  var timeLeft = 30;
-
-  // show the first question
-  showQuestion();
-
-  // start the timer
-  startTimer();
-
-  // handle form submission
-  $("#quiz-form").submit(function (event) {
-    event.preventDefault();
-    checkAnswer();
-  });
-
-  // check the answer
-  function checkAnswer() {
-    if (currentQuestion === questions.length) {
-        if (attemptedQuestions.length === questions.length) {
-            stopTimer();
-            showResults();
-        } else {
-            alert("You need to answer all questions first!");
-        }
-    }
-
-    // var userAnswer = $("input[name='choice']:checked").val();
-    // if (userAnswer === questions[currentQuestion].answer) {
-    //   correctAnswers++;
-    // }
-    // currentQuestion++;
-    // if (currentQuestion === questions.length) {
-    //   if (attemptedQuestions.length === questions.length) {
-    //     stopTimer();
-    //     showResults();
-    //   } else {
-    //     alert("You need to answer all questions first!");
-    //   }
-    // } else {
-    //   showQuestion();
-    // }
-  }
-
-
-
-
-
-  // show the current question
-  function showQuestion() {
-    var prevSelected = selectedAnswers[currentQuestion];
-    if (prevSelected) {
-        $("input[name='choice'][value='"+prevSelected+"']").prop("checked", true);
-    }
-    if (currentQuestion === 0) {
-      $("#previous-button").attr("disabled", true);
-    } else {
-      $("#previous-button").attr("disabled", false);
-    }
-
-    var question = questions[currentQuestion];
-    $("#question").text(question.question);
-    $("#choices").empty();
-    for (var i = 0; i < question.choices.length; i++) {
-      $("#choices").append("<input type='radio' name='choice' value='" + question.choices[i] + "' required>" + question.choices[i] + "<br>");
-    }
-  }
-
-  // start the timer
-  function startTimer() {
-    timer = setInterval(function () {
-      timeLeft--;
-      $("#timer").text(timeLeft);
-      if (timeLeft === 0) {
-        stopTimer();
-        alert("Time's up!");
-        showResults();
-      }
-    }, 1000);
-  }
-
-  // stop the timer
-  function stopTimer() {
-    clearInterval(timer);
-    timeTaken = 30 - timeLeft;
-  }
-
-  // show the results
-  function showResults() {
-    $("#quiz-form").hide();
-    $("#timer").hide();
-    $("body").append("<div id='results'>You got " + correctAnswers + " out of " + questions.length + " questions correct! <br> Time Taken: " + timeTaken + " seconds</div>");
-  }
-</script> -->
 
 
 

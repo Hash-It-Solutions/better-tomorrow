@@ -1,0 +1,64 @@
+{% extends "admin/base.html" %}
+
+{% block title %}View Users{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <form method="post" >
+        <div class="form-group">
+            <label for="formName">Enter Name</label>
+            <input type="text" class="form-control" id="formName" placeholder="Enetr Name" name="name">
+        </div>
+        <div class="form-group">
+            <label for="formNumber">Enter Number</label>
+            <input type="number" class="form-control" id="formNumber" placeholder="Enetr Number" name="phone" maxlength="10">
+        </div>
+        <div class="form-group">
+            <label for="formMessage">Enter Message</label>
+            <input type="text" class="form-control" id="formMessage" placeholder="Enetr Message" name="text">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <h1 style="margin-top: 2em;">View WhatsApp Messages</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>S.NO</th>
+                            <th>Name</th>
+                            <th>Number</th>
+                            <th>Message</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in whatsapp %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ data.number }}</td>
+                                <td>{{ data.name }}</td>
+                                <td>{{ data.message }}</td>
+                                <td>
+                                    <a href="" class="btn btn-primary" onclick="alert('Not available')"><img src="{{ url_for('static', filename='img/edit-icon.png') }}" alt="" style="max-width: 20px;"></a>
+                                    <a href="{{ url_for('whatsapp_delete', id=data.id) }}" class="btn btn-danger" ><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px;"></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                       
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

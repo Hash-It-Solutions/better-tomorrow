@@ -10,9 +10,10 @@
     <div class="d-flex justify-content-left"><a href="" class="btn btn-success" data-toggle="modal"
             data-target="#AddQuestion">Add Questions <img src="{{ url_for('static', filename='img/add-icon.png') }}"
                 alt=""></a>
-            <a href="" class="btn btn-info" data-toggle="modal"
-            data-target="#Excel">Upload Execl <i class="fas fa-table" style="font-size: 40px;"></i></a></div>
-            
+        <a href="" class="btn btn-info" data-toggle="modal" data-target="#Excel">Upload Execl <i class="fas fa-table"
+                style="font-size: 40px;"></i></a>
+    </div>
+
     <div class="modal fade" id="AddQuestion" tabindex="-1" role="dialog" aria-labelledby="AddQuestionLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -52,9 +53,14 @@
             </div>
         </div>
     </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
 
-    <div class="modal fade" id="Excel" tabindex="-1" role="dialog" aria-labelledby="ExcelLabel"
-        aria-hidden="true">
+    <p style="color: red;">{{ messages }}</p>
+
+    {% endif %}
+    {% endwith %}
+    <div class="modal fade" id="Excel" tabindex="-1" role="dialog" aria-labelledby="ExcelLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -63,19 +69,20 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" enctype="multipart/form-data" action="/admin/modules/mocktest/Questions/add/execl/{{mocktest.id}}">
+                <form method="post" enctype="multipart/form-data"
+                    action="/admin/modules/mocktest/Questions/add/execl/{{mocktest.id}}">
                     <div class="modal-body">
 
-                   
+
                         <div class="fileUpload">
                             <br>
-                            <h1>Upload Multiple PDF Files</h1>
-                            <hr>   
+                            <h1>Upload a Execl File</h1>
+                            <hr>
                             <div id="upload" class="upload">
-                            <input type="file" multiple  accept="application/pdf" name="notes_pdf" required>
+                                <input type="file" multiple accept="application/execl" name="file" required>
                             </div>
-                            
-                            </div>
+
+                        </div>
 
 
                         <!-- <div class="form-group">
@@ -88,7 +95,7 @@
                     <div class="modal-footer">
 
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" id="submit_btn"  class="btn btn-primary">Add Question</button>
+                        <button type="submit" id="submit_btn" class="btn btn-primary">Add Question</button>
                     </div>
                 </form>
 
@@ -100,8 +107,8 @@
 
             $('#submit_btn').attr('disabled', 'disabled');
             $('#submit_btn').html('Please Wait <div class="spinner" style="color: #EEE; max-width: 30px; display: inline;"><img id="spinner" src="{{url_for("static", filename="img/Spinner.svg")}}" alt="" style="color: #EEE; max-width: 25px; display: inline;"></div>');
-            
-            
+
+
 
         });
     </script>
@@ -115,7 +122,7 @@
                 <h5 class="mb-0">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne_{{question.id}}"
                         aria-expanded="false" role="button" aria-controls="collapseOne_{{question.id}}">
-                       Q.{{ loop.index }} {{question.question}}}
+                        Q.{{ loop.index }} {{question.question}}
                     </button>
                     <div class="float-right"><a
                             href="{{ url_for('admin_modules_mocktest_Questions_delete', id=question.id )}}"><img
@@ -129,7 +136,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editQuestion_{{ question.id }}Label">Add a Question
+                                        <h5 class="modal-title" id="editQuestion_{{ question.id }}Label">Edit Question
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -146,6 +153,13 @@
                                                     name="question">
                                             </div>
 
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea1"> Explanation</label>
+                                                <textarea class="form-control" id="explanation" name="explanation"
+                                                    rows="3">{{ question.explanation }}</textarea>
+                                            </div>
+
+
 
 
                                             <!-- <div class="form-group">
@@ -159,7 +173,7 @@
 
                                             <button type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Add Question</button>
+                                            <button type="submit" class="btn btn-primary">Apply changes</button>
                                         </div>
                                     </form>
 
@@ -199,7 +213,8 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editOtpion_chk_{{ option.id }}Label">Add an Option</h5>
+                                        <h5 class="modal-title" id="editOtpion_chk_{{ option.id }}Label">Add an Option
+                                        </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -211,24 +226,26 @@
                                             <div class="form-group">
                                                 <label>Option</label>
                                                 <input type="text" class="form-control" id="option"
-                                                    placeholder="Enter Option" name="option" value="{{ option.answer }}">
+                                                    placeholder="Enter Option" name="option"
+                                                    value="{{ option.answer }}">
                                             </div>
 
-                                            
+
                                             <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="is_correct_chk"
-                                                    name="is_correct" checked>
-                                                <label class="custom-control-label" for="is_correct_chk">Is Correct</label>
+                                                <input type="checkbox" class="custom-control-input"
+                                                    id="is_correct_chk_{{ question.id }}" name="is_correct" checked>
+                                                <label class="custom-control-label"
+                                                    for="is_correct_chk_{{ question.id }}">Is Correct</label>
                                             </div>
-                                            
+
 
 
 
                                             <!-- <div class="form-group">
-                            <label for="exampleFormControlFile1">Choose an Image</label>
-                            <input type="file" class="form-control-file" id="exampleFormControlFile1"
-                                name="module_image">
-                        </div> -->
+                                        <label for="exampleFormControlFile1">Choose an Image</label>
+                                        <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                            name="module_image">
+                                    </div> -->
 
                                         </div>
                                         <div class="modal-footer">
@@ -256,7 +273,8 @@
                                 </a>
                             </div>
                         </li>
-                        
+
+
                         <div class="modal fade" id="editOtpion_{{ option.id }}" tabindex="-1" role="dialog"
                             aria-labelledby="editOtpion_{{ option.id }}Label" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -274,24 +292,26 @@
                                             <div class="form-group">
                                                 <label>Option</label>
                                                 <input type="text" class="form-control" id="option"
-                                                    placeholder="Enter Option" name="option" value="{{ option.answer }}">
+                                                    placeholder="Enter Option" name="option"
+                                                    value="{{ option.answer }}">
                                             </div>
 
-                                            
+
                                             <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="is_correctu"
-                                                    name="is_correct">
-                                                <label class="custom-control-label" for="is_correctu">Is Correct</label>
+                                                <input type="checkbox" class="custom-control-input"
+                                                    id="is_correctu_{{ option.id }}" name="is_correct">
+                                                <label class="custom-control-label" for="is_correctu_{{ option.id }}">Is
+                                                    Correct</label>
                                             </div>
-                                            
+
 
 
 
                                             <!-- <div class="form-group">
-                            <label for="exampleFormControlFile1">Choose an Image</label>
-                            <input type="file" class="form-control-file" id="exampleFormControlFile1"
-                                name="module_image">
-                        </div> -->
+                                        <label for="exampleFormControlFile1">Choose an Image</label>
+                                        <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                            name="module_image">
+                                    </div> -->
 
                                         </div>
                                         <div class="modal-footer">
@@ -308,6 +328,13 @@
                         {% endif %}
                         {% endif %}
                         {% endfor %}
+                        <li class="list-group-item" style="background-color: rgba(127, 255, 212, 0.137);">
+                            <b>Explanation</b>
+                            <a href="" class="btn btn-warning" data-toggle="modal"
+                                data-target="#editQuestion_{{ question.id }}"><img
+                                    src="{{ url_for('static', filename='img/edit.png') }}" alt=""
+                                    style="max-width: 20px;"></a><br>{{question.explanation}}
+                        </li>
 
                     </ul>
 
@@ -338,9 +365,10 @@
                                     </div>
 
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="is_correct"
-                                            name="is_correct">
-                                        <label class="custom-control-label" for="is_correct">Is Correct</label>
+                                        <input type="checkbox" class="custom-control-input"
+                                            id="is_correct_{{question.id}}" name="is_correct">
+                                        <label class="custom-control-label" for="is_correct_{{question.id}}">Is
+                                            Correct</label>
                                     </div>
 
 
@@ -370,33 +398,6 @@
 
 
 
-        <!-- <div class="card">
-            <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-                        aria-controls="collapseTwo">
-                        Question 1
-                    </button>
-                    <div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 30px; margin-right: 10px;"></a><a href="" class="btn btn-warning"><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div>
-                </h5>
-            </div>
-
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                    <ul class="list-group">
-                        <li class="list-group-item active">Option 1<div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px; margin-right: 10px;"></a><a href="" ><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div></li>
-                        <li class="list-group-item">Option 2<div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px; margin-right: 10px;"></a><a href="" ><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div></li>
-                        <li class="list-group-item">Option 3<div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px; margin-right: 10px;"></a><a href="" ><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div></li>
-                        <li class="list-group-item">Option 4<div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px; margin-right: 10px;"></a><a href="" ><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div></li>
-                        <li class="list-group-item">Option 5<div class="float-right"><a href=""><img src="{{ url_for('static', filename='img/delete-icon.png') }}" alt="" style="max-width: 20px; margin-right: 10px;"></a><a href="" ><img src="{{ url_for('static', filename='img/edit.png') }}" alt="" style="max-width: 20px;"></a></div></li>
-                    </ul>
-                    <div class="d-flex justify-content-center"><a href="" class="btn btn-success">Add options</a></div>
-                
-                    
-                </div>
-            </div>
-        </div>
-         -->
     </div>
 </div>
 

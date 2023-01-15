@@ -38,7 +38,80 @@
                         <tfoot>
                             <tr>
                                 <td colspan="5">
-                                    
+                                    <a href="" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add User</a>
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Add a Subscription</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form method="post" action="/admin/users/add">
+                                                <div class="modal-body">
+
+                                                    <div class="form-group">
+                                                        <label>Enter Name</label>
+                                                        <input type="text" class="form-control" id="formName"
+                                                             placeholder="Enetr Name"
+                                                            name="name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Enter Phone number</label>
+                                                        <input type="number" class="form-control" id="phone" maxlength="10"
+                                                             placeholder="Enetr Name"
+                                                            name="phone">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Enter Email</label>
+                                                        <input type="email" class="form-control" id="formEmail"
+                                                             placeholder="Enetr Email"
+                                                            name="email">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Enter Password</label>
+                                                        <input type="password" class="form-control" id="formPassword"
+                                                             placeholder="Enetr Password"
+                                                            name="password">
+                                                    </div>
+
+
+                                                    <label class="my-1 mr-2"
+                                                        for="inlineFormCustomSelectPref">Role</label>
+                                                    <select class="custom-select my-1 mr-sm-2"
+                                                        id="inlineFormCustomSelectPref" name="role">
+                                                        <option selected disabled>Choose...</option>
+                                                        <option value="student">Student</option>
+                                                        <option value="teacher">Teacher</option>
+                                                        <option value="admin">Admin</option>
+                                                    </select>
+
+                                                       
+                                                    
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                            id="is_active" name="is_active" checked>
+                                                        <label class="custom-control-label" for="is_active">Activate
+                                                            User</label>
+                                                    </div>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button type="submit" id="submit_btn" class="btn btn-primary">Add user </button>
+                            
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
                                 </td>
                             </tr>
                         </tfoot>
@@ -54,5 +127,32 @@
             alert("This feature is not available yet.");
         }
     </script>
+
+    
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<a href="{{ url_for('whatsapp_add') }}" class="float" target="_blank">
+<i class="fa fa-whatsapp my-float"></i>
+</a>
+
+<style>
+    .float{
+  position:fixed;
+  width:60px;
+  height:60px;
+  bottom:40px;
+  right:40px;
+  background-color:#25d366;
+  color:#FFF;
+  border-radius:50px;
+  text-align:center;
+  font-size:30px;
+  box-shadow: 2px 2px 3px #999;
+  z-index:100;
+}
+
+.my-float{
+  margin-top:16px;
+}
+</style>
 {% endblock %}
 

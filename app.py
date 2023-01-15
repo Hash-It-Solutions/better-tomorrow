@@ -19,6 +19,8 @@ import os
 import base64
 
 from pdf2image import convert_from_path
+
+import xlrd
  
 
 
@@ -39,8 +41,10 @@ if ENV == 'dev' :
     PROPPLER_PATH = r'C:\Program Files\poppler-0.68.0\bin'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
     app.config['SECRET_KEY'] = 'asdasdasdasdasdasdasdaveqvq34c'
+    URL = 'http://192.168.29.166:5000/'
       
 else:
+    URL = 'https://better-tomorrow-intl.herokuapp.com/'
     app.debug = False
     PROPPLER_PATH = r'vendor\poppler\bin'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
@@ -105,6 +109,16 @@ class User(UserMixin, db.Model):
     subscription = db.relationship('subscription', backref='user')
     classes = db.relationship('Classes', backref='user')
 
+
+class Whatsapp(db.Model):
+    __tablename__ = 'whatsapp'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80))
+    number = db.Column(db.String(80))
+    message = db.Column(db.String(500))
+    is_active = db.Column(db.String(80))
+
+
 class subscription(db.Model):
     __tablename__ = 'subscription'
     id = db.Column(db.Integer, primary_key=True)
@@ -143,6 +157,7 @@ class Courses(db.Model):
     ###
     # course_language = db.Column(db.String(80))
     ###
+    is_active = db.Column(db.Boolean)
     course_image = db.Column(db.String(80))
     course_price = db.Column(db.String(80))
     course_module = db.relationship('Modules', backref='course')
@@ -194,8 +209,19 @@ class MockTestResults(db.Model):
     test_id = db.Column(db.Integer, db.ForeignKey('mocktest.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     marks_obtained = db.Column(db.String(80))
+    time_taken = db.Column(db.String(80))
     test_status = db.Column(db.String(80))
     test_taken_on = db.Column(db.String(80))
+    test_attempt = db.relationship('MocktestAttempt', backref='test_attempt')
+
+class MocktestAttempt(db.Model):
+    __tablename__ = 'mocktestattempt'
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String(80))
+    choosen_answer = db.Column(db.String(80))
+    correct_answer = db.Column(db.String(80))
+
+    test_id = db.Column(db.Integer, db.ForeignKey('mocktestresults.id'))
 
 
 class MockTestQuestion(db.Model):
@@ -203,6 +229,7 @@ class MockTestQuestion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(80))
     image_url = db.Column(db.String(80), nullable=True)
+    explanation = db.Column(db.String(2500))
 
     mock_test_id = db.Column(db.Integer, db.ForeignKey('mocktest.id'))
     mocktestanswer = db.relationship('MockTestAnswer', backref='question', lazy=True)
@@ -272,7 +299,12 @@ def login():
             if user:
                 print(user.password)
                 if user.password == password:
-                    login_user(user)
+                    if request.form.get('remember_me') == 'on':
+                        print('remember me')
+                        login_user(user, remember=True)
+                    else:
+                        print('not remember me')
+                        login_user(user)
                     return redirect(url_for('index'))
                 else:
                     flash('Invalid username or password')
@@ -334,6 +366,7 @@ def courses():
 def courses_c(param):
     courses = Courses.query.all()
     course = Courses.query.get(1)
+    modules = Modules.query.filter_by(course_id=course.id).all()
     status = 'apply'
     if current_user.is_authenticated:
         request = Requets.query.filter_by(user_id=current_user.id).all()
@@ -341,8 +374,8 @@ def courses_c(param):
             if req.staus == 'pending':
                 status = 'pending'
                 break
-            elif req.staus == 'approved':
-                status = 'approved'
+            elif req.staus == 'accepted':
+                status = 'accepted'
                 break
             else:
                 status = 'apply'
@@ -370,7 +403,8 @@ def courses_c(param):
                                                         course=course, 
                                                         course_price=course_price, 
                                                         couese_image=couese_image,
-                                                        status=status) 
+                                                        status=status,
+                                                        modules=modules) 
     
 @app.route('/courses/<int:id>', methods=['GET', 'POST'])
 def course(id):
@@ -383,19 +417,27 @@ def course(id):
 def getCourses():
     subscriptions = subscription.query.filter_by(user_id=current_user.id).all()
     courses = []
+    if not subscriptions:
+        return Courses.query.all()
     for sub in subscriptions:
         if sub.is_active == '1':
             c = Courses.query.get(sub.course_id)
             if c not in courses:
                 courses.append(c)
-    return courses
+    return Courses.query.all()
+
+def isSubActive(course_id):
+    sub = subscription.query.filter_by(user_id=current_user.id, course_id=course_id).first()
+    if sub:
+        if sub.is_active == '1':
+            return True
+    return False
 
 
 @app.route('/student', methods=['GET', 'POST'])
 @login_required
 def student():
-    
-    return render_template('student/index.html', user=current_user, Nav_courses=getCourses())
+    return render_template('student/index.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all())
                 
 
 
@@ -405,7 +447,7 @@ def student():
 @login_required
 def mocktests_mod(id):
     modules = Modules.query.filter_by(course_id=id).all()
-    return render_template('student/mocktest-mod.html', user=current_user, Nav_courses=getCourses(), modules=modules)
+    return render_template('student/mocktest-mod.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , modules=modules)
 
 
 
@@ -414,14 +456,14 @@ def mocktests_mod(id):
 def mocktests(id):
     module = Modules.query.get(id)
     mocktests = MockTest.query.filter_by(module_id=id).all()
-    return render_template('student/mocktest.html', user=current_user, Nav_courses=getCourses(), module=module, mocktests=mocktests)
+    return render_template('student/mocktest.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , module=module, mocktests=mocktests)
 
 
 @app.route('/student/mocktests/<int:id>/brief', methods=['GET', 'POST'])
 @login_required
 def mocktests_brief(id):
     mocktest = MockTest.query.get(id)
-    return render_template('student/mocktest/brief.html', user=current_user, Nav_courses=getCourses(), mocktest=mocktest)
+    return render_template('student/mocktest/brief.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , mocktest=mocktest)
 
 
 @app.route('/student/mocktests/<int:id>/start', methods=['GET', 'POST'])
@@ -433,21 +475,24 @@ def mocktests_start(id):
     mocktest_questions = MockTestQuestion.query.filter_by(mock_test_id=id).all()
     for question in mocktest_questions:
         Q['question'] = question.question
-        mocktest_answers = MockTestAnswer.query.filter_by(question_id=id).all()
+        mocktest_answers = MockTestAnswer.query.filter_by(question_id=question.id).all()
         Q['choices'] = [answer.answer for answer in mocktest_answers]
         Q['answer'] = [answer.answer for answer in mocktest_answers if answer.is_correct][0]
+
         questions.append(Q)
         Q = {'question': '', 'choices': [], 'answer': ''}
+
     print(questions)
         
             
-    return render_template('student/mocktest/quiz.html', user=current_user, Nav_courses=getCourses(), mocktest=mocktest, questions=questions)
+    return render_template('student/mocktest/quiz.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , mocktest=mocktest, questions=questions , URL=URL)
 
 
 @app.route('/student/mocktests/<int:id>/sendResult', methods=['GET', 'POST'])
 @login_required
 def mocktests_result(id):
     mocktest = MockTest.query.get(id)
+    questions = MockTestQuestion.query.filter_by(mock_test_id=id).all()
     if request.method == 'POST':
         print(request.json)
         print(request.json['user_id'])
@@ -457,19 +502,48 @@ def mocktests_result(id):
                     test_id=mocktest.id,
                     marks_obtained=quiz_results['score'],
                     test_taken_on=datetime.datetime.now(),
+                    time_taken=quiz_results['time'],
                 )
         db.session.add(results)
         db.session.commit()
-        return jsonify({'status': 'success'})
+
+        for question in quiz_results['questions']:
+            attempt = MocktestAttempt(
+                        test_id=results.id,
+                        question=question['question'],
+                        correct_answer=question['answer'],
+                        choosen_answer=quiz_results['answers'][quiz_results['questions'].index(question)]
+
+            )
+            db.session.add(attempt)
+            db.session.commit()
+        return jsonify({'status': 'success', 'id': results.id})
     return jsonify({'status': 'error'})
 
 
-# @app.route('/student/mocktests/<int:id>/result', methods=['GET', 'POST'])
-# @login_required
-# def mocktests_result_view(id):
-#     mocktest = MockTest.query.get(id)
-#     results = MockTestResults.query.filter_by(user_id=current_user.id, test_id=id).first()
-#     return render_template('student/mocktest/result.html', user=current_user, Nav_courses=getCourses(), mocktest=mocktest, results=results)
+@app.route('/student/mocktests/<int:id>/result', methods=['GET', 'POST'])
+@login_required
+def mocktests_result_view(id):
+    results = MockTestResults.query.get(id)
+    mocktest = MockTest.query.get(results.test_id)
+    questions = MockTestQuestion.query.filter_by(mock_test_id=mocktest.id).all()
+    answers = MockTestAnswer.query.all()
+    attempts = MocktestAttempt.query.filter_by(test_id=results.id).all()
+    return render_template('student/mocktest/results.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , 
+                                                mocktest=mocktest, results=results, 
+                                                attempts=attempts, answers=answers, 
+                                                questions=questions)
+
+
+@app.route('/student/mocktests/<int:id>/attempts/view', methods=['GET', 'POST'])
+@login_required
+def mocktests_attempts_view(id):
+    mocktest = MockTest.query.get(id)
+    attempts = MockTestResults.query.filter_by(test_id=id).all()
+    return render_template('student/quiz-attempts.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , mocktest=mocktest, attempts=attempts)
+
+
+
 
 
 
@@ -477,21 +551,21 @@ def mocktests_result(id):
 @login_required
 def video_mod(id):
     modules = Modules.query.filter_by(course_id=id).all()
-    return render_template('student/video-mod.html', user=current_user, Nav_courses=getCourses(), modules=modules)
+    return render_template('student/video-mod.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , modules=modules)
 
 @app.route('/student/video/<int:id>', methods=['GET', 'POST'])
 @login_required
 def video(id):
     module = Modules.query.get(id)
     videos = VideoRec.query.filter_by(module_id=id).all()
-    return render_template('student/videos.html', user=current_user, Nav_courses=getCourses(), module=module, videos=videos)
+    return render_template('student/videos.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , module=module, videos=videos)
 
 
 @app.route('/student/notes/modules/<int:id>', methods=['GET', 'POST'])
 @login_required
 def notes_mod(id):
     modules = Modules.query.filter_by(course_id=id).all()
-    return render_template('student/notes-mod.html', user=current_user, Nav_courses=getCourses(), modules=modules)
+    return render_template('student/notes-mod.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , modules=modules)
 
 @app.route('/student/notes/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -499,14 +573,14 @@ def notes(id):
     module = Modules.query.get(id)
     notes = Notes.query.filter_by(module_id=id).all()
     noteImages = NoteImages.query.all() 
-    return render_template('student/notes.html', user=current_user, Nav_courses=getCourses(), module=module, notes=notes, noteImages=noteImages)
+    return render_template('student/notes.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , module=module, notes=notes, noteImages=noteImages)
 
 @app.route('/student/notes/<int:id>/view', methods=['GET', 'POST'])
 @login_required
 def notes_view(id):
     note = Notes.query.get(id)
     noteImages = NoteImages.query.filter_by(note_id=id).all()
-    return render_template('student/note-view.html', user=current_user, Nav_courses=getCourses(), note=note, noteImages=noteImages)
+    return render_template('student/note-view.html', user=current_user, Nav_courses=getCourses(), isSubActive=isSubActive( getCourses()[0].id), users=User.query.all()  , note=note, noteImages=noteImages)
 
 
 
@@ -532,6 +606,20 @@ def admin_users():
     users = User.query.all()
     return render_template('admin/users.html', users=users)
 
+@app.route('/admin/users/add', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_users_add():
+    if request.method == 'POST':
+        user = User(
+            name=request.form['name'],
+            email=request.form['email'],
+            password=request.form['password'],
+            user_type=request.form['role'],
+            phone=request.form['phone'])
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('admin_users'))
 
 @app.route('/admin/users/view/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -597,6 +685,7 @@ def admin_users_sub_action(id):
 @admin_required
 def changeStatus(id, parm):
     sub = subscription.query.get(id)
+    course = Courses.query.get(id)
     if parm == "notes_access":
         if sub.notes_access:
             sub.notes_access = False
@@ -612,6 +701,12 @@ def changeStatus(id, parm):
             sub.mocktest_access = False
         else:
             sub.mocktest_access = True
+    elif parm == "course":
+        if course.is_active:
+            course.is_active = False
+        else:
+            course.is_active = True
+
     db.session.commit()
     return redirect(url_for('admin_users_view', id=sub.user_id))
 
@@ -699,6 +794,11 @@ def admin_users_requests_reject(id):
 @login_required
 @admin_required
 def admin_course():
+    def status(stat):
+        if str(stat) == 'on':
+            return 1
+        else:
+            return 0
     courses = Courses.query.all()
     if request.method == 'POST':
         try:
@@ -710,7 +810,8 @@ def admin_course():
             course = Courses(course_name=request.form['name'], 
                             course_description=request.form['description'],
                             course_image=upload_image.link,
-                            course_price=request.form['price'])
+                            course_price=request.form['price'],
+                            is_active=status(request.form['is_active']))
             print(course)
             db.session.add(course)
             db.session.commit()
@@ -835,6 +936,40 @@ def admin_modules_notes(id):
     #         flash('Error adding Note :- '+str(e))
     return render_template('admin/notes.html', notes=notes, module=module, noteImages=noteImages)
 
+# @app.route('/admin/modules/notes/upload/<int:id>', methods=['GET', 'POST'])
+# @login_required
+# @admin_required
+# def admin_modules_notes_upload(id):
+#     module = Modules.query.get(id)
+#     notes = Notes.query.filter_by(module_id=id).all()
+#     if request.method == 'POST':
+#         try:
+#             notes_pdfs = request.files.getlist('notes_pdf')
+#             for pdf in notes_pdfs:
+#                 pdf_filename = secure_filename(pdf.filename)
+#                 basedir = os.path.abspath(os.path.dirname(__file__))
+#                 pdf.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename))
+#                 note = Notes(note_name=request.form['name'],note_description=request.form['description'],
+#                             module_id=id)
+#                 db.session.add(note)
+#                 db.session.commit()
+
+#                 images = convert_from_path(UPLOAD_FOLDER+pdf_filename,poppler_path=PROPPLER_PATH, fmt='jpg')
+#                 for i in range(len(images)):
+#                     # images[i].save('page'+ str(i) +'.jpg', 'JPEG')
+#                     images[i].save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename + 'page'+ str(i) +'.jpg'), 'JPEG')
+#                     upload_image = im.upload_image(os.path.join(basedir, app.config['UPLOAD_FOLDER'],  pdf_filename + 'page'+ str(i) +'.jpg'), title= pdf_filename + 'page'+ str(i) +'.SSjpg')
+#                     noteImg = NoteImages(note_id=note.id, image_url=upload_image.link)
+#                     db.session.add(noteImg)
+#                     db.session.commit()
+#                     os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'],  pdf_filename + 'page'+ str(i) +'.jpg'))
+#                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename))
+#             return redirect(url_for('admin_modules_notes', id=id))
+#         except Exception as e:
+#             return jsonify({'error': str(e)})
+    
+#     return 'no post'
+
 @app.route('/admin/modules/notes/upload/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -843,31 +978,27 @@ def admin_modules_notes_upload(id):
     notes = Notes.query.filter_by(module_id=id).all()
     if request.method == 'POST':
         try:
-            notes_pdfs = request.files.getlist('notes_pdf')
-            for pdf in notes_pdfs:
-                pdf_filename = secure_filename(pdf.filename)
-                basedir = os.path.abspath(os.path.dirname(__file__))
-                pdf.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename))
-                note = Notes(note_name=request.form['name'],note_description=request.form['description'],
+            note = Notes(note_name=request.form['name'],note_description=request.form['description'],
                             module_id=id)
-                db.session.add(note)
+            db.session.add(note)
+            db.session.commit()
+            images = request.files.getlist('notes_pdf')
+            for img in images:
+                img_filename = secure_filename(img.filename)
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                img.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], img_filename))
+                upload_image = im.upload_image(os.path.join(basedir, app.config['UPLOAD_FOLDER'], img_filename), title= img_filename)
+                noteImg = NoteImages(note_id=note.id, image_url=upload_image.link)
+                db.session.add(noteImg)
                 db.session.commit()
-
-                images = convert_from_path(UPLOAD_FOLDER+pdf_filename,poppler_path=PROPPLER_PATH, fmt='jpg')
-                for i in range(len(images)):
-                    # images[i].save('page'+ str(i) +'.jpg', 'JPEG')
-                    images[i].save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename + 'page'+ str(i) +'.jpg'), 'JPEG')
-                    upload_image = im.upload_image(os.path.join(basedir, app.config['UPLOAD_FOLDER'],  pdf_filename + 'page'+ str(i) +'.jpg'), title= pdf_filename + 'page'+ str(i) +'.SSjpg')
-                    noteImg = NoteImages(note_id=note.id, image_url=upload_image.link)
-                    db.session.add(noteImg)
-                    db.session.commit()
-                    os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'],  pdf_filename + 'page'+ str(i) +'.jpg'))
-                os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pdf_filename))
+                os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], img_filename))
+                
             return redirect(url_for('admin_modules_notes', id=id))
         except Exception as e:
             return jsonify({'error': str(e)})
     
     return 'no post'
+
 
 
 @app.route('/admin/modules/notes/delete/<int:id>', methods=['GET', 'POST'])
@@ -878,6 +1009,41 @@ def admin_modules_notes_delete(id):
     db.session.delete(note)
     db.session.commit()
     return redirect(url_for('admin_modules_notes', id=note.module_id))
+
+@app.route('/admin/modules/notes/delete/image/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_notes_delete_image(id):
+    noteImg = NoteImages.query.get(id)
+    note = Notes.query.get(noteImg.note_id)
+    db.session.delete(noteImg)
+    db.session.commit()
+    return redirect(url_for('admin_modules_notes', id=note.module_id))
+
+@app.route('/admin/modules/notes/add/image/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_modules_notes_add_image(id):
+    note = Notes.query.get(id)
+    if request.method == 'POST':
+        try:
+            images = request.files.getlist('notes_pdf')
+            for img in images:
+                img_filename = secure_filename(img.filename)
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                img.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], img_filename))
+                upload_image = im.upload_image(os.path.join(basedir, app.config['UPLOAD_FOLDER'], img_filename), title= img_filename)
+                noteImg = NoteImages(note_id=note.id, image_url=upload_image.link)
+                db.session.add(noteImg)
+                db.session.commit()
+                os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], img_filename))
+                
+            return redirect(url_for('admin_modules_notes', id=note.module_id))
+        except Exception as e:
+            return jsonify({'error': str(e)})
+    
+    return 'no post'
+    
 
 @app.route('/admin/modules/notes/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -991,16 +1157,57 @@ def admin_modules_mocktest_Questions_add(id):
 @login_required
 @admin_required
 def admin_modules_mocktest_Questions_add_execl(id):
-    mocktest = MockTest.query.get(id)
+    def ConvertStatus(status):
+        if status == '1' or status == 1 or status == 'true' or status == 'TRUE':
+            return True
+        else:
+            return False
+    
     if request.method == 'POST':
         try:
             f = request.files['file']
-           
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
+            loc = (UPLOAD_FOLDER+f.filename)
+            wb = xlrd.open_workbook(loc)
+            sheet = wb.sheet_by_index(0)
+            sheet.cell_value(0, 0)
+            mocktest = MockTest.query.get(id)
+            for i in range(1, sheet.nrows):
+                question = MockTestQuestion(mock_test_id=id,
+                                            question=sheet.cell_value(i, 0),
+                                            explanation=sheet.cell_value(i, 9))
+                db.session.add(question)
+                db.session.commit()
+                # options1 = MockTestAnswer(question_id=question.id,)
+                for j in range(1, 8):
+                    if j%2 != 0:
+                        option = MockTestAnswer(question_id=question.id,
+                                                answer=sheet.cell_value(i,j),
+                                                is_correct=ConvertStatus(sheet.cell_value(i,j+1)))
+                        db.session.add(option)
+                        db.session.commit()
+                db.session.add(question)
+                db.session.commit()
+                mocktest.total_questions = mocktest.total_questions + 1
+                db.session.commit()
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
+                
+                
+                
             return redirect(url_for('admin_modules_mocktest_QNA', id=id))
         except Exception as e:
             flash('Error adding Question :- '+str(e))
-            return str(e)
+            return redirect(url_for('admin_modules_mocktest_QNA', id=id))
     return redirect(url_for('admin_modules_mocktest_QNA',id=id))
+
+
+
+
+
+
+
+
+
 
 @app.route('/admin/modules/mocktest/Questions/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -1021,6 +1228,7 @@ def admin_modules_mocktest_Questions_edit(id):
     question = MockTestQuestion.query.get(id)
     if request.method == 'POST':
         question.question = request.form['question']
+        question.explanation = request.form['explanation']
         db.session.commit()
         return redirect(url_for('admin_modules_mocktest_QNA', id=question.mock_test_id))
     return 'edit question'
@@ -1144,3 +1352,45 @@ def admin_modules_videoRec_edit(id):
         db.session.commit()
         return redirect(url_for('admin_modules_videoRec', id=video.module_id))
     return 'edit video'
+
+@app.route('/whatsapp', methods=['GET', 'POST'])
+def whatsapp():
+    whatsapp = Whatsapp.query.all()
+    phone = whatsapp[0].number
+    text = whatsapp[0].message
+    phone = phone.replace(' ', '')
+    text = text.replace(' ', '%20')
+    return redirect('https://api.whatsapp.com/send?phone='+phone+'&text='+text)
+
+
+
+@app.route('/admin/whatsapp/add/', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def whatsapp_add():
+    whatsapp = Whatsapp.query.all()
+    if request.method == 'POST':
+        name = request.form['name']
+        phone = request.form['phone']
+        text = request.form['text']
+        whatsapp = Whatsapp(name=name, number=phone, message=text)
+        db.session.add(whatsapp)
+        db.session.commit()
+        return redirect(url_for('whatsapp_add'))
+    return render_template('admin/whatsapp.html', whatsapp=whatsapp)
+
+@app.route('/admin/whatsapp/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def whatsapp_delete(id):
+    whatsapp = Whatsapp.query.get(id)
+    db.session.delete(whatsapp)
+    db.session.commit()
+    return redirect(url_for('whatsapp_add'))
+
+@app.route('/student/whatsapp/<phone>/<text>', methods=['GET', 'POST'])
+@login_required
+def student_whatsapp(phone, text):
+    phone = phone.replace(' ', '')
+    text = text.replace(' ', '%20')
+    return redirect('https://api.whatsapp.com/send?phone='+phone+'&text='+text)

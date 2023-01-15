@@ -7,7 +7,17 @@
 
 
 <div class="container">
-    <h1>{{Nav_courses[0].course_name}}</h1>
+    {% if  isSubActive %}
+    <h1>Welcome {{user.name}}</h1>
+    {% endif %}
+    <h3>Course - {{Nav_courses[0].course_name}}</h3>
+
+    {% if not isSubActive %}
+    <div class="container">
+        <p>YOU DON'T HAVE ANY SUBSCRIPTIONS, <a href="{{ url_for('courses') }}">CLICK HERE</a> TO ENROLL AND GET FULL ACCSES</p>
+    </div>
+    {% endif %}
+    
     
     <div class="row" >
         <div class="col-sm">
@@ -33,15 +43,11 @@
         </div>
     </div>
     
+
+
 </div>
 
 
-<style>
-
-
-
-
-</style>
 
 <script>
     $(document).ready(function(){

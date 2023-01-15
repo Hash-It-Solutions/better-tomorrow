@@ -144,7 +144,17 @@
                                                     </div>
                                                     <button type="button" class="btn btn-secondary"
                                                         data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                    <button type="submit" id="submit_btn" class="btn btn-primary">Save changes </button>
+                            <script>
+                                $('#file_form').on('submit', function () {
+                        
+                                    $('#submit_btn').attr('disabled', 'disabled');
+                                    $('#submit_btn').html('Please Wait <div class="spinner" style="color: #EEE; max-width: 30px; display: inline;"><img id="spinner" src="{{url_for("static", filename="img/Spinner.svg")}}" alt="" style="color: #EEE; max-width: 25px; display: inline;"></div>');
+                                    
+                                    
+                        
+                                });
+                            </script>
                                                 </div>
                                             </form>
 

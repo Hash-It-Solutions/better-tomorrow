@@ -30,6 +30,7 @@
             <p style="text-align: center; ">Time: {{mocktest.test_duration}} minutes</p>
           </div>  
           
+            <a href="{{ url_for('mocktests', id=mocktest.id)}}" class="btn btn-secondary btn-lg btn-block" style="max-width: 40%; margin-bottom: 3em; margin-right: .2em;">exit</a>
             <a href="{{ url_for('mocktests_start', id=mocktest.id)}}" class="btn btn-primary btn-lg btn-block" style="max-width: 40%; margin-bottom: 3em;">Start</a>
           
         </div>

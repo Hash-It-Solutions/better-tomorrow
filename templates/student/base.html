@@ -82,36 +82,23 @@
                 <div id="collapseFour" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header" style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;">{{ course.course_name }} Materials</h6>
-                        <a class="collapse-item" href="">Notes</a>
-                        <a class="collapse-item" href="">Videos</a>
+                        <h6 class="collapse-header" style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;"><a href="">{{ course.course_name }}</a> Materials</h6>
+                        <a class="collapse-item" href="{{ url_for('notes_mod',id=Nav_courses[0].id) }}">Notes</a>
+                        <a class="collapse-item" href="{{ url_for('video_mod',id=Nav_courses[0].id) }}">Videos</a>
                         <a class="collapse-item" href="{{ url_for('mocktests_mod',id=Nav_courses[0].id) }}">Mocktests</a>
                         
                     </div>
                 </div>
             </li>
             {% endfor %}
-
+<!-- 
             <div class="sidebar-heading">
                 Other
-            </div>
+            </div> -->
 
 
            
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Mocktests</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">MockTest Actions:</h6>
-                        <a class="collapse-item" href="">View Results</a>
-                    </div>
-                </div>
-            </li>
+            
 
             <!-- <li class="nav-item">
                 <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseThree"
@@ -220,6 +207,10 @@
 
                 <!-- Begin Page Content -->
                
+
+                
+
+
                 {% block content %}
                     {# instert here #}
                 {% endblock %}
@@ -228,6 +219,154 @@
             </div>
             <!-- End of Main Content -->
 
+          <div class="container">
+            <div class="row" id="float-switch" >
+                <div class="col" >
+                    <div class="float-right" >
+                  
+                        <a href="#" class="float" data-toggle="modal" data-target="#exampleModal">
+                            <i class="far fa-question-circle" style="font-size: 50px; margin-top: 4px;"></i>
+                            </a>
+                            <div class="label-container">
+                            <div class="label-text">Doubts</div>
+                            <i class="fa fa-play label-arrow"></i>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+           
+          </div>
+<!-- Button trigger modal -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+            <form action="" method="post">
+                
+                <label class="my-1 mr-2"
+                for="inlineFormCustomSelectPref">Choose Teacher</label>
+            <select class="custom-select my-1 mr-sm-2"
+                id="inlineFormCustomSelectPref" name="teacher">
+                <option selected disabled>Choose...</option>
+                {% for usr in users %}
+                    {% if usr.user_type == 'teacher' or usr.user_type == 'Teacher' %}
+                    <option value="{{ usr.phone }}">{{ usr.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Doubt Description</label>
+                <textarea class="form-control" id="doubt"
+                    name="doubt" rows="3"></textarea>
+            </div>
+
+            
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // on submit send whatsapp message jquery
+    $(document).ready(function(){
+        $('#exampleModal').on('submit', function(e){
+            e.preventDefault();
+            var teacher = $('#inlineFormCustomSelectPref').val();
+            var doubt = $('#doubt').val();
+            var url = 'https://api.whatsapp.com/send?phone=91'+teacher+'&text='+doubt;
+            window.open(url, '_blank');
+        });
+    });
+    // doubt button only visible if student is subscribed
+    $(document).ready(function(){
+        var is_subActive = "{{ isSubActive }}";
+        if(is_subActive ){
+            $('#float-switch').show();
+        }
+        else{
+            $('#float-switch').hide();
+        }
+    });
+  
+  </script>
+
+
+          <style>
+            
+.label-container{
+  position:fixed;
+  bottom:48px;
+  right:105px;
+  display:table;
+  visibility: hidden;
+}
+
+.label-text{
+  color:#FFF;
+  background:rgba(51,51,51,0.5);
+  display:table-cell;
+  vertical-align:middle;
+  padding:10px;
+  border-radius:3px;
+}
+
+.label-arrow{
+  display:table-cell;
+  vertical-align:middle;
+  color:#333;
+  opacity:0.5;
+}
+
+.float{
+  position:fixed;
+  width:60px;
+  height:60px;
+  bottom:40px;
+  right:40px;
+  background-color:#06C;
+  color:#FFF;
+  border-radius:50px;
+  text-align:center;
+  box-shadow: 2px 2px 3px #999;
+}
+
+.my-float{
+  font-size:60px;
+  margin-top:18px;
+  font-weight: bold;
+}
+
+a.float + div.label-container {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s ease;
+}
+
+a.float:hover + div.label-container{
+  visibility: visible;
+  opacity: 1;
+}
+          </style>
+         
+        
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">

@@ -1,0 +1,32 @@
+{% extends "student/base.html" %}
+
+{% block title %}Quiz Attemps{% endblock %}
+{% block content %}
+
+<div class="container">
+    <h1>Quiz Attemps</h1>
+    {% for attempts in attempts %}
+    <div class="card" style="margin-bottom: 30px;">
+      <div class="card-body">
+        <h5 class="card-title">{{ loop.index }}. {{ mocktest.test_name }}</h5>
+        <p class="card-text" style="max-width: 50%;">{{attempts.test_taken_on}}</p>
+        <div class="row">
+          <div class="col-sm"><p class="card-text"><b>Time taken :</b> {{attempts.time_taken}} Mins</p></div>
+        <div class="col-sm"><p class="card-text"><b>Total Questions :</b> 10</p></div>
+        <div class="col-sm"><p class="card-text"><b>Score Obtained : </b>{{attempts.marks_obtained}} / {{mocktest.max_marks}}</p></div>
+        </div>
+        <div class="container">
+          <div class="float-right">
+            <a href="{{ url_for('mocktests_result_view', id=attempts.id) }}" class="btn btn-primary">View Results</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+
+
+
+  {% endblock %}

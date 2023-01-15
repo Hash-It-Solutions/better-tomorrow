@@ -7,8 +7,10 @@
 <div class="container">
   <h1>MockTests in {{module.module_name}}</h1>
 
-
+  
   {% for mocktest in mocktests %}
+
+  {% if isSubActive  %}
   <div class="card" style="margin-bottom: 30px;">
     <div class="card-body">
       <h5 class="card-title">{{ loop.index }}. {{ mocktest.test_name }}</h5>
@@ -18,15 +20,52 @@
       <div class="col-sm"><p class="card-text"><b>Total Questions :</b> 10</p></div>
       <div class="col-sm"><p class="card-text"><b>Max Marks : </b>{{mocktest.max_marks}}</p></div>
       </div>
-      
-      
       <div class="container">
         <div class="float-right">
+          <a href="{{ url_for('mocktests_attempts_view', id=mocktest.id) }}" class="btn btn-secondary">View Attemps</a>
           <a href="{{ url_for('mocktests_brief', id=mocktest.id) }}" class="btn btn-primary">Take Quiz</a>
         </div>
       </div>
     </div>
   </div>
+  {% else %}
+    {% if loop.index >= 2 %}
+      <div class="card" style="margin-bottom: 30px; background-color: rgba(110, 110, 110, 0.313); ">
+        <div class="card-body">
+          <h5 class="card-title">{{ loop.index }}. {{ mocktest.test_name }}</h5>
+          <p class="card-text" style="max-width: 50%;">{{mocktest.test_description}}</p>
+          <div class="row">
+            <div class="col-sm"><p class="card-text"><b>Time Duration :</b> {{mocktest.test_duration}} Mins</p></div>
+          <div class="col-sm"><p class="card-text"><b>Total Questions :</b> 10</p></div>
+          <div class="col-sm"><p class="card-text"><b>Max Marks : </b>{{mocktest.max_marks}}</p></div>
+          </div>
+          <div class="container">
+            <div class="float-right">
+              <a href="{{ url_for('courses') }}" class="btn btn-primary">SUBSCRIBE TO GET ACCSES</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="card" style="margin-bottom: 30px;">
+        <div class="card-body">
+          <h5 class="card-title">{{ loop.index }}. {{ mocktest.test_name }}</h5>
+          <p class="card-text" style="max-width: 50%;">{{mocktest.test_description}}</p>
+          <div class="row">
+            <div class="col-sm"><p class="card-text"><b>Time Duration :</b> {{mocktest.test_duration}} Mins</p></div>
+          <div class="col-sm"><p class="card-text"><b>Total Questions :</b> 10</p></div>
+          <div class="col-sm"><p class="card-text"><b>Max Marks : </b>{{mocktest.max_marks}}</p></div>
+          </div>
+          <div class="container">
+            <div class="float-right">
+          <a href="{{ url_for('mocktests_attempts_view', id=mocktest.id) }}" class="btn btn-secondary">View Attemps</a>
+          <a href="{{ url_for('mocktests_brief', id=mocktest.id) }}" class="btn btn-primary">Take Quiz</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
 
 
 {% endfor %}

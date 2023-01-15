@@ -23,8 +23,12 @@
             <div class="card-body">
               <div class="container">
                 <p class="card-text" style="font-size: xx-large; font-weight: bolder;">₹ {{ course.course_price }}</p>
+                {% if course.is_active %}
                 <button type="button" class="btn btn-primary btn-lg btn-block" style="margin-bottom: 2em;">Request To
                   Apply</button>
+                {% else %}
+                <button type="button" class="btn btn-secondary btn-lg btn-block" style="margin-bottom: 2em;">Coming soon...</button>
+                {% endif %}
 
                 <h5><b>This course contains:</b></h5>
                 <ul style="list-style-type: '';">
@@ -55,19 +59,15 @@
   <div class="card" style="margin-top: 2em; max-width: 50%;">
     <div class="card-body">
       <h5 class="card-title">Course Obectives</h5>
-      <ul style="list-style-type: '✓ ';">
-        <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
-        <li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</li>
-        <li>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in
-          some form,</li>
-        <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
-        <li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</li>
-        <li>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in
-          some form,</li>
-        <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
-        <li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</li>
-        <li>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in
-          some form,</li>
+      <ul style="list-style-type: '✅ ';">
+        <li>Understand the regulations and guidelines set by the Health Authority of Abu Dhabi (HAAD) for healthcare professionals</li>
+        <li>Learn the ethical and professional conduct required of healthcare professionals in Abu Dhabi</li>
+        <li>Gain knowledge of common diseases and conditions seen in Abu Dhabi, and the appropriate treatment and management strategies</li>
+        <li>Develop the skills necessary to safely and effectively communicate with patients and other healthcare professionals </li>
+        <li>Understand the healthcare system in Abu Dhabi and the roles and responsibilities of different healthcare professionals</li>
+        <li>Learn how to properly document patient information and maintain accurate medical records</li>
+        <li>Develop the ability to identify and report any potential healthcare hazards or incidents</li>
+        <li>Learn how to use technology and equipment commonly found in Abu Dhabi healthcare settings</li>
       </ul>
     </div>
   </div>
