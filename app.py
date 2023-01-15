@@ -18,7 +18,6 @@ import datetime
 import os
 import base64
 
-from pdf2image import convert_from_path
 
 import xlrd
  

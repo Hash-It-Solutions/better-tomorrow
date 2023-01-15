@@ -221,7 +221,7 @@
 
               {% for course in courses %}
               {% if course.id != 1 %}
-              {% if loop.index%2 == 0 %}
+              {% if (loop.index + 1)%2 == 0 %}
               <div class="col-lg-4 col-md-6 d-flex align-items-stretch service-block color-bg text-center"
                 style="background: #166ab5">
                 <div class="icon-box">
