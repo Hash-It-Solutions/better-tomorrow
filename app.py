@@ -414,6 +414,54 @@ def course(id):
     return render_template('main/course-detail.html', user=current_user, course=course, modules=modules, courses=courses)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def getCourses():
     subscriptions = subscription.query.filter_by(user_id=current_user.id).all()
     courses = []
@@ -427,11 +475,14 @@ def getCourses():
     return Courses.query.all()
 
 def isSubActive(course_id):
-    sub = subscription.query.filter_by(user_id=current_user.id, course_id=course_id).first()
-    if sub:
-        if sub.is_active == '1':
-            return True
-    return False
+    try:
+        sub = subscription.query.filter_by(user_id=current_user.id, course_id=str(course_id)).first()
+        if sub:
+            if sub.is_active == '1':
+                return True
+        return False
+    except:
+        return False
 
 
 @app.route('/student', methods=['GET', 'POST'])
